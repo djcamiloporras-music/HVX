@@ -20,7 +20,7 @@
   <nav class="nav" id="nav">
     <div class="nav-logo">
       <a href="index.html">
-        <img src="assets/hvx-logo-transparent.png" alt="HVX Music" class="logo-img"/>
+        <div class="logo-video-wrap"><video class="logo-video" autoplay loop muted playsinline><source src="assets/hvx-logo.mp4" type="video/mp4"></video></div>
       </a>
     </div>
     <ul class="nav-links">
@@ -96,10 +96,15 @@
       <!-- RIGHT: hero image -->
       <div class="hero-visual">
         <div class="hero-img-wrap">
-          <img src="assets/hvx-hero.jpg" alt="HVX Music" class="hero-img hero-img-red"  aria-hidden="true"/>
-          <img src="assets/hvx-hero.jpg" alt="HVX Music" class="hero-img hero-img-cyan" aria-hidden="true"/>
-          <img src="assets/hvx-hero.jpg" alt="HVX Music" class="hero-img hero-img-main"/>
-          <div class="hero-img-scanlines"></div>
+          <!-- VIDEO principal: mix-blend-mode elimina el negro -->
+          <video class="hero-vid" autoplay loop muted playsinline>
+            <source src="assets/hvx-hero-video.mp4" type="video/mp4"/>
+          </video>
+          <!-- Capas de textura sobre el video -->
+          <div class="hero-vid-glow"></div>
+          <div class="hero-vid-scanlines"></div>
+          <div class="hero-vid-vignette"></div>
+          <!-- Chips flotantes -->
           <div class="chip chip-1"><span class="chip-dot"></span>Tech House</div>
           <div class="chip chip-2">↑ 24 new sets</div>
           <div class="chip chip-3"><span class="chip-dot chip-dot-orange"></span>Live</div>
@@ -471,7 +476,7 @@
   <footer class="footer">
     <div class="footer-top">
       <div class="footer-brand">
-        <img src="assets/hvx-logo-transparent.png" alt="HVX Music" class="logo-img footer-logo-img"/>
+        <div class="logo-video-wrap footer-logo-wrap"><video class="logo-video footer-logo-video" autoplay loop muted playsinline><source src="assets/hvx-logo.mp4" type="video/mp4"></video></div>
         <p>Artist Management for the Electronic Music Scene.</p>
       </div>
       <div class="footer-links">

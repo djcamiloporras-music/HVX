@@ -224,6 +224,12 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-track{background:var(--black)}
 ::-webkit-scrollbar-thumb{background:var(--accent);border-radius:2px}
+
+    /* ── Logo video admin ── */
+    .logo-video-wrap{display:block;width:130px;height:44px;overflow:hidden;position:relative;flex-shrink:0}
+    .logo-video{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);height:270px;width:auto;mix-blend-mode:screen;pointer-events:none}
+    .login-logo-wrap{display:block;width:160px;height:54px;overflow:hidden;position:relative;margin-bottom:.5rem}
+    .login-logo-vid{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);height:310px;width:auto;mix-blend-mode:screen;pointer-events:none}
 </style>
 </head>
 <body>
@@ -235,7 +241,7 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
 
 <!-- LOGIN SCREEN -->
 <div class="login-screen" id="login-screen">
-  <div class="login-logo">HVX<span>.</span> <span style="font-size:.9rem;font-weight:400;color:var(--muted)">Admin</span></div>
+  <div class="login-logo-wrap"><video class="login-logo-vid" autoplay loop muted playsinline><source src="assets/hvx-logo.mp4" type="video/mp4"></video></div><span style="font-size:.78rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)">Admin Panel</span>
   <div class="login-card">
     <p class="login-title">Sign In</p>
     <p class="login-sub">Access the HVX content management panel.</p>
@@ -258,8 +264,7 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-logo">
-      <div class="logo-t">HVX<span>.</span></div>
-      <p>Admin Panel</p>
+      <div class="logo-video-wrap"><video class="logo-video" autoplay loop muted playsinline><source src="assets/hvx-logo.mp4" type="video/mp4"></video></div>
     </div>
 
     <div class="nav-section">
