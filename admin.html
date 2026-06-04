@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>HVX Admin — Content Management</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --black:#080808;--dark:#0f0f0f;--dark-2:#161616;--dark-3:#1e1e1e;
+  --border:rgba(255,255,255,0.07);--white:#fff;--off-white:#c8c8c8;--muted:#6b6b6b;
+  --accent:#a259ff;--accent-2:#ff6b35;--green:#22c55e;--red:#ef4444;
+  --font-h:'Syne',sans-serif;--font-b:'Manrope',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:var(--font-b);cursor:none;overflow-x:hidden;min-height:100vh}
+a{color:inherit;text-decoration:none}
+button,input,select,textarea{font-family:var(--font-b)}
+
+/* CURSOR */
+.cursor{width:8px;height:8px;background:var(--accent);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .3s,height .3s,background .3s}
+.cursor-f{width:28px;height:28px;border:1px solid rgba(162,89,255,.5);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .3s,height .3s,opacity .3s}
+
+/* SCROLL PROGRESS */
+.sp{position:fixed;top:0;left:0;height:2px;width:0;background:linear-gradient(90deg,var(--accent),var(--accent-2));z-index:10000;transition:width .1s linear}
+
+/* LOGIN */
+.login-screen{position:fixed;inset:0;background:var(--black);display:flex;align-items:center;justify-content:center;z-index:500;flex-direction:column;gap:2rem}
+.login-screen.hidden{display:none}
+.login-logo{font-family:var(--font-h);font-size:2rem;font-weight:800;letter-spacing:-.02em}
+.login-logo span{color:var(--accent)}
+.login-card{width:100%;max-width:380px;background:var(--dark-2);border:1px solid var(--border);border-radius:6px;padding:2.5rem}
+.login-title{font-family:var(--font-h);font-size:1.4rem;font-weight:700;margin-bottom:.4rem}
+.login-sub{font-size:.82rem;color:var(--muted);margin-bottom:2rem}
+.form-group{margin-bottom:1rem}
+.form-label{display:block;font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem}
+.form-input{width:100%;background:var(--dark-3);border:1px solid var(--border);border-radius:3px;padding:.75rem 1rem;color:var(--white);font-size:.9rem;outline:none;transition:border-color .3s}
+.form-input:focus{border-color:var(--accent)}
+.form-input::placeholder{color:var(--muted)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;padding:.7rem 1.5rem;border-radius:3px;font-size:.85rem;font-weight:600;cursor:none;transition:.3s;border:none;position:relative;overflow:hidden}
+.btn-primary{background:var(--accent);color:#fff;width:100%}
+.btn-primary:hover{background:#b472ff}
+.btn-outline{background:transparent;color:var(--white);border:1px solid var(--border)}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent)}
+.btn-danger{background:transparent;color:var(--red);border:1px solid rgba(239,68,68,.3);font-size:.78rem;padding:.4rem .9rem}
+.btn-danger:hover{background:rgba(239,68,68,.1)}
+.btn-green{background:var(--green);color:#fff}
+.btn-sm{padding:.4rem .9rem;font-size:.78rem}
+.login-error{font-size:.8rem;color:var(--red);margin-top:.8rem;display:none}
+
+/* LAYOUT */
+.admin-wrap{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+.admin-wrap.hidden{display:none}
+
+/* SIDEBAR */
+.sidebar{background:var(--dark);border-right:1px solid var(--border);padding:2rem 0;position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column}
+.sidebar-logo{padding:0 1.5rem 2rem;border-bottom:1px solid var(--border);margin-bottom:1.5rem}
+.sidebar-logo .logo-t{font-family:var(--font-h);font-size:1.3rem;font-weight:800}
+.sidebar-logo .logo-t span{color:var(--accent)}
+.sidebar-logo p{font-size:.72rem;color:var(--muted);margin-top:.3rem;letter-spacing:.06em;text-transform:uppercase}
+.nav-section{padding:0 1rem;margin-bottom:.5rem}
+.nav-section-label{font-size:.62rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);padding:.5rem .5rem .5rem;display:block}
+.nav-item{display:flex;align-items:center;gap:.75rem;padding:.65rem .75rem;border-radius:4px;font-size:.85rem;font-weight:500;color:var(--off-white);cursor:none;transition:.25s;width:100%;background:none;border:none;text-align:left}
+.nav-item:hover{background:rgba(162,89,255,.08);color:var(--white)}
+.nav-item.active{background:rgba(162,89,255,.15);color:var(--accent)}
+.nav-item svg{flex-shrink:0;opacity:.7}
+.nav-item.active svg{opacity:1}
+.sidebar-bottom{margin-top:auto;padding:1.5rem;border-top:1px solid var(--border)}
+.sidebar-user{display:flex;align-items:center;gap:.8rem;margin-bottom:1rem}
+.user-avatar{width:36px;height:36px;background:linear-gradient(135deg,var(--accent),var(--accent-2));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;font-family:var(--font-h)}
+.user-name{font-size:.85rem;font-weight:600}
+.user-role{font-size:.7rem;color:var(--muted)}
+.logout-btn{width:100%;background:none;border:1px solid var(--border);border-radius:3px;padding:.5rem;font-size:.78rem;color:var(--muted);cursor:none;transition:.25s}
+.logout-btn:hover{border-color:var(--red);color:var(--red)}
+
+/* MAIN CONTENT */
+.main-content{padding:2.5rem 3rem;overflow-y:auto}
+.page-section{display:none}
+.page-section.active{display:block}
+
+/* PAGE HEADER */
+.page-header{margin-bottom:2.5rem;display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.page-title{font-family:var(--font-h);font-size:1.8rem;font-weight:700;margin-bottom:.3rem}
+.page-sub{font-size:.85rem;color:var(--muted)}
+.header-actions{display:flex;gap:.75rem;align-items:center;flex-wrap:wrap}
+
+/* KPI CARDS */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2.5rem}
+.kpi-card{background:var(--dark-2);border:1px solid var(--border);border-radius:6px;padding:1.5rem;transition:.3s}
+.kpi-card:hover{border-color:rgba(162,89,255,.3);transform:translateY(-2px)}
+.kpi-label{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem}
+.kpi-value{font-family:var(--font-h);font-size:2rem;font-weight:800;background:linear-gradient(120deg,#fff,var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.kpi-trend{font-size:.75rem;color:var(--green);margin-top:.4rem}
+
+/* TABLES */
+.table-wrap{background:var(--dark-2);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:2rem}
+.table-head{display:flex;justify-content:space-between;align-items:center;padding:1.2rem 1.5rem;border-bottom:1px solid var(--border)}
+.table-title{font-family:var(--font-h);font-size:1rem;font-weight:700}
+table{width:100%;border-collapse:collapse}
+thead th{padding:.8rem 1.5rem;text-align:left;font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border)}
+tbody tr{border-bottom:1px solid var(--border);transition:background .2s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:rgba(162,89,255,.04)}
+tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
+.badge{display:inline-flex;align-items:center;gap:.4rem;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.25rem .7rem;border-radius:100px}
+.badge-accent{background:rgba(162,89,255,.15);color:var(--accent);border:1px solid rgba(162,89,255,.3)}
+.badge-orange{background:rgba(255,107,53,.15);color:var(--accent-2);border:1px solid rgba(255,107,53,.3)}
+.badge-green{background:rgba(34,197,94,.12);color:var(--green);border:1px solid rgba(34,197,94,.25)}
+.badge-muted{background:rgba(255,255,255,.05);color:var(--muted);border:1px solid var(--border)}
+.artist-cell{display:flex;align-items:center;gap:.9rem}
+.artist-avatar{width:36px;height:36px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:700;font-family:var(--font-h);flex-shrink:0}
+.artist-avatar.av-nexus{background:linear-gradient(135deg,#a259ff,#6b21d4)}
+.artist-avatar.av-kara{background:linear-gradient(135deg,#ff6b35,#c2410c)}
+.artist-avatar.av-delvyn{background:linear-gradient(135deg,#10b981,#065f46)}
+.artist-avatar.av-solen{background:linear-gradient(135deg,#3b82f6,#1e3a8a)}
+.artist-avatar.av-mira{background:linear-gradient(135deg,#f59e0b,#92400e)}
+.artist-avatar.av-axio{background:linear-gradient(135deg,#ec4899,#831843)}
+.artist-name-cell{font-weight:700;font-family:var(--font-h)}
+.artist-genre{font-size:.72rem;color:var(--muted)}
+
+/* HIGHLIGHTS SECTION */
+.upload-zone{border:2px dashed var(--border);border-radius:6px;padding:3rem 2rem;text-align:center;transition:.3s;cursor:none;margin-bottom:1.5rem}
+.upload-zone:hover,.upload-zone.dragover{border-color:var(--accent);background:var(--accent-glow)}
+.upload-icon{font-size:2rem;margin-bottom:.75rem;opacity:.4}
+.upload-title{font-family:var(--font-h);font-size:1rem;font-weight:700;margin-bottom:.4rem}
+.upload-sub{font-size:.82rem;color:var(--muted);margin-bottom:1.2rem}
+#file-input{display:none}
+
+.highlight-form{background:var(--dark-2);border:1px solid var(--border);border-radius:6px;padding:1.5rem;margin-bottom:2rem}
+.highlight-form h3{font-family:var(--font-h);font-size:1rem;font-weight:700;margin-bottom:1.2rem}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.form-group{margin-bottom:1rem}
+.form-textarea{resize:vertical;min-height:80px}
+.char-count{font-size:.7rem;color:var(--muted);text-align:right;margin-top:.3rem}
+
+/* FEED GRID */
+.feed-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.feed-card{background:var(--dark-2);border:1px solid var(--border);border-radius:6px;overflow:hidden;transition:.3s}
+.feed-card:hover{border-color:rgba(162,89,255,.3);transform:translateY(-2px)}
+.feed-img{aspect-ratio:1;background:var(--dark-3);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.feed-img-preview{width:100%;height:100%;object-fit:cover;display:block}
+.feed-img-placeholder{font-size:.65rem;font-weight:700;letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
+.feed-source-badge{position:absolute;top:.6rem;right:.6rem;background:rgba(8,8,8,.8);border:1px solid var(--border);border-radius:100px;padding:.2rem .6rem;font-size:.62rem;font-weight:700;letter-spacing:.08em}
+.feed-body{padding:1rem}
+.feed-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem}
+.feed-artist{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.feed-date{font-size:.7rem;color:var(--muted)}
+.feed-caption{font-size:.82rem;color:var(--off-white);line-height:1.55;margin-bottom:.8rem}
+.feed-actions{display:flex;gap:.5rem;justify-content:flex-end}
+
+/* API KEYS */
+.api-section{background:var(--dark-2);border:1px solid var(--border);border-radius:6px;margin-bottom:1.5rem;overflow:hidden}
+.api-section-head{display:flex;align-items:center;justify-content:space-between;padding:1.2rem 1.5rem;border-bottom:1px solid var(--border);cursor:none}
+.api-section-title{display:flex;align-items:center;gap:.75rem;font-family:var(--font-h);font-size:.95rem;font-weight:700}
+.api-icon{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.85rem}
+.api-icon.ig{background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045)}
+.api-icon.spotify{background:#1db954}
+.api-icon.ra{background:#0b0b0b;border:1px solid #333}
+.api-icon.sc{background:#ff5500}
+.api-icon.webhook{background:var(--dark-3);border:1px solid var(--border)}
+.api-status{display:flex;align-items:center;gap:.4rem;font-size:.72rem;font-weight:600}
+.status-dot{width:6px;height:6px;border-radius:50%}
+.status-dot.connected{background:var(--green);animation:pulse 2s infinite}
+.status-dot.pending{background:var(--accent-2)}
+.status-dot.disconnected{background:var(--muted)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.api-body{padding:1.5rem;display:none}
+.api-body.open{display:block}
+.api-key-row{display:flex;gap:.75rem;margin-bottom:1rem}
+.api-key-input{flex:1;background:var(--dark-3);border:1px solid var(--border);border-radius:3px;padding:.65rem 1rem;color:var(--muted);font-size:.83rem;font-family:monospace;outline:none;transition:border .3s;letter-spacing:.05em}
+.api-key-input:focus{border-color:var(--accent);color:var(--white)}
+.api-desc{font-size:.78rem;color:var(--muted);line-height:1.6;margin-bottom:1rem;padding:.75rem;background:rgba(255,255,255,.03);border-radius:3px;border-left:2px solid var(--accent)}
+.copy-btn{padding:.65rem .9rem;background:var(--dark-3);border:1px solid var(--border);border-radius:3px;color:var(--off-white);font-size:.75rem;cursor:none;transition:.25s;white-space:nowrap}
+.copy-btn:hover{border-color:var(--accent);color:var(--accent)}
+.save-btn{padding:.65rem 1.2rem;background:var(--accent);border:none;border-radius:3px;color:#fff;font-size:.8rem;font-weight:600;cursor:none;transition:.25s}
+.save-btn:hover{background:#b472ff}
+
+.automation-card{background:var(--dark-3);border:1px solid var(--border);border-radius:4px;padding:1.2rem;margin-bottom:.75rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.automation-info{flex:1}
+.automation-name{font-size:.88rem;font-weight:600;margin-bottom:.2rem}
+.automation-desc{font-size:.75rem;color:var(--muted)}
+.toggle-wrap{display:flex;align-items:center;gap:.6rem}
+.toggle{width:40px;height:22px;background:var(--dark);border:1px solid var(--border);border-radius:100px;position:relative;cursor:none;transition:.3s;flex-shrink:0}
+.toggle.on{background:var(--accent);border-color:var(--accent)}
+.toggle::after{content:'';position:absolute;top:3px;left:3px;width:14px;height:14px;background:#fff;border-radius:50%;transition:.3s}
+.toggle.on::after{transform:translateX(18px)}
+.toggle-label{font-size:.72rem;color:var(--muted);white-space:nowrap}
+
+/* ACTIVITY LOG */
+.log-list{display:flex;flex-direction:column;gap:0}
+.log-item{display:flex;align-items:flex-start;gap:1rem;padding:1rem 1.5rem;border-bottom:1px solid var(--border);font-size:.82rem}
+.log-item:last-child{border-bottom:none}
+.log-dot{width:8px;height:8px;border-radius:50%;margin-top:.3rem;flex-shrink:0}
+.log-dot.green{background:var(--green)}
+.log-dot.purple{background:var(--accent)}
+.log-dot.orange{background:var(--accent-2)}
+.log-text{flex:1;line-height:1.5;color:var(--off-white)}
+.log-time{color:var(--muted);font-size:.75rem;white-space:nowrap}
+
+/* SETTINGS */
+.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.settings-card{background:var(--dark-2);border:1px solid var(--border);border-radius:6px;padding:1.5rem}
+.settings-card-title{font-family:var(--font-h);font-size:1rem;font-weight:700;margin-bottom:1.2rem;padding-bottom:.8rem;border-bottom:1px solid var(--border)}
+.danger-zone{background:rgba(239,68,68,.05);border:1px solid rgba(239,68,68,.2);border-radius:6px;padding:1.5rem;margin-top:1.5rem}
+.danger-title{font-family:var(--font-h);font-weight:700;color:var(--red);margin-bottom:.5rem}
+.danger-desc{font-size:.82rem;color:var(--muted);margin-bottom:1rem;line-height:1.6}
+
+/* TOAST */
+.toast-wrap{position:fixed;bottom:1.5rem;right:1.5rem;z-index:9990;display:flex;flex-direction:column;gap:.5rem;pointer-events:none}
+.toast{background:var(--dark-2);border:1px solid var(--border);border-radius:4px;padding:.8rem 1.2rem;font-size:.83rem;display:flex;align-items:center;gap:.6rem;transform:translateX(120%);transition:transform .35s cubic-bezier(.4,0,.2,1);pointer-events:none}
+.toast.show{transform:translateX(0)}
+.toast.success{border-color:rgba(34,197,94,.3)}
+.toast.error{border-color:rgba(239,68,68,.3)}
+.toast-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.toast.success .toast-dot{background:var(--green)}
+.toast.error .toast-dot{background:var(--red)}
+
+/* RIPPLE */
+.ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.15);transform:scale(0);animation:rippleA .6s linear;pointer-events:none}
+@keyframes rippleA{to{transform:scale(4);opacity:0}}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--black)}
+::-webkit-scrollbar-thumb{background:var(--accent);border-radius:2px}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-f" id="cursor-f"></div>
+<div class="sp" id="sp"></div>
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<!-- LOGIN SCREEN -->
+<div class="login-screen" id="login-screen">
+  <div class="login-logo">HVX<span>.</span> <span style="font-size:.9rem;font-weight:400;color:var(--muted)">Admin</span></div>
+  <div class="login-card">
+    <p class="login-title">Sign In</p>
+    <p class="login-sub">Access the HVX content management panel.</p>
+    <div class="form-group">
+      <label class="form-label">Username</label>
+      <input type="text" class="form-input" id="login-user" placeholder="admin" autocomplete="username"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <input type="password" class="form-input" id="login-pass" placeholder="••••••••" autocomplete="current-password"/>
+    </div>
+    <button class="btn btn-primary" id="login-btn">Sign In →</button>
+    <p class="login-error" id="login-error">Invalid credentials. Try: admin / hvxmusic2026</p>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div class="admin-wrap hidden" id="admin-wrap">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-t">HVX<span>.</span></div>
+      <p>Admin Panel</p>
+    </div>
+
+    <div class="nav-section">
+      <span class="nav-section-label">Overview</span>
+      <button class="nav-item active" data-page="dashboard">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Dashboard
+      </button>
+    </div>
+
+    <div class="nav-section">
+      <span class="nav-section-label">Content</span>
+      <button class="nav-item" data-page="highlights">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 20M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+        Highlights & Feed
+      </button>
+      <button class="nav-item" data-page="artists">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        Artists
+      </button>
+      <button class="nav-item" data-page="events">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        Events & Shows
+      </button>
+    </div>
+
+    <div class="nav-section">
+      <span class="nav-section-label">Integrations</span>
+      <button class="nav-item" data-page="api">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+        API Keys & Automations
+      </button>
+    </div>
+
+    <div class="nav-section">
+      <span class="nav-section-label">System</span>
+      <button class="nav-item" data-page="activity">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Activity Log
+      </button>
+      <button class="nav-item" data-page="settings">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        Settings
+      </button>
+    </div>
+
+    <div class="sidebar-bottom">
+      <div class="sidebar-user">
+        <div class="user-avatar">AD</div>
+        <div>
+          <div class="user-name">Admin</div>
+          <div class="user-role">Super Admin</div>
+        </div>
+      </div>
+      <button class="logout-btn" id="logout-btn">Sign Out</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+
+    <!-- DASHBOARD -->
+    <div class="page-section active" id="page-dashboard">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Dashboard</h1>
+          <p class="page-sub">Welcome back. Here's what's happening with HVX Music.</p>
+        </div>
+        <div class="header-actions">
+          <a href="index.html" class="btn btn-outline btn-sm">← View Site</a>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <p class="kpi-label">Total Artists</p>
+          <p class="kpi-value">6</p>
+          <p class="kpi-trend">↑ +1 this month</p>
+        </div>
+        <div class="kpi-card">
+          <p class="kpi-label">Shows This Month</p>
+          <p class="kpi-value">24</p>
+          <p class="kpi-trend">↑ +8 vs last month</p>
+        </div>
+        <div class="kpi-card">
+          <p class="kpi-label">Total Highlights</p>
+          <p class="kpi-value" id="dash-highlights">0</p>
+          <p class="kpi-trend">Content pieces</p>
+        </div>
+        <div class="kpi-card">
+          <p class="kpi-label">Active Automations</p>
+          <p class="kpi-value" id="dash-automations">3</p>
+          <p class="kpi-trend">↑ Running</p>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <div class="table-head">
+          <h3 class="table-title">Artist Roster</h3>
+          <a href="artists.html" class="btn btn-outline btn-sm">View All Artists →</a>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Artist</th><th>Genre</th><th>Shows/yr</th><th>Top Market</th><th>Status</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><div class="artist-cell"><div class="artist-avatar av-nexus">NX</div><div><div class="artist-name-cell">NEXUS</div><div class="artist-genre">Berlin, DE</div></div></div></td><td><span class="badge badge-orange">Tech House</span></td><td>80</td><td>Berlin</td><td><span class="badge badge-green">Active</span></td><td><a href="artist-profile.html?id=nexus" class="btn btn-outline btn-sm">Profile</a></td></tr>
+            <tr><td><div class="artist-cell"><div class="artist-avatar av-kara">KA</div><div><div class="artist-name-cell">KARA</div><div class="artist-genre">New York, US</div></div></div></td><td><span class="badge badge-accent">House</span></td><td>65</td><td>New York</td><td><span class="badge badge-green">Active</span></td><td><a href="artist-profile.html?id=kara" class="btn btn-outline btn-sm">Profile</a></td></tr>
+            <tr><td><div class="artist-cell"><div class="artist-avatar av-delvyn">DL</div><div><div class="artist-name-cell">DELVYN</div><div class="artist-genre">London, UK</div></div></div></td><td><span class="badge badge-muted">Dance</span></td><td>90</td><td>London</td><td><span class="badge badge-green">Active</span></td><td><a href="artist-profile.html?id=delvyn" class="btn btn-outline btn-sm">Profile</a></td></tr>
+            <tr><td><div class="artist-cell"><div class="artist-avatar av-solen">SL</div><div><div class="artist-name-cell">SOLEN</div><div class="artist-genre">Barcelona, ES</div></div></div></td><td><span class="badge badge-accent">House</span></td><td>55</td><td>Barcelona</td><td><span class="badge badge-green">Active</span></td><td><a href="artist-profile.html?id=solen" class="btn btn-outline btn-sm">Profile</a></td></tr>
+            <tr><td><div class="artist-cell"><div class="artist-avatar av-mira">MI</div><div><div class="artist-name-cell">MIRA</div><div class="artist-genre">Buenos Aires, AR</div></div></div></td><td><span class="badge badge-orange">Tech House</span></td><td>70</td><td>LATAM</td><td><span class="badge badge-green">Active</span></td><td><a href="artist-profile.html?id=mira" class="btn btn-outline btn-sm">Profile</a></td></tr>
+            <tr><td><div class="artist-cell"><div class="artist-avatar av-axio">AX</div><div><div class="artist-name-cell">AXIO</div><div class="artist-genre">Paris, FR</div></div></div></td><td><span class="badge badge-muted">Dance</span></td><td>75</td><td>Paris</td><td><span class="badge badge-green">Active</span></td><td><a href="artist-profile.html?id=axio" class="btn btn-outline btn-sm">Profile</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-wrap">
+        <div class="table-head"><h3 class="table-title">Recent Activity</h3></div>
+        <div class="log-list" id="dash-activity"></div>
+      </div>
+    </div>
+
+    <!-- HIGHLIGHTS & FEED -->
+    <div class="page-section" id="page-highlights">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Highlights & Feed</h1>
+          <p class="page-sub">Upload and manage content shown on artist profile pages.</p>
+        </div>
+        <div class="header-actions">
+          <select class="form-input" id="artist-select" style="width:180px;padding:.5rem .8rem;font-size:.82rem">
+            <option value="all">All Artists</option>
+            <option value="nexus">NEXUS</option>
+            <option value="kara">KARA</option>
+            <option value="delvyn">DELVYN</option>
+            <option value="solen">SOLEN</option>
+            <option value="mira">MIRA</option>
+            <option value="axio">AXIO</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="highlight-form">
+        <h3>Upload New Highlight</h3>
+        <div class="upload-zone" id="upload-zone">
+          <div class="upload-icon">📸</div>
+          <p class="upload-title">Drop image or video here</p>
+          <p class="upload-sub">Supports JPG, PNG, MP4 — max 20MB</p>
+          <button class="btn btn-outline" onclick="document.getElementById('file-input').click()">Choose File</button>
+          <input type="file" id="file-input" accept="image/*,video/mp4"/>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Artist</label>
+            <select class="form-input" id="upload-artist">
+              <option value="nexus">NEXUS</option>
+              <option value="kara">KARA</option>
+              <option value="delvyn">DELVYN</option>
+              <option value="solen">SOLEN</option>
+              <option value="mira">MIRA</option>
+              <option value="axio">AXIO</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Source / Platform</label>
+            <select class="form-input" id="upload-source">
+              <option value="Instagram">Instagram</option>
+              <option value="Photo">Photo</option>
+              <option value="Video">Video</option>
+              <option value="Backstage">Backstage</option>
+              <option value="Press">Press</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Caption</label>
+          <textarea class="form-input form-textarea" id="upload-caption" placeholder="Write a caption..." maxlength="220"></textarea>
+          <p class="char-count"><span id="cap-count">0</span>/220</p>
+        </div>
+        <button class="btn btn-primary" id="upload-btn" style="width:auto;padding:.7rem 2rem">Publish to Feed</button>
+      </div>
+
+      <div class="feed-grid" id="feed-grid">
+        <p style="color:var(--muted);font-size:.85rem;grid-column:1/-1">No highlights published yet. Upload content above.</p>
+      </div>
+    </div>
+
+    <!-- ARTISTS PAGE (admin view) -->
+    <div class="page-section" id="page-artists">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Artists</h1>
+          <p class="page-sub">Manage roster, bios, and artist data.</p>
+        </div>
+        <div class="header-actions">
+          <a href="artists.html" target="_blank" class="btn btn-outline btn-sm">View Public Page →</a>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Artist</th><th>Genre</th><th>City</th><th>Shows/yr</th><th>Avg Reach</th><th>Profile</th></tr></thead>
+          <tbody>
+            <tr><td><div class="artist-cell"><div class="artist-avatar av-nexus">NX</div><div><div class="artist-name-cell">NEXUS</div></div></div></td><td><span class="badge badge-orange">Tech House</span></td><td>Berlin, DE</td><td>80</td><td>3,200</td><td><a href="artist-profile.html?id=nexus" target="_blank" class="btn btn-outline btn-sm">Open</a></td></tr>
+            <tr><td><div class="artist-cell"><div class="artist-avatar av-kara">KA</div><div><div class="artist-name-cell">KARA</div></div></div></td><td><span class="badge badge-accent">House</span></td><td>New York, US</td><td>65</td><td>2,800</td><td><a href="artist-profile.html?id=kara" target="_blank" class="btn btn-outline btn-sm">Open</a></td></tr>
+            <tr><td><div class="artist-cell"><div class="artist-avatar av-delvyn">DL</div><div><div class="artist-name-cell">DELVYN</div></div></div></td><td><span class="badge badge-muted">Dance</span></td><td>London, UK</td><td>90</td><td>4,100</td><td><a href="artist-profile.html?id=delvyn" target="_blank" class="btn btn-outline btn-sm">Open</a></td></tr>
+            <tr><td><div class="artist-cell"><div class="artist-avatar av-solen">SL</div><div><div class="artist-name-cell">SOLEN</div></div></div></td><td><span class="badge badge-accent">House</span></td><td>Barcelona, ES</td><td>55</td><td>2,400</td><td><a href="artist-profile.html?id=solen" target="_blank" class="btn btn-outline btn-sm">Open</a></td></tr>
+            <tr><td><div class="artist-cell"><div class="artist-avatar av-mira">MI</div><div><div class="artist-name-cell">MIRA</div></div></div></td><td><span class="badge badge-orange">Tech House</span></td><td>Buenos Aires, AR</td><td>70</td><td>3,600</td><td><a href="artist-profile.html?id=mira" target="_blank" class="btn btn-outline btn-sm">Open</a></td></tr>
+            <tr><td><div class="artist-cell"><div class="artist-avatar av-axio">AX</div><div><div class="artist-name-cell">AXIO</div></div></div></td><td><span class="badge badge-muted">Dance</span></td><td>Paris, FR</td><td>75</td><td>3,900</td><td><a href="artist-profile.html?id=axio" target="_blank" class="btn btn-outline btn-sm">Open</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- EVENTS -->
+    <div class="page-section" id="page-events">
+      <div class="page-header">
+        <div><h1 class="page-title">Events & Shows</h1><p class="page-sub">Upcoming confirmed bookings across all artists.</p></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Date</th><th>Artist</th><th>Venue</th><th>City</th><th>Capacity</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Aug 02, 2026</td><td><span class="badge badge-orange">NEXUS</span></td><td>Tresor</td><td>Berlin, DE</td><td>1,200</td><td><span class="badge badge-green">Confirmed</span></td></tr>
+            <tr><td>Aug 09, 2026</td><td><span class="badge badge-accent">KARA</span></td><td>Output</td><td>New York, US</td><td>800</td><td><span class="badge badge-green">Confirmed</span></td></tr>
+            <tr><td>Aug 14, 2026</td><td><span class="badge badge-muted">DELVYN</span></td><td>Fabric</td><td>London, UK</td><td>1,500</td><td><span class="badge badge-green">Confirmed</span></td></tr>
+            <tr><td>Sep 06, 2026</td><td><span class="badge badge-accent">SOLEN</span></td><td>Razzmatazz</td><td>Barcelona, ES</td><td>2,000</td><td><span class="badge badge-accent">Pending</span></td></tr>
+            <tr><td>Sep 19, 2026</td><td><span class="badge badge-orange">MIRA</span></td><td>Crobar</td><td>Buenos Aires, AR</td><td>3,200</td><td><span class="badge badge-green">Confirmed</span></td></tr>
+            <tr><td>Oct 03, 2026</td><td><span class="badge badge-muted">AXIO</span></td><td>Rex Club</td><td>Paris, FR</td><td>600</td><td><span class="badge badge-accent">Pending</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- API KEYS & AUTOMATIONS -->
+    <div class="page-section" id="page-api">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">API Keys & Automations</h1>
+          <p class="page-sub">Connect external platforms and configure automated content updates.</p>
+        </div>
+      </div>
+
+      <div style="background:rgba(162,89,255,.08);border:1px solid rgba(162,89,255,.25);border-radius:6px;padding:1rem 1.5rem;margin-bottom:2rem;font-size:.83rem;color:var(--off-white);line-height:1.6">
+        ⚠️ <strong style="color:var(--accent)">Security note:</strong> API keys are stored locally in your browser (localStorage) for this prototype. In production, keys must be stored server-side and never exposed in client code. Use environment variables or a secrets manager.
+      </div>
+
+      <!-- INSTAGRAM -->
+      <div class="api-section">
+        <div class="api-section-head" onclick="toggleApi('ig')">
+          <div class="api-section-title">
+            <div class="api-icon ig">📷</div>
+            Instagram Graph API
+            <span class="api-status"><span class="status-dot pending"></span> Not connected</span>
+          </div>
+          <span style="color:var(--muted);font-size:.8rem">Expand ▾</span>
+        </div>
+        <div class="api-body" id="api-ig">
+          <p class="api-desc">Connect the Instagram Graph API to automatically pull posts, stories and reels from your artists' accounts into the Highlights feed. Requires a Meta Business App with <code>instagram_basic</code> and <code>instagram_content_publish</code> permissions.</p>
+          <div class="form-group">
+            <label class="form-label">App ID</label>
+            <div class="api-key-row">
+              <input type="text" class="api-key-input" id="ig-app-id" placeholder="Enter Instagram App ID…"/>
+              <button class="save-btn" onclick="saveKey('ig-app-id','ig_app_id')">Save</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">App Secret</label>
+            <div class="api-key-row">
+              <input type="password" class="api-key-input" id="ig-secret" placeholder="••••••••••••••••••••"/>
+              <button class="save-btn" onclick="saveKey('ig-secret','ig_secret')">Save</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Long-Lived Access Token</label>
+            <div class="api-key-row">
+              <input type="text" class="api-key-input" id="ig-token" placeholder="EAABwzLixnjYBO…"/>
+              <button class="copy-btn" onclick="copyField('ig-token')">Copy</button>
+              <button class="save-btn" onclick="saveKey('ig-token','ig_token')">Save</button>
+            </div>
+          </div>
+          <div class="automation-card">
+            <div class="automation-info">
+              <p class="automation-name">Auto-sync Instagram posts → Highlights</p>
+              <p class="automation-desc">Every 6 hours, fetch latest posts from connected artist accounts and add to the Highlights feed.</p>
+            </div>
+            <div class="toggle-wrap">
+              <div class="toggle" id="toggle-ig-sync" onclick="toggleSwitch(this)"></div>
+              <span class="toggle-label">Off</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SPOTIFY -->
+      <div class="api-section">
+        <div class="api-section-head" onclick="toggleApi('spotify')">
+          <div class="api-section-title">
+            <div class="api-icon spotify" style="color:#fff;font-weight:900;font-size:.65rem;font-family:var(--font-h)">SP</div>
+            Spotify for Artists API
+            <span class="api-status"><span class="status-dot pending"></span> Not connected</span>
+          </div>
+          <span style="color:var(--muted);font-size:.8rem">Expand ▾</span>
+        </div>
+        <div class="api-body" id="api-spotify">
+          <p class="api-desc">Connect Spotify to automatically update monthly listener counts, stream totals, and top tracks shown in each artist's Analytics tab.</p>
+          <div class="form-group">
+            <label class="form-label">Client ID</label>
+            <div class="api-key-row">
+              <input type="text" class="api-key-input" id="sp-id" placeholder="Enter Spotify Client ID…"/>
+              <button class="save-btn" onclick="saveKey('sp-id','spotify_client_id')">Save</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Client Secret</label>
+            <div class="api-key-row">
+              <input type="password" class="api-key-input" id="sp-secret" placeholder="••••••••••••••••••••"/>
+              <button class="save-btn" onclick="saveKey('sp-secret','spotify_secret')">Save</button>
+            </div>
+          </div>
+          <div class="automation-card">
+            <div class="automation-info">
+              <p class="automation-name">Sync monthly listeners to Analytics</p>
+              <p class="automation-desc">Update stream counts and listener data on the artist profile automatically.</p>
+            </div>
+            <div class="toggle-wrap">
+              <div class="toggle" id="toggle-sp-sync" onclick="toggleSwitch(this)"></div>
+              <span class="toggle-label">Off</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESIDENT ADVISOR -->
+      <div class="api-section">
+        <div class="api-section-head" onclick="toggleApi('ra')">
+          <div class="api-section-title">
+            <div class="api-icon ra" style="color:#fff;font-size:.65rem;font-weight:900;font-family:var(--font-h)">RA</div>
+            Resident Advisor
+            <span class="api-status"><span class="status-dot pending"></span> Not connected</span>
+          </div>
+          <span style="color:var(--muted);font-size:.8rem">Expand ▾</span>
+        </div>
+        <div class="api-body" id="api-ra">
+          <p class="api-desc">Connect to RA's unofficial API or scraper endpoint to pull event listings, RA Watchlist numbers, and ratings directly into artist profiles.</p>
+          <div class="form-group">
+            <label class="form-label">RA API Endpoint</label>
+            <div class="api-key-row">
+              <input type="text" class="api-key-input" id="ra-endpoint" placeholder="https://ra.co/api/…"/>
+              <button class="save-btn" onclick="saveKey('ra-endpoint','ra_endpoint')">Save</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Bearer Token</label>
+            <div class="api-key-row">
+              <input type="password" class="api-key-input" id="ra-token" placeholder="Bearer token…"/>
+              <button class="save-btn" onclick="saveKey('ra-token','ra_token')">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SOUNDCLOUD -->
+      <div class="api-section">
+        <div class="api-section-head" onclick="toggleApi('sc')">
+          <div class="api-section-title">
+            <div class="api-icon sc" style="color:#fff;font-size:.65rem;font-weight:900;font-family:var(--font-h)">SC</div>
+            SoundCloud API
+            <span class="api-status"><span class="status-dot pending"></span> Not connected</span>
+          </div>
+          <span style="color:var(--muted);font-size:.8rem">Expand ▾</span>
+        </div>
+        <div class="api-body" id="api-sc">
+          <p class="api-desc">Pull play counts, follower numbers, and latest tracks from SoundCloud to auto-update the Music and Sets tabs on artist profiles.</p>
+          <div class="form-group">
+            <label class="form-label">Client ID</label>
+            <div class="api-key-row">
+              <input type="text" class="api-key-input" id="sc-id" placeholder="SoundCloud Client ID…"/>
+              <button class="save-btn" onclick="saveKey('sc-id','sc_client_id')">Save</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">OAuth Token</label>
+            <div class="api-key-row">
+              <input type="text" class="api-key-input" id="sc-token" placeholder="OAuth 2.0 token…"/>
+              <button class="copy-btn" onclick="copyField('sc-token')">Copy</button>
+              <button class="save-btn" onclick="saveKey('sc-token','sc_token')">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WEBHOOK -->
+      <div class="api-section">
+        <div class="api-section-head" onclick="toggleApi('webhook')">
+          <div class="api-section-title">
+            <div class="api-icon webhook">🔗</div>
+            Custom Webhooks
+            <span class="api-status"><span class="status-dot disconnected"></span> Inactive</span>
+          </div>
+          <span style="color:var(--muted);font-size:.8rem">Expand ▾</span>
+        </div>
+        <div class="api-body" id="api-webhook">
+          <p class="api-desc">Configure outgoing webhooks to notify external systems (Make, Zapier, n8n, custom backend) when content is uploaded, a show is confirmed, or an artist profile is updated.</p>
+          <div class="form-group">
+            <label class="form-label">Webhook URL (on highlight upload)</label>
+            <div class="api-key-row">
+              <input type="text" class="api-key-input" id="wh-upload" placeholder="https://hooks.zapier.com/hooks/catch/…"/>
+              <button class="save-btn" onclick="saveKey('wh-upload','webhook_upload')">Save</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Webhook URL (on show confirmed)</label>
+            <div class="api-key-row">
+              <input type="text" class="api-key-input" id="wh-show" placeholder="https://hooks.make.com/…"/>
+              <button class="save-btn" onclick="saveKey('wh-show','webhook_show')">Save</button>
+            </div>
+          </div>
+          <div class="automation-card">
+            <div class="automation-info">
+              <p class="automation-name">Post to social on new highlight</p>
+              <p class="automation-desc">Trigger a Make/Zapier scenario when a new highlight is published to auto-share to Instagram Stories or Twitter.</p>
+            </div>
+            <div class="toggle-wrap">
+              <div class="toggle on" id="toggle-wh-share" onclick="toggleSwitch(this)"></div>
+              <span class="toggle-label">On</span>
+            </div>
+          </div>
+          <div class="automation-card">
+            <div class="automation-info">
+              <p class="automation-name">Notify booking team on inquiry</p>
+              <p class="automation-desc">When contact form is submitted with type "Booking Request", fire webhook to Slack #bookings channel.</p>
+            </div>
+            <div class="toggle-wrap">
+              <div class="toggle on" id="toggle-wh-booking" onclick="toggleSwitch(this)"></div>
+              <span class="toggle-label">On</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACTIVITY LOG -->
+    <div class="page-section" id="page-activity">
+      <div class="page-header">
+        <div><h1 class="page-title">Activity Log</h1><p class="page-sub">Recent admin actions and system events.</p></div>
+        <button class="btn btn-outline btn-sm" onclick="clearActivity()">Clear Log</button>
+      </div>
+      <div class="table-wrap">
+        <div class="log-list" id="activity-log"></div>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="page-section" id="page-settings">
+      <div class="page-header">
+        <div><h1 class="page-title">Settings</h1><p class="page-sub">Site preferences and admin configuration.</p></div>
+      </div>
+      <div class="settings-grid">
+        <div class="settings-card">
+          <h3 class="settings-card-title">Site Info</h3>
+          <div class="form-group">
+            <label class="form-label">Agency Name</label>
+            <input type="text" class="form-input" value="HVX Music"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Booking Email</label>
+            <input type="email" class="form-input" value="booking@hvxmusic.com"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">General Email</label>
+            <input type="email" class="form-input" value="info@hvxmusic.com"/>
+          </div>
+          <button class="btn btn-primary" style="width:auto" onclick="toast('Settings saved','success')">Save Changes</button>
+        </div>
+        <div class="settings-card">
+          <h3 class="settings-card-title">Admin Password</h3>
+          <div class="form-group">
+            <label class="form-label">Current Password</label>
+            <input type="password" class="form-input" placeholder="••••••••"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">New Password</label>
+            <input type="password" class="form-input" placeholder="••••••••"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Confirm New Password</label>
+            <input type="password" class="form-input" placeholder="••••••••"/>
+          </div>
+          <button class="btn btn-primary" style="width:auto" onclick="toast('Password updated','success')">Update Password</button>
+        </div>
+      </div>
+      <div class="danger-zone">
+        <h3 class="danger-title">Danger Zone</h3>
+        <p class="danger-desc">These actions are irreversible. Please be certain before proceeding.</p>
+        <button class="btn btn-danger" onclick="if(confirm('Clear all highlights from localStorage?')){localStorage.clear();toast('All data cleared','error');logActivity('All localStorage data cleared','orange')}">Clear All Highlights Data</button>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// ── CURSOR ─────────────────────────────────────────────────────────────────
+const cur=document.getElementById('cursor'),curf=document.getElementById('cursor-f');
+let mx=0,my=0,fx=0,fy=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
+(function af(){fx+=(mx-fx)*.12;fy+=(my-fy)*.12;curf.style.left=fx+'px';curf.style.top=fy+'px';requestAnimationFrame(af)})();
+
+// ── SCROLL PROGRESS ────────────────────────────────────────────────────────
+const sp=document.getElementById('sp');
+window.addEventListener('scroll',()=>{const d=document.documentElement;sp.style.width=(d.scrollTop/(d.scrollHeight-d.clientHeight)*100)+'%'},{passive:true});
+
+// ── RIPPLE ─────────────────────────────────────────────────────────────────
+document.addEventListener('click',e=>{const btn=e.target.closest('.btn');if(!btn)return;const r=btn.getBoundingClientRect();const rip=document.createElement('span');const s=Math.max(r.width,r.height);rip.className='ripple';rip.style.cssText=`width:${s}px;height:${s}px;left:${e.clientX-r.left-s/2}px;top:${e.clientY-r.top-s/2}px`;btn.appendChild(rip);rip.addEventListener('animationend',()=>rip.remove())});
+
+// ── TOAST ──────────────────────────────────────────────────────────────────
+function toast(msg,type='success'){const w=document.getElementById('toast-wrap');const t=document.createElement('div');t.className=`toast ${type}`;t.innerHTML=`<span class="toast-dot"></span>${msg}`;w.appendChild(t);setTimeout(()=>t.classList.add('show'),10);setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),400)},3200)}
+
+// ── AUTH ───────────────────────────────────────────────────────────────────
+const CREDS={user:'admin',pass:'hvxmusic2026'};
+
+function checkSession(){if(localStorage.getItem('hvx_admin')==='true'){showAdmin()}}
+function showAdmin(){document.getElementById('login-screen').classList.add('hidden');document.getElementById('admin-wrap').classList.remove('hidden');localStorage.setItem('hvx_admin','true');renderFeed();updateDashStats();renderActivity()}
+
+document.getElementById('login-btn').addEventListener('click',()=>{
+  const u=document.getElementById('login-user').value;
+  const p=document.getElementById('login-pass').value;
+  const err=document.getElementById('login-error');
+  if(u===CREDS.user&&p===CREDS.pass){err.style.display='none';showAdmin();logActivity('Admin signed in','green')}
+  else{err.style.display='block'}
+});
+document.getElementById('login-pass').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('login-btn').click()});
+document.getElementById('logout-btn').addEventListener('click',()=>{localStorage.removeItem('hvx_admin');location.reload()});
+
+// ── NAVIGATION ─────────────────────────────────────────────────────────────
+document.querySelectorAll('.nav-item[data-page]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.page-section').forEach(s=>s.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('page-'+btn.dataset.page).classList.add('active');
+    if(btn.dataset.page==='highlights')renderFeed();
+    if(btn.dataset.page==='activity')renderActivity();
+  });
+});
+
+// ── ACTIVITY LOG ───────────────────────────────────────────────────────────
+function logActivity(text,color='purple'){
+  const logs=JSON.parse(localStorage.getItem('hvx_activity')||'[]');
+  logs.unshift({text,color,time:new Date().toLocaleTimeString()});
+  if(logs.length>50)logs.pop();
+  localStorage.setItem('hvx_activity',JSON.stringify(logs));
+  renderActivity();updateDashActivity();
+}
+function renderActivity(){
+  const logs=JSON.parse(localStorage.getItem('hvx_activity')||'[]');
+  const el=document.getElementById('activity-log');
+  const dash=document.getElementById('dash-activity');
+  const html=logs.length?logs.map(l=>`<div class="log-item"><span class="log-dot ${l.color}"></span><span class="log-text">${l.text}</span><span class="log-time">${l.time}</span></div>`).join(''):'<p style="padding:1.5rem;color:var(--muted);font-size:.85rem">No activity yet.</p>';
+  if(el)el.innerHTML=html;
+  if(dash)dash.innerHTML=html;
+}
+function clearActivity(){localStorage.removeItem('hvx_activity');renderActivity();toast('Activity log cleared','success')}
+function updateDashActivity(){renderActivity()}
+
+// ── HIGHLIGHTS FEED ────────────────────────────────────────────────────────
+function getHighlights(){return JSON.parse(localStorage.getItem('hvx_highlights')||'[]')}
+function saveHighlights(h){localStorage.setItem('hvx_highlights',JSON.stringify(h))}
+
+function renderFeed(){
+  const all=getHighlights();
+  const filter=document.getElementById('artist-select')?.value||'all';
+  const items=filter==='all'?all:all.filter(h=>h.artist===filter);
+  const grid=document.getElementById('feed-grid');
+  if(!grid)return;
+  if(!items.length){grid.innerHTML='<p style="color:var(--muted);font-size:.85rem;grid-column:1/-1">No highlights yet. Upload content above.</p>';return}
+  grid.innerHTML=items.map((h,i)=>`
+    <div class="feed-card">
+      <div class="feed-img">
+        ${h.dataUrl?`<img class="feed-img-preview" src="${h.dataUrl}" alt=""/>`:'<span class="feed-img-placeholder">No Preview</span>'}
+        <span class="feed-source-badge">${h.source}</span>
+      </div>
+      <div class="feed-body">
+        <div class="feed-meta">
+          <span class="feed-artist">${h.artist.toUpperCase()}</span>
+          <span class="feed-date">${h.date}</span>
+        </div>
+        <p class="feed-caption">${h.caption||'—'}</p>
+        <div class="feed-actions">
+          <button class="btn btn-danger btn-sm" onclick="deleteHighlight(${h.id})">Delete</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+document.getElementById('artist-select')?.addEventListener('change',renderFeed);
+
+document.getElementById('upload-caption')?.addEventListener('input',function(){
+  document.getElementById('cap-count').textContent=this.value.length;
+});
+
+let uploadedFile=null;
+document.getElementById('file-input')?.addEventListener('change',e=>{
+  uploadedFile=e.target.files[0];
+  if(uploadedFile){document.querySelector('.upload-title').textContent=uploadedFile.name;document.querySelector('.upload-icon').textContent='✅'}
+});
+
+const zone=document.getElementById('upload-zone');
+zone?.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('dragover')});
+zone?.addEventListener('dragleave',()=>zone.classList.remove('dragover'));
+zone?.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('dragover');uploadedFile=e.dataTransfer.files[0];if(uploadedFile){document.querySelector('.upload-title').textContent=uploadedFile.name;document.querySelector('.upload-icon').textContent='✅'}});
+
+document.getElementById('upload-btn')?.addEventListener('click',()=>{
+  const artist=document.getElementById('upload-artist').value;
+  const source=document.getElementById('upload-source').value;
+  const caption=document.getElementById('upload-caption').value.trim();
+  const highlights=getHighlights();
+  const id=Date.now();
+
+  function doSave(dataUrl){
+    highlights.unshift({id,artist,source,caption,date:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}),dataUrl:dataUrl||null});
+    saveHighlights(highlights);
+    renderFeed();
+    updateDashStats();
+    logActivity(`New highlight uploaded for ${artist.toUpperCase()} (${source})`,'purple');
+    toast('Highlight published to feed!','success');
+    document.getElementById('upload-caption').value='';
+    document.getElementById('cap-count').textContent='0';
+    uploadedFile=null;
+    document.querySelector('.upload-title').textContent='Drop image or video here';
+    document.querySelector('.upload-icon').textContent='📸';
+    // Fire webhook if configured
+    const wh=localStorage.getItem('webhook_upload');
+    if(wh)fetch(wh,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({event:'highlight_uploaded',artist,source,caption})}).catch(()=>{});
+  }
+
+  if(uploadedFile&&uploadedFile.type.startsWith('image')){
+    const reader=new FileReader();
+    reader.onload=e=>doSave(e.target.result);
+    reader.readAsDataURL(uploadedFile);
+  } else {
+    doSave(null);
+  }
+});
+
+function deleteHighlight(id){
+  if(!confirm('Delete this highlight?'))return;
+  saveHighlights(getHighlights().filter(h=>h.id!==id));
+  renderFeed();updateDashStats();
+  logActivity(`Highlight #${id} deleted`,'orange');
+  toast('Highlight deleted','error');
+}
+
+function updateDashStats(){
+  const el=document.getElementById('dash-highlights');
+  if(el)el.textContent=getHighlights().length;
+}
+
+// ── API KEYS ───────────────────────────────────────────────────────────────
+function toggleApi(id){const body=document.getElementById('api-'+id);body.classList.toggle('open')}
+
+function saveKey(inputId,storageKey){
+  const val=document.getElementById(inputId).value.trim();
+  if(!val){toast('Enter a value first','error');return}
+  localStorage.setItem('hvx_api_'+storageKey,val);
+  toast('Key saved!','success');
+  logActivity(`API key saved: ${storageKey}`,'purple');
+}
+
+function copyField(inputId){
+  const val=document.getElementById(inputId).value;
+  if(!val){toast('Nothing to copy','error');return}
+  navigator.clipboard.writeText(val).then(()=>toast('Copied to clipboard','success'));
+}
+
+// Load saved keys on page load
+function loadKeys(){
+  const map={
+    'ig-app-id':'ig_app_id','ig-secret':'ig_secret','ig-token':'ig_token',
+    'sp-id':'spotify_client_id','sp-secret':'spotify_secret',
+    'ra-endpoint':'ra_endpoint','ra-token':'ra_token',
+    'sc-id':'sc_client_id','sc-token':'sc_token',
+    'wh-upload':'webhook_upload','wh-show':'webhook_show'
+  };
+  Object.entries(map).forEach(([inputId,key])=>{
+    const el=document.getElementById(inputId);
+    const val=localStorage.getItem('hvx_api_'+key);
+    if(el&&val)el.value=val;
+  });
+}
+
+// ── TOGGLE SWITCH ──────────────────────────────────────────────────────────
+function toggleSwitch(el){
+  el.classList.toggle('on');
+  const label=el.nextElementSibling;
+  label.textContent=el.classList.contains('on')?'On':'Off';
+  const count=document.querySelectorAll('.toggle.on').length;
+  document.getElementById('dash-automations').textContent=count;
+  logActivity(`Automation ${el.classList.contains('on')?'enabled':'disabled'}: ${el.id.replace('toggle-','')}`,'green');
+}
+
+// ── INIT ───────────────────────────────────────────────────────────────────
+checkSession();
+loadKeys();
+</script>
+</body>
+</html>
