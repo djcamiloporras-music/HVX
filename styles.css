@@ -1,5 +1,5 @@
 /* ============================================================
-   HVX MUSIC — Base Stylesheet
+   HVX MUSIC ‚Äî Base Stylesheet
    ============================================================ */
 
 :root {
@@ -39,7 +39,7 @@ a { color: inherit; text-decoration: none; }
 ul { list-style: none; }
 img { display: block; width: 100%; }
 
-/* ── SCROLL PROGRESS BAR ────────────────────────────────── */
+/* ‚îÄ‚îÄ SCROLL PROGRESS BAR ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 .scroll-progress {
   position: fixed;
   top: 0; left: 0;
@@ -51,12 +51,12 @@ img { display: block; width: 100%; }
   box-shadow: 0 0 8px var(--cyan);
 }
 
-/* ── SCROLLBAR ─────────────────────────────────────────── */
+/* ‚îÄ‚îÄ SCROLLBAR ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--black); }
 ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
 
-/* ── CURSOR ─────────────────────────────────────────────── */
+/* ‚îÄ‚îÄ CURSOR ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 .cursor {
   width: 8px; height: 8px;
   background: var(--accent);
@@ -80,7 +80,7 @@ body:has(button:hover) .cursor { width: 14px; height: 14px; }
 body:has(a:hover) .cursor-follower,
 body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.6; }
 
-/* ── TYPOGRAPHY HELPERS ─────────────────────────────────── */
+/* ‚îÄ‚îÄ TYPOGRAPHY HELPERS ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 .gradient-text {
   background: linear-gradient(120deg, var(--cyan), var(--accent), var(--accent-2));
   -webkit-background-clip: text;
@@ -113,7 +113,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
 }
 .section-header .section-desc { margin: 0 auto; }
 
-/* ── BUTTONS ─────────────────────────────────────────────── */
+/* ‚îÄ‚îÄ BUTTONS ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 .btn {
   display: inline-flex; align-items: center; justify-content: center;
   padding: 0.75rem 2rem;
@@ -160,7 +160,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
 .btn-ghost:hover { color: var(--white); }
 .btn-full { width: 100%; }
 
-/* ── NAV ─────────────────────────────────────────────────── */
+/* ‚îÄ‚îÄ NAV ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 .nav {
   position: fixed; top: 0; left: 0; right: 0;
   height: var(--nav-h);
@@ -222,7 +222,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   transition: var(--transition);
 }
 
-/* ── MOBILE MENU ─────────────────────────────────────────── */
+/* ‚îÄ‚îÄ MOBILE MENU ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 .mobile-menu {
   position: fixed; inset: 0;
   background: var(--black);
@@ -236,7 +236,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
 .mobile-link { font-size: 2.5rem; font-weight: 700; color: var(--white); }
 .mobile-link:hover { color: var(--accent); }
 
-/* ── HERO ─────────────────────────────────────────────────── */
+/* ‚îÄ‚îÄ HERO ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 .hero {
   position: relative;
   min-height: 100vh;
@@ -323,7 +323,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   50%      { transform: translate(-30px, 30px) scale(1.15); }
 }
 
-/* ── ORB OPACITY BOOST ─────────────────────────────────────── */
+/* ‚îÄ‚îÄ ORB OPACITY BOOST ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 .orb-1 { opacity: 0.45; }
 .orb-2 { opacity: 0.35; }
 .orb-3 { opacity: 0.4; }
@@ -332,7 +332,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   position: relative; z-index: 2;
 }
 
-/* ── HERO MINI STATS ─────────────────────────────────────── */
+/* ‚îÄ‚îÄ HERO MINI STATS ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 .hero-mini-stats {
   display: flex; align-items: center; gap: 1.5rem;
   margin-top: 2.5rem;
@@ -358,7 +358,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
 }
 .mini-divider { width: 1px; height: 36px; background: var(--border); }
 
-/* ── HERO VISUAL (right column) ──────────────────────────── */
+/* ‚îÄ‚îÄ HERO VISUAL (right column) ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 .hero-visual {
   position: relative;
   display: flex; flex-direction: column; align-items: center;
@@ -366,7 +366,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   gap: 1.5rem;
 }
 
-/* ── HERO IMAGE ──────────────────────────────────────────── */
+/* ‚îÄ‚îÄ HERO IMAGE ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 .hero-img-wrap {
   position: relative;
   width: 100%;
@@ -393,7 +393,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   0%,100% { filter: saturate(1.15) brightness(1.05); }
   50%      { filter: saturate(1.3)  brightness(1.1) drop-shadow(0 0 20px rgba(0,212,255,0.3)); }
 }
-/* Chromatic aberration — red channel */
+/* Chromatic aberration ‚Äî red channel */
 .hero-img-red {
   z-index: 1;
   mix-blend-mode: screen;
@@ -401,7 +401,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   opacity: 0;
   animation: glitchRed 6s steps(1) infinite;
 }
-/* Chromatic aberration — cyan channel */
+/* Chromatic aberration ‚Äî cyan channel */
 .hero-img-cyan {
   z-index: 1;
   mix-blend-mode: screen;
@@ -445,7 +445,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
 .hero-img-wrap .chip-3 { bottom: 14%; left: -10%; }
 .hero-img-wrap .chip-4 { bottom: 8%;  right: -6%; }
 
-/* ── VINYL DISC ──────────────────────────────────────────── */
+/* ‚îÄ‚îÄ VINYL DISC ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 .vinyl-wrap {
   position: relative;
   width: 340px; height: 340px;
@@ -480,7 +480,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   );
 }
 
-/* Center label — shows HVX logo, counter-spins to stay upright */
+/* Center label ‚Äî shows HVX logo, counter-spins to stay upright */
 .vinyl-label {
   position: absolute;
   top: 50%; left: 50%;
@@ -551,7 +551,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   100% { box-shadow: 0 0 40px rgba(0,212,255,0.4), 0 0 80px rgba(162,89,255,0.3); }
 }
 
-/* ── FLOATING CHIPS ──────────────────────────────────────── */
+/* ‚îÄ‚îÄ FLOATING CHIPS ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 .chip {
   position: absolute;
   display: flex; align-items: center; gap: 0.45rem;
@@ -682,7 +682,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   0%,100% { width: 40px; } 50% { width: 70px; }
 }
 
-/* ── AUDIO VISUALIZER ────────────────────────────────────── */
+/* ‚îÄ‚îÄ AUDIO VISUALIZER ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 .audio-visualizer {
   display: flex; align-items: flex-end; gap: 3px;
   height: 60px;
@@ -721,7 +721,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   50%      { height: var(--h, 60%); }
 }
 
-/* ── STATS BAND ──────────────────────────────────────────── */
+/* ‚îÄ‚îÄ STATS BAND ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 .stats-band {
   display: flex; align-items: center; justify-content: center;
   gap: 0; border-top: 1px solid var(--border);
@@ -756,7 +756,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   background: var(--border);
 }
 
-/* ── ARTISTS ─────────────────────────────────────────────── */
+/* ‚îÄ‚îÄ ARTISTS ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 .artists {
   padding: 8rem 4vw;
   background: var(--black);
@@ -853,7 +853,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   line-height: 1.6;
 }
 
-/* ── ABOUT ───────────────────────────────────────────────── */
+/* ‚îÄ‚îÄ ABOUT ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 .about {
   padding: 8rem 4vw;
   background: var(--dark);
@@ -913,7 +913,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   color: var(--white);
 }
 
-/* ── MARQUEE ─────────────────────────────────────────────── */
+/* ‚îÄ‚îÄ MARQUEE ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 .marquee-section {
   overflow: hidden;
   border-top: 1px solid var(--border);
@@ -936,7 +936,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   to   { transform: translateX(-50%); }
 }
 
-/* ── RELEASES ────────────────────────────────────────────── */
+/* ‚îÄ‚îÄ RELEASES ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 .releases {
   padding: 8rem 4vw;
   background: var(--black);
@@ -993,7 +993,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
 }
 .release-link:hover { color: var(--white); }
 
-/* ── CONTACT ─────────────────────────────────────────────── */
+/* ‚îÄ‚îÄ CONTACT ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 .contact {
   padding: 8rem 4vw;
   background: var(--dark);
@@ -1051,7 +1051,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
 .form-select option { background: var(--dark-2); }
 .form-textarea { resize: vertical; min-height: 120px; }
 
-/* ── FOOTER ──────────────────────────────────────────────── */
+/* ‚îÄ‚îÄ FOOTER ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 .footer {
   background: var(--black);
   border-top: 1px solid var(--border);
@@ -1094,7 +1094,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   flex-wrap: wrap; gap: 0.5rem;
 }
 
-/* ── SCROLL REVEAL ───────────────────────────────────────── */
+/* ‚îÄ‚îÄ SCROLL REVEAL ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 .reveal {
   opacity: 0;
   transform: translateY(30px);
@@ -1102,7 +1102,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
 }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
-/* ── RESPONSIVE ──────────────────────────────────────────── */
+/* ‚îÄ‚îÄ RESPONSIVE ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 @media (max-width: 900px) {
   .nav-links, .nav-cta { display: none; }
   .nav-hamburger { display: flex; }
@@ -1134,7 +1134,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   .faq-inner { grid-template-columns: 1fr; gap: 2rem; }
 }
 
-/* ── SYNE DISPLAY OVERRIDES ─────────────────────────────── */
+/* ‚îÄ‚îÄ SYNE DISPLAY OVERRIDES ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 .hero-title,
 .section-title,
 .logo-text,
@@ -1148,7 +1148,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   letter-spacing: -0.02em;
 }
 
-/* ── FAQ ─────────────────────────────────────────────────── */
+/* ‚îÄ‚îÄ FAQ ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 .faq {
   padding: 8rem 4vw;
   background: var(--black);
@@ -1240,7 +1240,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
 }
 .faq-answer strong { color: var(--accent); font-weight: 600; }
 
-/* ── RIPPLE EFFECT ───────────────────────────────────────── */
+/* ‚îÄ‚îÄ RIPPLE EFFECT ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 .ripple {
   position: absolute;
   border-radius: 50%;
@@ -1254,7 +1254,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
 }
 .btn { position: relative; overflow: hidden; }
 
-/* ── CLICK BURST PARTICLES ───────────────────────────────── */
+/* ‚îÄ‚îÄ CLICK BURST PARTICLES ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 .particle {
   position: fixed;
   width: 6px; height: 6px;
@@ -1268,10 +1268,10 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0); }
 }
 
-/* ── MAGNETIC BUTTON WRAPPER ─────────────────────────────── */
+/* ‚îÄ‚îÄ MAGNETIC BUTTON WRAPPER ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 .magnetic { display: inline-block; }
 
-/* ── SECTION SLIDE-IN VARIANT ────────────────────────────── */
+/* ‚îÄ‚îÄ SECTION SLIDE-IN VARIANT ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 .reveal-left {
   opacity: 0;
   transform: translateX(-40px);
@@ -1293,21 +1293,21 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
 }
 .reveal-scale.visible { opacity: 1; transform: scale(1); }
 
-/* Vinyl is above fold — show immediately */
+/* Vinyl is above fold ‚Äî show immediately */
 .vinyl-wrap.reveal-scale { opacity: 1 !important; transform: none !important; }
 
-/* ── ACTIVE NAV INDICATOR ────────────────────────────────── */
+/* ‚îÄ‚îÄ ACTIVE NAV INDICATOR ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 .nav-link.active { color: var(--white); }
 .nav-link.active::after { width: 100%; }
 
-/* ── SECTION CTA ─────────────────────────────────────────── */
+/* ‚îÄ‚îÄ SECTION CTA ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 .section-cta {
   display: flex;
   justify-content: center;
   margin-top: 3rem;
 }
 
-/* ── SERVICES ────────────────────────────────────────────── */
+/* ‚îÄ‚îÄ SERVICES ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 .services {
   padding: 8rem 4vw;
   background: var(--dark);
@@ -1358,7 +1358,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   line-height: 1.7;
 }
 
-/* ── DEMO SUBMISSION ─────────────────────────────────────── */
+/* ‚îÄ‚îÄ DEMO SUBMISSION ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 .demo {
   padding: 8rem 4vw;
   background: var(--black);
@@ -1397,7 +1397,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   position: relative;
 }
 .demo-tip-list li::before {
-  content: '→';
+  content: '‚Üí';
   position: absolute;
   left: 0;
   color: var(--accent);
@@ -1405,7 +1405,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
 }
 .demo-form { display: flex; flex-direction: column; gap: 1rem; }
 
-/* ── FOOTER TAGLINE ──────────────────────────────────────── */
+/* ‚îÄ‚îÄ FOOTER TAGLINE ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 .footer-tagline {
   font-size: 1.1rem;
   font-weight: 700;
@@ -1415,7 +1415,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   margin-bottom: 0.5rem;
 }
 
-/* ── RELEASE ARTWORK ─────────────────────────────────────── */
+/* ‚îÄ‚îÄ RELEASE ARTWORK ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 .release-artwork {
   width: 48px; height: 48px;
   background: var(--dark-3);
@@ -1424,7 +1424,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   flex-shrink: 0;
 }
 
-/* ── RESPONSIVE ADDITIONS ────────────────────────────────── */
+/* ‚îÄ‚îÄ RESPONSIVE ADDITIONS ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 @media (max-width: 900px) {
   .demo-inner { grid-template-columns: 1fr; gap: 3rem; }
   .services-grid { grid-template-columns: 1fr 1fr; }
@@ -1434,7 +1434,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   .services-grid { grid-template-columns: 1fr; }
 }
 
-/* ── GLITCH HOVER ON LOGO ────────────────────────────────── */
+/* ‚îÄ‚îÄ GLITCH HOVER ON LOGO ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 .logo-text {
   position: relative;
   display: inline-block;
