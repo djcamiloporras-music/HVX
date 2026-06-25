@@ -1,507 +1,200 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HVX MUSIC — Artist Management</title>
-  <link rel="stylesheet" href="styles.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-</head>
-<body>
 
-  <!-- SCROLL PROGRESS -->
-  <div class="scroll-progress" id="scroll-progress"></div>
 
-  <!-- CURSOR PERSONALIZADO -->
-  <div class="cursor" id="cursor"></div>
-  <div class="cursor-follower" id="cursor-follower"></div>
 
-  <!-- NAV -->
-  <nav class="nav" id="nav">
-    <div class="nav-logo">
-      <a href="index.html">
-        <div class="logo-video-wrap"><video class="logo-video" autoplay loop muted playsinline><source src="assets/hvx-logo.mp4" type="video/mp4"></video></div>
-      </a>
-    </div>
-    <ul class="nav-links">
-      <li><a href="artists.html" class="nav-link">Artists</a></li>
-      <li><a href="#about" class="nav-link">About</a></li>
-      <li><a href="#releases" class="nav-link">Releases</a></li>
-      <li><a href="#faq" class="nav-link">FAQ</a></li>
-      <li><a href="#contact" class="nav-link">Contact</a></li>
-    </ul>
-    <div class="nav-cta">
-      <a href="#contact" class="btn btn-outline">Book Now</a>
-      <a href="admin.html" class="btn btn-admin" title="Admin Panel">
-        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-        Admin
-      </a>
-    </div>
-    <button class="nav-hamburger" id="hamburger" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
-  </nav>
+￼
+	•	Home
+	•	Artists
+	•	About
+	•	Services
+	•	Releases
+	•	Demo
+	•	Contact
+Submit Demo
+	•	Home
+	•	Artists
+	•	About
+	•	Services
+	•	Releases
+	•	Demo
+	•	Contact
 
-  <!-- MOBILE MENU -->
-  <div class="mobile-menu" id="mobile-menu">
-    <ul>
-      <li><a href="#artists" class="mobile-link">Artists</a></li>
-      <li><a href="#about" class="mobile-link">About</a></li>
-      <li><a href="#releases" class="mobile-link">Releases</a></li>
-      <li><a href="#contact" class="mobile-link">Contact</a></li>
-    </ul>
-  </div>
 
-  <!-- HERO -->
-  <section class="hero" id="home">
-    <div class="hero-bg">
-      <div class="hero-grid"></div>
-      <div class="orb orb-1"></div>
-      <div class="orb orb-2"></div>
-      <div class="orb orb-3"></div>
-      <div class="orb orb-4"></div>
-    </div>
 
-    <div class="hero-layout">
-      <!-- LEFT: copy -->
-      <div class="hero-content">
-        <div class="hero-tag">
-          <span class="tag-dot"></span>
-          House · Tech House · Dance Music
-        </div>
-        <h1 class="hero-title">
-          <span class="title-line">We Shape</span>
-          <span class="title-line gradient-text">The Sound</span>
-          <span class="title-line">Of Tomorrow</span>
-        </h1>
-        <p class="hero-subtitle">
-          Artist management for the next generation of electronic music creators.
-          We build careers, craft identities, and connect talent with the world.
-        </p>
-        <div class="hero-actions">
-          <a href="artists.html" class="btn btn-primary">Meet Our Artists</a>
-          <a href="#about" class="btn btn-ghost">Our Vision →</a>
-        </div>
 
-        <!-- mini stats inline -->
-        <div class="hero-mini-stats">
-          <div class="mini-stat"><span class="mini-num">12+</span><span class="mini-label">Artists</span></div>
-          <div class="mini-divider"></div>
-          <div class="mini-stat"><span class="mini-num">200+</span><span class="mini-label">Shows / yr</span></div>
-          <div class="mini-divider"></div>
-          <div class="mini-stat"><span class="mini-num">30+</span><span class="mini-label">Countries</span></div>
-        </div>
-      </div>
 
-      <!-- RIGHT: hero image -->
-      <div class="hero-visual">
-        <div class="hero-img-wrap">
-          <!-- VIDEO principal: mix-blend-mode elimina el negro -->
-          <video class="hero-vid" autoplay loop muted playsinline>
-            <source src="assets/hvx-hero-video.mp4" type="video/mp4"/>
-          </video>
-          <!-- Capas de textura sobre el video -->
-          <div class="hero-vid-glow"></div>
-          <div class="hero-vid-scanlines"></div>
-          <div class="hero-vid-vignette"></div>
-          <!-- Chips flotantes -->
-          <div class="chip chip-1"><span class="chip-dot"></span>Tech House</div>
-          <div class="chip chip-2">↑ 24 new sets</div>
-          <div class="chip chip-3"><span class="chip-dot chip-dot-orange"></span>Live</div>
-          <div class="chip chip-4">Global Roster</div>
-        </div>
-        <div class="audio-visualizer" id="visualizer">
-          <div class="bar"></div><div class="bar"></div><div class="bar"></div>
-          <div class="bar"></div><div class="bar"></div><div class="bar"></div>
-          <div class="bar"></div><div class="bar"></div><div class="bar"></div>
-          <div class="bar"></div><div class="bar"></div><div class="bar"></div>
-          <div class="bar"></div><div class="bar"></div><div class="bar"></div>
-          <div class="bar"></div><div class="bar"></div><div class="bar"></div>
-          <div class="bar"></div><div class="bar"></div><div class="bar"></div>
-          <div class="bar"></div><div class="bar"></div><div class="bar"></div>
-          <div class="bar"></div><div class="bar"></div>
-        </div>
-      </div>
-    </div>
+Electronic Music Label · Artist Development · Creative Vision
+HVX Music
+HVX Music is an independent record label based in New York City, dedicated to developing artists across electronic, house, afro house, and melodic house genres, as well as innovative sounds. We create opportunities through strategy, branding, visual content, distribution, and international positioning.
+Submit Demo Our Artists Merch → Contact Us →
+12+Artists
 
-    <div class="hero-scroll">
-      <span>Scroll</span>
-      <div class="scroll-line"></div>
-    </div>
-  </section>
+200+Shows / yr
 
-  <!-- STATS BAND -->
-  <div class="stats-band">
-    <div class="stat-item">
-      <span class="stat-num" data-target="12">0</span>
-      <span class="stat-label">Artists</span>
-    </div>
-    <div class="stat-divider"></div>
-    <div class="stat-item">
-      <span class="stat-num" data-target="200">0</span>
-      <span class="stat-label">Shows / Year</span>
-    </div>
-    <div class="stat-divider"></div>
-    <div class="stat-item">
-      <span class="stat-num" data-target="30">0</span>
-      <span class="stat-label">Countries</span>
-    </div>
-    <div class="stat-divider"></div>
-    <div class="stat-item">
-      <span class="stat-num" data-target="5">0</span>
-      <span class="stat-label">Years in the Scene</span>
-    </div>
-  </div>
+30+Countries
+￼ ￼ ￼
 
-  <!-- ARTISTS -->
-  <section class="artists" id="artists">
-    <div class="section-header">
-      <p class="section-tag">Roster</p>
-      <h2 class="section-title">Our Artists</h2>
-      <p class="section-desc">A curated collective of boundary-pushing selectors and producers.</p>
-    </div>
+House / Tech House
+↑ New York City
+Live
+Global Roster
 
-    <div class="artists-grid">
-      <!-- Artist Card 1 -->
-      <div class="artist-card" data-genre="House">
-        <div class="artist-img-wrap">
-          <div class="artist-img-placeholder">
-            <span>ARTIST</span>
-          </div>
-          <div class="artist-overlay">
-            <div class="artist-social">
-              <a href="#" class="social-link">IG</a>
-              <a href="#" class="social-link">SC</a>
-              <a href="#" class="social-link">RA</a>
-            </div>
-          </div>
-        </div>
-        <div class="artist-info">
-          <span class="artist-genre">House</span>
-          <h3 class="artist-name">Artist Name</h3>
-          <p class="artist-bio">Lorem ipsum dolor sit amet, consectetur adipiscing elit. DJ y productor basado en —.</p>
-        </div>
-      </div>
 
-      <!-- Artist Card 2 -->
-      <div class="artist-card featured" data-genre="Tech House">
-        <div class="artist-img-wrap">
-          <div class="artist-img-placeholder">
-            <span>ARTIST</span>
-          </div>
-          <div class="artist-overlay">
-            <div class="artist-social">
-              <a href="#" class="social-link">IG</a>
-              <a href="#" class="social-link">SC</a>
-              <a href="#" class="social-link">RA</a>
-            </div>
-          </div>
-        </div>
-        <div class="artist-info">
-          <span class="artist-genre">Tech House</span>
-          <h3 class="artist-name">Artist Name</h3>
-          <p class="artist-bio">Lorem ipsum dolor sit amet, consectetur adipiscing elit. DJ y productor basado en —.</p>
-        </div>
-      </div>
 
-      <!-- Artist Card 3 -->
-      <div class="artist-card" data-genre="Dance">
-        <div class="artist-img-wrap">
-          <div class="artist-img-placeholder">
-            <span>ARTIST</span>
-          </div>
-          <div class="artist-overlay">
-            <div class="artist-social">
-              <a href="#" class="social-link">IG</a>
-              <a href="#" class="social-link">SC</a>
-              <a href="#" class="social-link">RA</a>
-            </div>
-          </div>
-        </div>
-        <div class="artist-info">
-          <span class="artist-genre">Dance Music</span>
-          <h3 class="artist-name">Artist Name</h3>
-          <p class="artist-bio">Lorem ipsum dolor sit amet, consectetur adipiscing elit. DJ y productor basado en —.</p>
-        </div>
-      </div>
 
-      <!-- Artist Card 4 -->
-      <div class="artist-card" data-genre="House">
-        <div class="artist-img-wrap">
-          <div class="artist-img-placeholder">
-            <span>ARTIST</span>
-          </div>
-          <div class="artist-overlay">
-            <div class="artist-social">
-              <a href="#" class="social-link">IG</a>
-              <a href="#" class="social-link">SC</a>
-              <a href="#" class="social-link">RA</a>
-            </div>
-          </div>
-        </div>
-        <div class="artist-info">
-          <span class="artist-genre">House</span>
-          <h3 class="artist-name">Artist Name</h3>
-          <p class="artist-bio">Lorem ipsum dolor sit amet, consectetur adipiscing elit. DJ y productor basado en —.</p>
-        </div>
-      </div>
-    </div>
 
-    <div class="artists-filter">
-      <button class="filter-btn active" data-filter="all">All</button>
-      <button class="filter-btn" data-filter="House">House</button>
-      <button class="filter-btn" data-filter="Tech House">Tech House</button>
-      <button class="filter-btn" data-filter="Dance">Dance</button>
-    </div>
-  </section>
 
-  <!-- ABOUT -->
-  <section class="about" id="about">
-    <div class="about-inner">
-      <div class="about-text">
-        <p class="section-tag">About HVX</p>
-        <h2 class="section-title">More Than<br/>Management</h2>
-        <p class="about-desc">
-          HVX Music is a full-service artist management agency built from within the electronic music scene.
-          We understand the culture, the craft, and the commerce — because we live it.
-        </p>
-        <p class="about-desc">
-          From booking and branding to release strategy and touring, we handle every dimension
-          of an artist's career so they can focus on what matters: the music.
-        </p>
-        <ul class="about-services">
-          <li><span class="service-icon">↗</span> Artist Management</li>
-          <li><span class="service-icon">↗</span> Booking & Touring</li>
-          <li><span class="service-icon">↗</span> Brand Development</li>
-          <li><span class="service-icon">↗</span> Release Strategy</li>
-          <li><span class="service-icon">↗</span> PR & Comms</li>
-          <li><span class="service-icon">↗</span> Sync & Licensing</li>
-        </ul>
-      </div>
-      <div class="about-visual">
-        <div class="about-card-stack">
-          <div class="about-card ac-1">
-            <p class="ac-label">Headquartered</p>
-            <p class="ac-value">Global</p>
-          </div>
-          <div class="about-card ac-2">
-            <p class="ac-label">Focus</p>
-            <p class="ac-value">Electronic Music</p>
-          </div>
-          <div class="about-card ac-3">
-            <p class="ac-label">Philosophy</p>
-            <p class="ac-value">Culture first, always.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- MARQUEE -->
-  <div class="marquee-section">
-    <div class="marquee-track">
-      <span>HOUSE &nbsp;—&nbsp; TECH HOUSE &nbsp;—&nbsp; DANCE MUSIC &nbsp;—&nbsp; HVX MUSIC &nbsp;—&nbsp;
-            HOUSE &nbsp;—&nbsp; TECH HOUSE &nbsp;—&nbsp; DANCE MUSIC &nbsp;—&nbsp; HVX MUSIC &nbsp;—&nbsp;
-            HOUSE &nbsp;—&nbsp; TECH HOUSE &nbsp;—&nbsp; DANCE MUSIC &nbsp;—&nbsp; HVX MUSIC &nbsp;—&nbsp;</span>
-    </div>
-  </div>
 
-  <!-- RELEASES / UPCOMING -->
-  <section class="releases" id="releases">
-    <div class="section-header">
-      <p class="section-tag">Events & Releases</p>
-      <h2 class="section-title">What's Coming</h2>
-    </div>
-    <div class="releases-list">
-      <div class="release-row">
-        <span class="release-date">— / — / 2026</span>
-        <div class="release-info">
-          <p class="release-artist">Artist Name</p>
-          <p class="release-title">Release / Event Title</p>
-        </div>
-        <span class="release-genre">House</span>
-        <a href="#" class="release-link">Listen →</a>
-      </div>
-      <div class="release-row">
-        <span class="release-date">— / — / 2026</span>
-        <div class="release-info">
-          <p class="release-artist">Artist Name</p>
-          <p class="release-title">Release / Event Title</p>
-        </div>
-        <span class="release-genre">Tech House</span>
-        <a href="#" class="release-link">Listen →</a>
-      </div>
-      <div class="release-row">
-        <span class="release-date">— / — / 2026</span>
-        <div class="release-info">
-          <p class="release-artist">Artist Name</p>
-          <p class="release-title">Release / Event Title</p>
-        </div>
-        <span class="release-genre">Dance</span>
-        <a href="#" class="release-link">Listen →</a>
-      </div>
-      <div class="release-row">
-        <span class="release-date">— / — / 2026</span>
-        <div class="release-info">
-          <p class="release-artist">Artist Name</p>
-          <p class="release-title">Release / Event Title</p>
-        </div>
-        <span class="release-genre">House</span>
-        <a href="#" class="release-link">Listen →</a>
-      </div>
-    </div>
-  </section>
 
-  <!-- CONTACT -->
-  <section class="contact" id="contact">
-    <div class="contact-inner">
-      <div class="contact-text">
-        <p class="section-tag">Get in Touch</p>
-        <h2 class="section-title">Let's Build<br/>Something.</h2>
-        <p class="contact-desc">
-          Whether you're an artist looking for representation, a promoter with a booking inquiry,
-          or a brand seeking partnership — we'd love to hear from you.
-        </p>
-        <div class="contact-channels">
-          <a href="mailto:info@hvxmusic.com" class="channel-link">
-            <span class="channel-type">General</span>
-            <span>info@hvxmusic.com</span>
-          </a>
-          <a href="mailto:booking@hvxmusic.com" class="channel-link">
-            <span class="channel-type">Booking</span>
-            <span>booking@hvxmusic.com</span>
-          </a>
-        </div>
-      </div>
-      <form class="contact-form" id="contact-form">
-        <div class="form-group">
-          <input type="text" class="form-input" placeholder="Your Name" required />
-        </div>
-        <div class="form-group">
-          <input type="email" class="form-input" placeholder="Email Address" required />
-        </div>
-        <div class="form-group">
-          <select class="form-input form-select">
-            <option value="" disabled selected>Inquiry Type</option>
-            <option>Artist Representation</option>
-            <option>Booking Request</option>
-            <option>Brand Partnership</option>
-            <option>Press & Media</option>
-            <option>Other</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <textarea class="form-input form-textarea" placeholder="Your message..." rows="4"></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary btn-full">Send Message</button>
-      </form>
-    </div>
-  </section>
 
-  <!-- FAQ -->
-  <section class="faq" id="faq">
-    <div class="faq-inner">
-      <div class="faq-header">
-        <p class="section-tag">FAQ</p>
-        <h2 class="section-title">Questions &amp;<br/>Answers</h2>
-        <p class="section-desc">Everything you need to know about working with HVX Music.</p>
-      </div>
-      <div class="faq-list">
 
-        <div class="faq-item">
-          <button class="faq-question" aria-expanded="false">
-            <span>How do I submit my music for representation?</span>
-            <span class="faq-icon"><span></span><span></span></span>
-          </button>
-          <div class="faq-answer">
-            <p>Send us a link to your music (SoundCloud, Spotify, or a private mix) along with a short bio to <strong>demo@hvxmusic.com</strong>. We review all submissions and respond within 2–3 weeks. We look for artists with a strong, distinct sound and a clear artistic vision — genre alone doesn't define who we work with.</p>
-          </div>
-        </div>
 
-        <div class="faq-item">
-          <button class="faq-question" aria-expanded="false">
-            <span>What does HVX Music offer as a management agency?</span>
-            <span class="faq-icon"><span></span><span></span></span>
-          </button>
-          <div class="faq-answer">
-            <p>We offer full artist management including booking &amp; tour coordination, brand development, release strategy, social media direction, press &amp; PR, sync &amp; licensing opportunities, and long-term career planning. We're hands-on partners, not just booking agents.</p>
-          </div>
-        </div>
 
-        <div class="faq-item">
-          <button class="faq-question" aria-expanded="false">
-            <span>I'm a promoter — how do I book one of your artists?</span>
-            <span class="faq-icon"><span></span><span></span></span>
-          </button>
-          <div class="faq-answer">
-            <p>Reach out directly at <strong>booking@hvxmusic.com</strong> with your event details: date, venue, city, capacity, and which artist you're interested in. We'll get back to you with availability and fees within 48 hours.</p>
-          </div>
-        </div>
 
-        <div class="faq-item">
-          <button class="faq-question" aria-expanded="false">
-            <span>Do you work with artists outside of your local scene?</span>
-            <span class="faq-icon"><span></span><span></span></span>
-          </button>
-          <div class="faq-answer">
-            <p>Absolutely. Our roster is global and we actively seek artists from diverse scenes and regions. Electronic music has no borders, and neither does HVX. We work with artists across Europe, Latin America, North America, and beyond.</p>
-          </div>
-        </div>
 
-        <div class="faq-item">
-          <button class="faq-question" aria-expanded="false">
-            <span>What genres do you focus on?</span>
-            <span class="faq-icon"><span></span><span></span></span>
-          </button>
-          <div class="faq-answer">
-            <p>Our core focus is House, Tech House, and Dance Music in all its forms — from deep and soulful to peak-time and raw. That said, we're driven by quality and originality first. If your sound is compelling, we're listening.</p>
-          </div>
-        </div>
 
-        <div class="faq-item">
-          <button class="faq-question" aria-expanded="false">
-            <span>Do you offer brand partnerships or sponsorships?</span>
-            <span class="faq-icon"><span></span><span></span></span>
-          </button>
-          <div class="faq-answer">
-            <p>Yes. We welcome conversations with brands that align with the culture — audio equipment, fashion, lifestyle, tech, and beyond. Contact us at <strong>partnerships@hvxmusic.com</strong> with your proposal.</p>
-          </div>
-        </div>
 
-      </div>
-    </div>
-  </section>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <div class="logo-video-wrap footer-logo-wrap"><video class="logo-video footer-logo-video" autoplay loop muted playsinline><source src="assets/hvx-logo.mp4" type="video/mp4"></video></div>
-        <p>Artist Management for the Electronic Music Scene.</p>
-      </div>
-      <div class="footer-links">
-        <div class="footer-col">
-          <p class="footer-col-title">Navigation</p>
-          <a href="#artists">Artists</a>
-          <a href="#about">About</a>
-          <a href="#releases">Releases</a>
-          <a href="#contact">Contact</a>
-        </div>
-        <div class="footer-col">
-          <p class="footer-col-title">Follow</p>
-          <a href="#">Instagram</a>
-          <a href="#">SoundCloud</a>
-          <a href="#">Resident Advisor</a>
-          <a href="#">Spotify</a>
-        </div>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>© 2026 HVX Music. All rights reserved.</p>
-      <p>Built for the music.</p>
-    </div>
-  </footer>
 
-  <script src="script.js"></script>
-</body>
-</html>
+
+
+
+
+
+
+
+Scroll
+
+0 Artists
+
+0 Shows / Year
+
+0 Countries
+
+0 Years in the Scene
+Roster
+Featured Artists
+Artist photos and profiles will appear here. Each artist features a professional photo, biography, and links to their latest releases.
+ARTIST
+IG SC SP
+House
+Artist Name
+Short biography and background. DJ and producer developing a unique sound within the HVX roster.
+ARTIST
+IG SC SP
+Tech House
+Artist Name
+Short biography and background. DJ and producer developing a unique sound within the HVX roster.
+ARTIST
+IG SC SP
+Afro House
+Artist Name
+Short biography and background. DJ and producer developing a unique sound within the HVX roster.
+ARTIST
+IG SC SP
+Melodic House
+Artist Name
+Short biography and background. DJ and producer developing a unique sound within the HVX roster.
+All House Tech House Afro House Melodic
+View All Artists
+About HVX
+Who We Are
+HVX Music was born from a vision to combine music, imagery, and strategy to propel artists with global potential. More than just a label, we are a creative platform connecting talent, technology, and culture.
+We are an independent record label based in New York City, dedicated to developing artists across electronic, house, afro house, and melodic house genres, as well as innovative sounds.
+	•	✓ Artist development
+	•	✓ Branding and positioning
+	•	✓ Digital distribution
+	•	✓ Music marketing
+	•	✓ Photography and audiovisual content
+	•	✓ Strategic relationships
+Based In
+New York City
+Focus
+Electronic Music
+Philosophy
+Culture first, always.
+HOUSE  —  TECH HOUSE  —  AFRO HOUSE  —  MELODIC HOUSE  —  HVX MUSIC  —  NEW YORK CITY  —  HOUSE  —  TECH HOUSE  —  AFRO HOUSE  —  MELODIC HOUSE  —  HVX MUSIC  —  NEW YORK CITY  —  HOUSE  —  TECH HOUSE  —  AFRO HOUSE  —  MELODIC HOUSE  —  HVX MUSIC  —  NEW YORK CITY  — 
+What We Offer
+Our Services
+Everything you need to build a lasting career in electronic music.
+
+Artist Development
+Building artistic identity and career strategy tailored to your sound and vision.
+
+Music Distribution
+Global distribution on Spotify, Apple Music, Beatport, and more major platforms.
+
+Creative Content
+Photography, video, visualizers, and social media content crafted for impact.
+
+Marketing & Promotion
+Digital campaigns, advertising, and strategic positioning in the global market.
+
+Strategic Partnerships
+Connections with venues, brands, promoters, and festivals worldwide.
+
+Brand Development
+Crafting a cohesive visual and narrative identity that resonates with your audience.
+Catalog
+Latest Releases
+
+— / — / 2026
+Artist Name
+Track / Release Title
+House Listen Now →
+
+— / — / 2026
+Artist Name
+Track / Release Title
+Tech House Listen Now →
+
+— / — / 2026
+Artist Name
+Track / Release Title
+Afro House Listen Now →
+
+— / — / 2026
+Artist Name
+Track / Release Title
+Melodic House Listen Now →
+View All Releases
+Open Call
+Send Your Music
+Think your music fits with HVX Music? We listen to everything. Send us your work and we'll get back to you if we feel the connection.
+What to include:
+	•	Artist name & city
+	•	Private SoundCloud or Dropbox link
+	•	Your social media profiles
+	•	A brief note about your sound
+
+
+
+
+
+
+Submit Demo
+Get in Touch
+Let's Build Something.
+Whether you're an artist looking for representation, a promoter with a booking inquiry, or a brand seeking partnership — we'd love to hear from you.
+Email info@hvxmusic.com Instagram @hvxmusic
+Location New York, USA
+
+
+            Inquiry Type
+            Artist Representation
+            Booking Request
+            Brand Partnership
+            Press & Media
+            Other
+          
+
+Send Message
+￼
+Discover Your Energy. Project Your Flow.
+Artist Management & Label for the Electronic Music Scene.
+Navigation
+Home Artists About Services Releases Submit Demo Contact
+Follow
+Instagram SoundCloud Spotify Beatport
+© 2026 HVX Music. All Rights Reserved.
+New York City · Built for the music.
