@@ -1,5 +1,5 @@
 /* ============================================================
-   HVX MUSIC — Base Stylesheet
+   HVX MUSIC â€” Base Stylesheet
    ============================================================ */
 
 :root {
@@ -39,7 +39,7 @@ a { color: inherit; text-decoration: none; }
 ul { list-style: none; }
 img { display: block; width: 100%; }
 
-/* ── SCROLL PROGRESS BAR ────────────────────────────────── */
+/* â”€â”€ SCROLL PROGRESS BAR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .scroll-progress {
   position: fixed;
   top: 0; left: 0;
@@ -51,12 +51,12 @@ img { display: block; width: 100%; }
   box-shadow: 0 0 8px var(--cyan);
 }
 
-/* ── SCROLLBAR ─────────────────────────────────────────── */
+/* â”€â”€ SCROLLBAR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--black); }
 ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
 
-/* ── CURSOR ─────────────────────────────────────────────── */
+/* â”€â”€ CURSOR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .cursor {
   width: 8px; height: 8px;
   background: var(--accent);
@@ -80,7 +80,7 @@ body:has(button:hover) .cursor { width: 14px; height: 14px; }
 body:has(a:hover) .cursor-follower,
 body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.6; }
 
-/* ── TYPOGRAPHY HELPERS ─────────────────────────────────── */
+/* â”€â”€ TYPOGRAPHY HELPERS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .gradient-text {
   background: linear-gradient(120deg, var(--cyan), var(--accent), var(--accent-2));
   -webkit-background-clip: text;
@@ -113,7 +113,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
 }
 .section-header .section-desc { margin: 0 auto; }
 
-/* ── BUTTONS ─────────────────────────────────────────────── */
+/* â”€â”€ BUTTONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .btn {
   display: inline-flex; align-items: center; justify-content: center;
   padding: 0.75rem 2rem;
@@ -160,7 +160,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
 .btn-ghost:hover { color: var(--white); }
 .btn-full { width: 100%; }
 
-/* ── NAV ─────────────────────────────────────────────────── */
+/* â”€â”€ NAV â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .nav {
   position: fixed; top: 0; left: 0; right: 0;
   height: var(--nav-h);
@@ -175,49 +175,19 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   border-bottom: 1px solid var(--border);
 }
 .nav-logo { margin-right: auto; }
-/* ── LOGO VIDEO ─────────────────────────────────────────── */
-/* Video es 1080x1920 (portrait) — usamos un wrap para recortar */
-.logo-video-wrap {
-  display: block;
-  width: 155px;
-  height: 54px;
-  overflow: hidden;
-  position: relative;
-  flex-shrink: 0;
-}
-.logo-video {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  height: 310px;
-  width: auto;
-  mix-blend-mode: screen;
-  pointer-events: none;
-}
-.footer-logo-wrap {
-  width: 140px;
-  height: 48px;
-  overflow: hidden;
-  position: relative;
-  margin-bottom: 0.8rem;
-}
-.footer-logo-video {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  height: 275px;
-  width: auto;
-  mix-blend-mode: screen;
-  pointer-events: none;
-  opacity: 0.92;
-}
 .logo-img {
   height: 32px;
   width: auto;
   display: block;
-  mix-blend-mode: screen;
+  transition: filter 0.3s;
+}
+.logo-img:hover {
+  filter: drop-shadow(0 0 8px rgba(255,255,255,0.5)) drop-shadow(0 0 16px rgba(0,212,255,0.4));
+}
+.footer-logo-img {
+  height: 26px;
+  margin-bottom: 0.8rem;
+  opacity: 0.9;
 }
 .logo-accent { color: var(--cyan); }
 .nav-links {
@@ -252,7 +222,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   transition: var(--transition);
 }
 
-/* ── MOBILE MENU ─────────────────────────────────────────── */
+/* â”€â”€ MOBILE MENU â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .mobile-menu {
   position: fixed; inset: 0;
   background: var(--black);
@@ -266,7 +236,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
 .mobile-link { font-size: 2.5rem; font-weight: 700; color: var(--white); }
 .mobile-link:hover { color: var(--accent); }
 
-/* ── HERO ─────────────────────────────────────────────────── */
+/* â”€â”€ HERO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .hero {
   position: relative;
   min-height: 100vh;
@@ -353,7 +323,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   50%      { transform: translate(-30px, 30px) scale(1.15); }
 }
 
-/* ── ORB OPACITY BOOST ─────────────────────────────────────── */
+/* â”€â”€ ORB OPACITY BOOST â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .orb-1 { opacity: 0.45; }
 .orb-2 { opacity: 0.35; }
 .orb-3 { opacity: 0.4; }
@@ -362,7 +332,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   position: relative; z-index: 2;
 }
 
-/* ── HERO MINI STATS ─────────────────────────────────────── */
+/* â”€â”€ HERO MINI STATS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .hero-mini-stats {
   display: flex; align-items: center; gap: 1.5rem;
   margin-top: 2.5rem;
@@ -388,7 +358,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
 }
 .mini-divider { width: 1px; height: 36px; background: var(--border); }
 
-/* ── HERO VISUAL (right column) ──────────────────────────── */
+/* â”€â”€ HERO VISUAL (right column) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .hero-visual {
   position: relative;
   display: flex; flex-direction: column; align-items: center;
@@ -396,135 +366,86 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   gap: 1.5rem;
 }
 
-/* ── HERO VIDEO ──────────────────────────────────────────── */
+/* â”€â”€ HERO IMAGE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .hero-img-wrap {
   position: relative;
   width: 100%;
-  max-width: 500px;
-  aspect-ratio: 4 / 5;
+  max-width: 520px;
+  aspect-ratio: 1 / 1;
   margin: 0 auto;
   display: flex; align-items: center; justify-content: center;
-  overflow: visible;
-  background: transparent;
 }
-
-/* ── Borde cian tipo "pantalla holográfica" ── */
-.hero-img-wrap::before {
-  content: '';
+.hero-img {
   position: absolute; inset: 0;
-  border: 1px solid rgba(0,212,255,0.25);
-  border-radius: 6px;
-  pointer-events: none;
-  z-index: 6;
-  box-shadow:
-    0 0 12px rgba(0,212,255,0.15),
-    0 0 40px rgba(0,212,255,0.06),
-    inset 0 0 20px rgba(0,212,255,0.04);
-  animation: borderPulse 3s ease-in-out infinite;
-}
-@keyframes borderPulse {
-  0%,100% { box-shadow: 0 0 12px rgba(0,212,255,0.15), 0 0 40px rgba(0,212,255,0.06), inset 0 0 20px rgba(0,212,255,0.04); }
-  50%      { box-shadow: 0 0 20px rgba(0,212,255,0.30), 0 0 60px rgba(0,212,255,0.12), inset 0 0 30px rgba(0,212,255,0.08); }
-}
-
-/* ── Brackets en las 4 esquinas ── */
-.hero-img-wrap::after {
-  content: '';
-  position: absolute; inset: -4px;
-  pointer-events: none; z-index: 7;
-  background:
-    /* top-left */
-    linear-gradient(to right,  rgba(0,212,255,0.8) 12px, transparent 12px) top    left  / 14px 1.5px no-repeat,
-    linear-gradient(to bottom, rgba(0,212,255,0.8) 12px, transparent 12px) top    left  / 1.5px 14px no-repeat,
-    /* top-right */
-    linear-gradient(to left,   rgba(0,212,255,0.8) 12px, transparent 12px) top    right / 14px 1.5px no-repeat,
-    linear-gradient(to bottom, rgba(0,212,255,0.8) 12px, transparent 12px) top    right / 1.5px 14px no-repeat,
-    /* bottom-left */
-    linear-gradient(to right,  rgba(0,212,255,0.8) 12px, transparent 12px) bottom left  / 14px 1.5px no-repeat,
-    linear-gradient(to top,    rgba(0,212,255,0.8) 12px, transparent 12px) bottom left  / 1.5px 14px no-repeat,
-    /* bottom-right */
-    linear-gradient(to left,   rgba(0,212,255,0.8) 12px, transparent 12px) bottom right / 14px 1.5px no-repeat,
-    linear-gradient(to top,    rgba(0,212,255,0.8) 12px, transparent 12px) bottom right / 1.5px 14px no-repeat;
-}
-
-/* Video — natural, colores originales intactos */
-.hero-vid {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  width: 100%;
-  height: 100%;
+  width: 100%; height: 100%;
   object-fit: cover;
-  object-position: center 50%;
-  filter: contrast(1.05) brightness(1.0) saturate(1.1);
-  border-radius: 4px;
+  border-radius: 6px;
+  display: block;
 }
-
-
-/* Glow ambiental — irradiado desde el centro, sin borde */
-.hero-vid-glow {
-  position: absolute;
-  inset: -80px;
+/* Main layer */
+.hero-img-main {
+  position: relative;
+  z-index: 2;
+  filter: saturate(1.15) brightness(1.05);
+  animation: imgPulse 4s ease-in-out infinite;
+}
+@keyframes imgPulse {
+  0%,100% { filter: saturate(1.15) brightness(1.05); }
+  50%      { filter: saturate(1.3)  brightness(1.1) drop-shadow(0 0 20px rgba(0,212,255,0.3)); }
+}
+/* Chromatic aberration â€” red channel */
+.hero-img-red {
   z-index: 1;
-  background: radial-gradient(
-    ellipse 55% 55% at 50% 50%,
-    rgba(0,212,255,0.07) 0%,
-    rgba(162,89,255,0.04) 55%,
-    transparent 100%
-  );
-  pointer-events: none;
-  animation: glowPulse 3s ease-in-out infinite;
-  border-radius: 50%;
+  mix-blend-mode: screen;
+  filter: url(#red-channel);
+  opacity: 0;
+  animation: glitchRed 6s steps(1) infinite;
 }
-@keyframes glowPulse {
-  0%,100% { opacity: 0.7; }
-  50%      { opacity: 1; }
+/* Chromatic aberration â€” cyan channel */
+.hero-img-cyan {
+  z-index: 1;
+  mix-blend-mode: screen;
+  opacity: 0;
+  animation: glitchCyan 6s steps(1) infinite;
 }
-
-/* Scan lines sutiles */
-.hero-vid-scanlines {
+@keyframes glitchRed {
+  0%,89%,100% { opacity: 0; transform: translate(0,0); }
+  90%          { opacity: 0.5; transform: translate(-4px, 1px); filter: saturate(0) sepia(1) hue-rotate(-50deg) brightness(1.5); }
+  93%          { opacity: 0; }
+  96%          { opacity: 0.3; transform: translate(3px, -2px); filter: saturate(0) sepia(1) hue-rotate(-50deg) brightness(2); }
+  99%          { opacity: 0; }
+}
+@keyframes glitchCyan {
+  0%,89%,100% { opacity: 0; transform: translate(0,0); }
+  90%          { opacity: 0.4; transform: translate(4px, -1px); filter: saturate(0) sepia(1) hue-rotate(160deg) brightness(1.5); }
+  93%          { opacity: 0; }
+  96%          { opacity: 0.25; transform: translate(-2px, 2px); filter: saturate(0) sepia(1) hue-rotate(160deg) brightness(2); }
+  99%          { opacity: 0; }
+}
+/* Scan lines overlay */
+.hero-img-scanlines {
   position: absolute; inset: 0; z-index: 3;
-  border-radius: 4px;
-  background:
-    /* scan lines horizontales */
-    repeating-linear-gradient(
-      0deg,
-      transparent 0px, transparent 3px,
-      rgba(0,212,255,0.025) 3px, rgba(0,212,255,0.025) 4px
-    ),
-    /* barrido de luz vertical animado */
-    linear-gradient(
-      180deg,
-      transparent 0%, rgba(0,212,255,0.04) 50%, transparent 100%
-    );
+  border-radius: 6px;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent, transparent 2px,
+    rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px
+  );
   pointer-events: none;
   animation: scanMove 8s linear infinite;
 }
 @keyframes scanMove {
-  from { background-position: 0 0, 0 -100%; }
-  to   { background-position: 0 200px, 0 200%; }
+  from { background-position: 0 0; }
+  to   { background-position: 0 100px; }
 }
-
-/* Viñeta: fundido suave hacia los bordes */
-.hero-vid-vignette {
-  position: absolute; inset: 0; z-index: 4;
-  border-radius: 4px;
-  background: radial-gradient(
-    ellipse 85% 85% at 50% 48%,
-    transparent 55%,
-    rgba(5,5,8,0.5) 100%
-  );
-  pointer-events: none;
-}
-
-/* Chips */
+/* Move chips relative to image wrap */
 .hero-img-wrap .chip { z-index: 5; }
-.hero-img-wrap .chip-1 { top: 12%; left: -14%; }
-.hero-img-wrap .chip-2 { top: 6%;  right: -10%; }
-.hero-img-wrap .chip-3 { bottom: 18%; left: -12%; }
-.hero-img-wrap .chip-4 { bottom: 10%; right: -8%; }
+.hero-img-wrap .chip-1 { top: 8%;  left: -12%; }
+.hero-img-wrap .chip-2 { top: 4%;  right: -8%; }
+.hero-img-wrap .chip-3 { bottom: 14%; left: -10%; }
+.hero-img-wrap .chip-4 { bottom: 8%;  right: -6%; }
 
-/* ── VINYL DISC ──────────────────────────────────────────── */
+/* â”€â”€ VINYL DISC â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .vinyl-wrap {
   position: relative;
   width: 340px; height: 340px;
@@ -559,7 +480,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   );
 }
 
-/* Center label — shows HVX logo, counter-spins to stay upright */
+/* Center label â€” shows HVX logo, counter-spins to stay upright */
 .vinyl-label {
   position: absolute;
   top: 50%; left: 50%;
@@ -630,7 +551,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   100% { box-shadow: 0 0 40px rgba(0,212,255,0.4), 0 0 80px rgba(162,89,255,0.3); }
 }
 
-/* ── FLOATING CHIPS ──────────────────────────────────────── */
+/* â”€â”€ FLOATING CHIPS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .chip {
   position: absolute;
   display: flex; align-items: center; gap: 0.45rem;
@@ -761,7 +682,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   0%,100% { width: 40px; } 50% { width: 70px; }
 }
 
-/* ── AUDIO VISUALIZER ────────────────────────────────────── */
+/* â”€â”€ AUDIO VISUALIZER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .audio-visualizer {
   display: flex; align-items: flex-end; gap: 3px;
   height: 60px;
@@ -800,7 +721,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   50%      { height: var(--h, 60%); }
 }
 
-/* ── STATS BAND ──────────────────────────────────────────── */
+/* â”€â”€ STATS BAND â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .stats-band {
   display: flex; align-items: center; justify-content: center;
   gap: 0; border-top: 1px solid var(--border);
@@ -835,7 +756,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   background: var(--border);
 }
 
-/* ── ARTISTS ─────────────────────────────────────────────── */
+/* â”€â”€ ARTISTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .artists {
   padding: 8rem 4vw;
   background: var(--black);
@@ -932,7 +853,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   line-height: 1.6;
 }
 
-/* ── ABOUT ───────────────────────────────────────────────── */
+/* â”€â”€ ABOUT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .about {
   padding: 8rem 4vw;
   background: var(--dark);
@@ -992,7 +913,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   color: var(--white);
 }
 
-/* ── MARQUEE ─────────────────────────────────────────────── */
+/* â”€â”€ MARQUEE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .marquee-section {
   overflow: hidden;
   border-top: 1px solid var(--border);
@@ -1015,7 +936,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   to   { transform: translateX(-50%); }
 }
 
-/* ── RELEASES ────────────────────────────────────────────── */
+/* â”€â”€ RELEASES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .releases {
   padding: 8rem 4vw;
   background: var(--black);
@@ -1027,7 +948,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
 }
 .release-row {
   display: grid;
-  grid-template-columns: 120px 1fr auto auto;
+  grid-template-columns: 48px 120px 1fr auto auto;
   align-items: center;
   gap: 1.5rem;
   padding: 1.5rem 0;
@@ -1072,7 +993,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
 }
 .release-link:hover { color: var(--white); }
 
-/* ── CONTACT ─────────────────────────────────────────────── */
+/* â”€â”€ CONTACT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .contact {
   padding: 8rem 4vw;
   background: var(--dark);
@@ -1130,7 +1051,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
 .form-select option { background: var(--dark-2); }
 .form-textarea { resize: vertical; min-height: 120px; }
 
-/* ── FOOTER ──────────────────────────────────────────────── */
+/* â”€â”€ FOOTER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .footer {
   background: var(--black);
   border-top: 1px solid var(--border);
@@ -1173,7 +1094,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   flex-wrap: wrap; gap: 0.5rem;
 }
 
-/* ── SCROLL REVEAL ───────────────────────────────────────── */
+/* â”€â”€ SCROLL REVEAL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .reveal {
   opacity: 0;
   transform: translateY(30px);
@@ -1181,7 +1102,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
 }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
-/* ── RESPONSIVE ──────────────────────────────────────────── */
+/* â”€â”€ RESPONSIVE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 @media (max-width: 900px) {
   .nav-links, .nav-cta { display: none; }
   .nav-hamburger { display: flex; }
@@ -1213,7 +1134,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   .faq-inner { grid-template-columns: 1fr; gap: 2rem; }
 }
 
-/* ── SYNE DISPLAY OVERRIDES ─────────────────────────────── */
+/* â”€â”€ SYNE DISPLAY OVERRIDES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .hero-title,
 .section-title,
 .logo-text,
@@ -1227,7 +1148,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   letter-spacing: -0.02em;
 }
 
-/* ── FAQ ─────────────────────────────────────────────────── */
+/* â”€â”€ FAQ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .faq {
   padding: 8rem 4vw;
   background: var(--black);
@@ -1319,7 +1240,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
 }
 .faq-answer strong { color: var(--accent); font-weight: 600; }
 
-/* ── RIPPLE EFFECT ───────────────────────────────────────── */
+/* â”€â”€ RIPPLE EFFECT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .ripple {
   position: absolute;
   border-radius: 50%;
@@ -1333,7 +1254,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
 }
 .btn { position: relative; overflow: hidden; }
 
-/* ── CLICK BURST PARTICLES ───────────────────────────────── */
+/* â”€â”€ CLICK BURST PARTICLES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .particle {
   position: fixed;
   width: 6px; height: 6px;
@@ -1347,10 +1268,10 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0); }
 }
 
-/* ── MAGNETIC BUTTON WRAPPER ─────────────────────────────── */
+/* â”€â”€ MAGNETIC BUTTON WRAPPER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .magnetic { display: inline-block; }
 
-/* ── SECTION SLIDE-IN VARIANT ────────────────────────────── */
+/* â”€â”€ SECTION SLIDE-IN VARIANT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .reveal-left {
   opacity: 0;
   transform: translateX(-40px);
@@ -1372,14 +1293,148 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
 }
 .reveal-scale.visible { opacity: 1; transform: scale(1); }
 
-/* Vinyl is above fold — show immediately */
+/* Vinyl is above fold â€” show immediately */
 .vinyl-wrap.reveal-scale { opacity: 1 !important; transform: none !important; }
 
-/* ── ACTIVE NAV INDICATOR ────────────────────────────────── */
+/* â”€â”€ ACTIVE NAV INDICATOR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .nav-link.active { color: var(--white); }
 .nav-link.active::after { width: 100%; }
 
-/* ── GLITCH HOVER ON LOGO ────────────────────────────────── */
+/* â”€â”€ SECTION CTA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.section-cta {
+  display: flex;
+  justify-content: center;
+  margin-top: 3rem;
+}
+
+/* â”€â”€ SERVICES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.services {
+  padding: 8rem 4vw;
+  background: var(--dark);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.service-card {
+  padding: 2.4rem 2rem;
+  background: var(--dark-2);
+  border: 1px solid var(--border);
+  transition: var(--transition);
+}
+.service-card:hover {
+  border-color: rgba(162,89,255,0.35);
+  background: rgba(162,89,255,0.04);
+  transform: translateY(-4px);
+}
+.service-icon-wrap {
+  width: 52px; height: 52px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--accent);
+  margin-bottom: 1.4rem;
+  transition: var(--transition);
+}
+.service-card:hover .service-icon-wrap {
+  border-color: var(--accent);
+  background: var(--accent-glow);
+}
+.service-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-family: var(--font-alt);
+  margin-bottom: 0.7rem;
+  color: var(--white);
+}
+.service-desc {
+  font-size: 0.88rem;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+/* â”€â”€ DEMO SUBMISSION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.demo {
+  padding: 8rem 4vw;
+  background: var(--black);
+  border-top: 1px solid var(--border);
+}
+.demo-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  align-items: start;
+}
+.demo-desc {
+  color: var(--off-white);
+  line-height: 1.7;
+  margin-bottom: 2rem;
+}
+.demo-tip-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.8rem;
+}
+.demo-tip-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.demo-tip-list li {
+  font-size: 0.88rem;
+  color: var(--off-white);
+  padding-left: 1.2rem;
+  position: relative;
+}
+.demo-tip-list li::before {
+  content: 'â†’';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-size: 0.8rem;
+}
+.demo-form { display: flex; flex-direction: column; gap: 1rem; }
+
+/* â”€â”€ FOOTER TAGLINE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.footer-tagline {
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-family: var(--font-alt);
+  color: var(--white);
+  line-height: 1.4;
+  margin-bottom: 0.5rem;
+}
+
+/* â”€â”€ RELEASE ARTWORK â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.release-artwork {
+  width: 48px; height: 48px;
+  background: var(--dark-3);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* â”€â”€ RESPONSIVE ADDITIONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+@media (max-width: 900px) {
+  .demo-inner { grid-template-columns: 1fr; gap: 3rem; }
+  .services-grid { grid-template-columns: 1fr 1fr; }
+  .release-artwork { display: none; }
+}
+@media (max-width: 600px) {
+  .services-grid { grid-template-columns: 1fr; }
+}
+
+/* â”€â”€ GLITCH HOVER ON LOGO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .logo-text {
   position: relative;
   display: inline-block;
