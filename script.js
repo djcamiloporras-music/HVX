@@ -1,10 +1,10 @@
 /* ============================================================
-   HVX MUSIC — Interactive Script v2
+   HVX MUSIC ‚Äî Interactive Script v2
    ============================================================ */
 
 (() => {
 
-  // ── CUSTOM CURSOR ─────────────────────────────────────────
+  // ‚îÄ‚îÄ CUSTOM CURSOR ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   const cursor   = document.getElementById('cursor');
   const follower = document.getElementById('cursor-follower');
   let mx = 0, my = 0, fx = 0, fy = 0;
@@ -41,7 +41,7 @@
   });
 
 
-  // ── SCROLL PROGRESS BAR ───────────────────────────────────
+  // ‚îÄ‚îÄ SCROLL PROGRESS BAR ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   const progressBar = document.getElementById('scroll-progress');
   function updateProgress() {
     const scrollTop = window.scrollY;
@@ -52,14 +52,14 @@
   window.addEventListener('scroll', updateProgress, { passive: true });
 
 
-  // ── NAV SCROLL ────────────────────────────────────────────
+  // ‚îÄ‚îÄ NAV SCROLL ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   const nav = document.getElementById('nav');
   window.addEventListener('scroll', () => {
     nav.classList.toggle('scrolled', window.scrollY > 40);
   }, { passive: true });
 
 
-  // ── MOBILE MENU ───────────────────────────────────────────
+  // ‚îÄ‚îÄ MOBILE MENU ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   const hamburger  = document.getElementById('hamburger');
   const mobileMenu = document.getElementById('mobile-menu');
   let menuOpen = false;
@@ -87,8 +87,8 @@
   });
 
 
-  // ── SCROLL REVEAL ─────────────────────────────────────────
-  const baseReveal = '.stats-band,.section-header,.artist-card,.release-row,.about-card,.footer-top,.faq-item,.channel-link';
+  // ‚îÄ‚îÄ SCROLL REVEAL ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+  const baseReveal = '.stats-band,.section-header,.artist-card,.release-row,.about-card,.footer-top,.faq-item,.channel-link,.service-card,.demo-tips,.demo-text';
 
   const revealObs = new IntersectionObserver((entries) => {
     entries.forEach((entry, i) => {
@@ -129,7 +129,7 @@
   });
 
 
-  // ── COUNTER ANIMATION ─────────────────────────────────────
+  // ‚îÄ‚îÄ COUNTER ANIMATION ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   function animateCounter(el) {
     const target = +el.dataset.target;
     const duration = 1800;
@@ -153,7 +153,7 @@
   if (statsBand) counterObs.observe(statsBand);
 
 
-  // ── ARTIST FILTER ─────────────────────────────────────────
+  // ‚îÄ‚îÄ ARTIST FILTER ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   document.querySelectorAll('.filter-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -170,7 +170,7 @@
   });
 
 
-  // ── RIPPLE ON BUTTONS ─────────────────────────────────────
+  // ‚îÄ‚îÄ RIPPLE ON BUTTONS ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   function addRipple(e) {
     const btn  = e.currentTarget;
     const rect = btn.getBoundingClientRect();
@@ -186,7 +186,7 @@
   document.querySelectorAll('.btn').forEach(btn => btn.addEventListener('click', addRipple));
 
 
-  // ── CLICK PARTICLE BURST ──────────────────────────────────
+  // ‚îÄ‚îÄ CLICK PARTICLE BURST ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   const COLORS = ['#a259ff','#ff6b35','#ffffff','#c084fc','#fb923c'];
   document.addEventListener('click', e => {
     for (let i = 0; i < 8; i++) {
@@ -206,7 +206,7 @@
   });
 
 
-  // ── MAGNETIC BUTTONS ──────────────────────────────────────
+  // ‚îÄ‚îÄ MAGNETIC BUTTONS ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   document.querySelectorAll('.btn-primary, .btn-outline').forEach(btn => {
     btn.addEventListener('mousemove', e => {
       const rect = btn.getBoundingClientRect();
@@ -220,7 +220,7 @@
   });
 
 
-  // ── FAQ ACCORDION ─────────────────────────────────────────
+  // ‚îÄ‚îÄ FAQ ACCORDION ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   document.querySelectorAll('.faq-question').forEach(btn => {
     btn.addEventListener('click', () => {
       const item   = btn.closest('.faq-item');
@@ -246,7 +246,7 @@
   });
 
 
-  // ── ARTIST CARD TILT ──────────────────────────────────────
+  // ‚îÄ‚îÄ ARTIST CARD TILT ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   document.querySelectorAll('.artist-card').forEach(card => {
     card.addEventListener('mousemove', e => {
       const rect = card.getBoundingClientRect();
@@ -258,14 +258,14 @@
   });
 
 
-  // ── RELEASE ROW HOVER ─────────────────────────────────────
+  // ‚îÄ‚îÄ RELEASE ROW HOVER ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   document.querySelectorAll('.release-row').forEach(row => {
     row.addEventListener('mouseenter', () => { row.style.background = 'rgba(162,89,255,0.04)'; });
     row.addEventListener('mouseleave', () => { row.style.background = ''; });
   });
 
 
-  // ── ABOUT CARD CLICK EXPAND ───────────────────────────────
+  // ‚îÄ‚îÄ ABOUT CARD CLICK EXPAND ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   document.querySelectorAll('.about-card').forEach(card => {
     card.addEventListener('click', () => {
       card.classList.toggle('expanded');
@@ -281,7 +281,7 @@
   });
 
 
-  // ── AUDIO VISUALIZER (live random) ────────────────────────
+  // ‚îÄ‚îÄ AUDIO VISUALIZER (live random) ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   const bars = document.querySelectorAll('.bar');
   function randomizeBars() {
     bars.forEach(bar => {
@@ -291,7 +291,7 @@
   setInterval(randomizeBars, 700);
 
 
-  // ── ACTIVE NAV LINK ON SCROLL ─────────────────────────────
+  // ‚îÄ‚îÄ ACTIVE NAV LINK ON SCROLL ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   const sections = document.querySelectorAll('section[id]');
   const navLinks = document.querySelectorAll('.nav-link');
   const sectionObs = new IntersectionObserver(entries => {
@@ -306,20 +306,20 @@
   sections.forEach(s => sectionObs.observe(s));
 
 
-  // ── CONTACT FORM ──────────────────────────────────────────
+  // ‚îÄ‚îÄ CONTACT FORM ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   const form = document.getElementById('contact-form');
   if (form) {
     form.addEventListener('submit', e => {
       e.preventDefault();
       const btn = form.querySelector('button[type="submit"]');
-      btn.textContent = 'Message Sent ✓';
+      btn.textContent = 'Message Sent ‚úì';
       btn.style.background = '#22c55e';
       setTimeout(() => { btn.textContent = 'Send Message'; btn.style.background = ''; form.reset(); }, 3000);
     });
   }
 
 
-  // ── SECTION ENTRANCE TEXT SCRAMBLE ────────────────────────
+  // ‚îÄ‚îÄ SECTION ENTRANCE TEXT SCRAMBLE ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#';
   function scramble(el) {
     const original = el.textContent;
@@ -349,7 +349,7 @@
   document.querySelectorAll('.section-tag').forEach(el => scrambleObs.observe(el));
 
 
-  // ── VINYL SPEED UP ON HOVER ───────────────────────────────
+  // ‚îÄ‚îÄ VINYL SPEED UP ON HOVER ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   const vinyl = document.querySelector('.vinyl');
   if (vinyl) {
     let speed = 18;
