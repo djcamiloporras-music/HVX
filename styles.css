@@ -445,18 +445,29 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
 .hero-img-wrap .chip-3 { bottom: 14%; left: -10%; }
 .hero-img-wrap .chip-4 { bottom: 8%;  right: -6%; }
 
+/* ‚îÄ‚îÄ NAV VIDEO LOGO ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
+.logo-video {
+  height: 48px;
+  width: auto;
+  display: block;
+  object-fit: contain;
+}
+
 /* ‚îÄ‚îÄ HERO VIDEO ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 .hero-video-wrap {
   background: transparent;
+  border: none;
 }
 .hero-video {
   width: 100%;
   height: 100%;
+  max-height: 520px;
   object-fit: contain;
-  border-radius: 6px;
   display: block;
   position: relative;
   z-index: 2;
+  border-radius: 6px;
+  mix-blend-mode: screen;
 }
 
 /* ‚îÄ‚îÄ VINYL DISC ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
