@@ -447,7 +447,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
 
 /* ‚îÄ‚îÄ NAV VIDEO LOGO ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 .logo-video {
-  height: 48px;
+  height: 40px;
   width: auto;
   display: block;
   object-fit: contain;
@@ -1422,7 +1422,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   position: relative;
 }
 .demo-tip-list li::before {
-  content: '‚Üí';
+  content: '\2014';
   position: absolute;
   left: 0;
   color: var(--accent);
