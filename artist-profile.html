@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Artist — HVX Music</title>
+  <title>Artist ‚Äî HVX Music</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -28,11 +28,11 @@
 
     /* NAV */
     nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; display: flex; align-items: center; justify-content: space-between; padding: 0 48px; height: 72px; background: rgba(8,8,8,0.88); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
-    .nav-logo { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; color: var(--white); text-decoration: none; letter-spacing: -0.02em; }
-    .nav-logo span { color: var(--accent); }
+    .nav-logo { display: flex; align-items: center; text-decoration: none; }
+    .nav-logo-video { height: 40px; width: auto; display: block; object-fit: contain; }
     .nav-back { display: flex; align-items: center; gap: 8px; color: var(--off-white); text-decoration: none; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; transition: color 0.2s; }
     .nav-back:hover { color: var(--accent); }
-    .nav-back::before { content: '←'; font-size: 1rem; }
+    .nav-back::before { content: '\2190'; font-size: 1rem; }
     .nav-links { display: flex; gap: 36px; list-style: none; }
     .nav-links a { color: var(--off-white); text-decoration: none; font-size: 0.875rem; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; transition: color 0.2s; position: relative; }
     .nav-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px; background: var(--accent); transition: width 0.3s; }
@@ -90,7 +90,7 @@
       font-size: 0.8rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase;
       margin-bottom: 24px; display: flex; align-items: center; gap: 8px;
     }
-    .hero-city::before { content: '◉'; color: var(--accent); font-size: 0.6rem; }
+    .hero-city::before { content: '‚óâ'; color: var(--accent); font-size: 0.6rem; }
     .hero-bio { font-size: 1rem; color: var(--off-white); line-height: 1.7; max-width: 480px; margin-bottom: 36px; }
     .hero-stats { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 36px; }
     .stat-chip {
@@ -158,7 +158,7 @@
       50% { transform: translateY(-8px); }
     }
 
-    /* ── TAB NAV ── */
+    /* ‚îÄ‚îÄ TAB NAV ‚îÄ‚îÄ */
     .tab-nav {
       position: sticky; top: 72px; z-index: 100;
       background: rgba(15,15,15,0.95); backdrop-filter: blur(20px);
@@ -181,7 +181,7 @@
       border-radius: 2px 2px 0 0; transition: left 0.3s ease, width 0.3s ease;
     }
 
-    /* ── TAB CONTENT ── */
+    /* ‚îÄ‚îÄ TAB CONTENT ‚îÄ‚îÄ */
     .tab-content { display: none; padding: 60px 56px; }
     .tab-content.active { display: block; }
 
@@ -192,7 +192,7 @@
     }
     .section-title span { color: var(--accent); }
 
-    /* ── OVERVIEW ── */
+    /* ‚îÄ‚îÄ OVERVIEW ‚îÄ‚îÄ */
     .about-block { max-width: 700px; margin-bottom: 56px; }
     .about-block p { font-size: 1rem; color: var(--off-white); line-height: 1.8; }
     .overview-cols { display: grid; grid-template-columns: 1fr 1.2fr; gap: 48px; margin-bottom: 56px; }
@@ -217,7 +217,7 @@
     blockquote p { font-size: 0.95rem; color: var(--off-white); line-height: 1.6; font-style: italic; margin-bottom: 8px; }
     blockquote cite { font-size: 0.72rem; color: var(--accent); font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; font-style: normal; }
 
-    /* ── MUSIC ── */
+    /* ‚îÄ‚îÄ MUSIC ‚îÄ‚îÄ */
     .releases-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
     .release-card {
       background: var(--dark-2); border: 1px solid var(--border); border-radius: 6px;
@@ -249,7 +249,7 @@
     .release-meta { font-size: 0.72rem; color: var(--muted); line-height: 1.5; }
     .release-streams { font-size: 0.72rem; color: var(--accent); font-weight: 600; margin-top: 6px; }
 
-    /* ── SETS ── */
+    /* ‚îÄ‚îÄ SETS ‚îÄ‚îÄ */
     .sets-list { display: flex; flex-direction: column; gap: 2px; margin-bottom: 48px; }
     .set-row {
       display: grid; grid-template-columns: 120px 1fr 120px 100px 120px auto;
@@ -292,7 +292,7 @@
     .track-time { font-size: 0.72rem; color: var(--accent); font-weight: 600; min-width: 40px; }
     .track-name { font-size: 0.85rem; color: var(--off-white); }
 
-    /* ── VENUES ── */
+    /* ‚îÄ‚îÄ VENUES ‚îÄ‚îÄ */
     .venues-section h3 { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; margin-top: 40px; }
     .venues-section h3:first-child { margin-top: 0; }
     .venues-list { display: flex; flex-direction: column; gap: 2px; margin-bottom: 8px; }
@@ -313,7 +313,7 @@
     .status-badge.confirmed { background: rgba(0,210,150,0.1); color: #00d296; border: 1px solid rgba(0,210,150,0.25); }
     .status-badge.past { background: var(--dark-3); color: var(--muted); border: 1px solid var(--border); }
 
-    /* ── ANALYTICS ── */
+    /* ‚îÄ‚îÄ ANALYTICS ‚îÄ‚îÄ */
     .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 56px; }
     .kpi-card {
       background: var(--dark-2); border: 1px solid var(--border); border-radius: 6px;
@@ -322,7 +322,7 @@
     .kpi-label { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
     .kpi-value { font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 800; color: var(--white); line-height: 1; margin-bottom: 6px; }
     .kpi-trend { font-size: 0.75rem; color: #00d296; font-weight: 600; }
-    .kpi-trend.up::before { content: '↑ '; }
+    .kpi-trend.up::before { content: '‚Üë '; }
 
     /* Bar chart */
     .chart-section { margin-bottom: 56px; }
@@ -379,7 +379,7 @@
     .eng-label { font-size: 0.68rem; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; }
     .eng-value { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--accent); }
 
-    /* ── HIGHLIGHTS ── */
+    /* ‚îÄ‚îÄ HIGHLIGHTS ‚îÄ‚îÄ */
     .highlights-grid { columns: 3; column-gap: 20px; }
     .highlight-card {
       break-inside: avoid; background: var(--dark-2); border: 1px solid var(--border);
@@ -405,7 +405,7 @@
     .highlight-delete { font-size: 0.7rem; color: #ff4444; cursor: none; border: 1px solid rgba(255,68,68,0.3); padding: 3px 8px; border-radius: 3px; transition: background 0.2s; }
     .highlight-delete:hover { background: rgba(255,68,68,0.1); }
 
-    /* ── FOOTER ── */
+    /* ‚îÄ‚îÄ FOOTER ‚îÄ‚îÄ */
     footer { border-top: 1px solid var(--border); padding: 40px 56px; display: flex; align-items: center; justify-content: space-between; }
     .footer-logo { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 800; color: var(--white); text-decoration: none; }
     .footer-logo span { color: var(--accent); }
@@ -455,7 +455,9 @@
   <!-- NAV -->
   <nav>
     <a href="artists.html" class="nav-back">Artists</a>
-    <a href="index.html" style="display:inline-block"><div class="logo-video-wrap"><video class="logo-video" autoplay loop muted playsinline><source src="assets/hvx-logo.mp4" type="video/mp4"></video></div></a>
+    <a href="index.html" class="nav-logo">
+      <video src="assets/hvx-logo-anim.mp4" autoplay muted loop playsinline class="nav-logo-video" aria-label="HVX Music"></video>
+    </a>
     <ul class="nav-links">
       <li><a href="artists.html">Artists</a></li>
       <li><a href="index.html#about">About</a></li>
@@ -484,8 +486,8 @@
         <div class="hero-img-placeholder" id="hero-img">
           <div class="hero-img-text" id="hero-img-text">NX</div>
         </div>
-        <div class="float-chip" id="float-chip-1">▸ Next Show: Loading...</div>
-        <div class="float-chip" id="float-chip-2">✦ Available for Booking</div>
+        <div class="float-chip" id="float-chip-1">‚ñ∏ Next Show: Loading...</div>
+        <div class="float-chip" id="float-chip-2">‚ú¶ Available for Booking</div>
       </div>
     </div>
   </section>
@@ -505,7 +507,7 @@
 
   <!-- OVERVIEW -->
   <section class="tab-content active" id="tab-overview">
-    <h2 class="section-title">About <span id="ov-name">—</span></h2>
+    <h2 class="section-title">About <span id="ov-name">‚Äî</span></h2>
     <div class="about-block"><p id="ov-bio"></p></div>
     <div class="overview-cols">
       <div class="list-block">
@@ -583,7 +585,7 @@
 
   <!-- FOOTER -->
   <footer>
-    <div class="footer-logo-wrap"><video class="footer-logo-video" autoplay loop muted playsinline><source src="assets/hvx-logo.mp4" type="video/mp4"></video></div>
+    <a href="index.html" class="footer-logo">HVX<span>.</span></a>
     <p class="footer-copy">&copy; 2026 HVX Music Group. All rights reserved.</p>
     <ul class="footer-links">
       <li><a href="#">Privacy</a></li>
@@ -594,7 +596,7 @@
 
   <script src="hvx-data.js"></script>
   <script>
-    // ── CURSOR ──
+    // ‚îÄ‚îÄ CURSOR ‚îÄ‚îÄ
     const dot = document.getElementById('cursor-dot');
     const ring = document.getElementById('cursor-ring');
     let mx = 0, my = 0, rx = 0, ry = 0;
@@ -612,13 +614,13 @@
       if (e.target.matches('a,button,[data-hover]')) document.body.classList.remove('cursor-hover');
     });
 
-    // ── SCROLL PROGRESS ──
+    // ‚îÄ‚îÄ SCROLL PROGRESS ‚îÄ‚îÄ
     const prog = document.getElementById('scroll-progress');
     window.addEventListener('scroll', () => {
       prog.style.width = (window.scrollY / (document.body.scrollHeight - innerHeight) * 100) + '%';
     });
 
-    // ── PARTICLES ON CLICK ──
+    // ‚îÄ‚îÄ PARTICLES ON CLICK ‚îÄ‚îÄ
     document.addEventListener('click', e => {
       for (let i = 0; i < 6; i++) {
         const p = document.createElement('div');
@@ -639,13 +641,13 @@
       }
     });
 
-    // ── READ URL PARAM ──
+    // ‚îÄ‚îÄ READ URL PARAM ‚îÄ‚îÄ
     const params = new URLSearchParams(location.search);
     const artistId = params.get('id') || 'nexus';
     const artist = (window.HVX && window.HVX.artists.find(a => a.id === artistId)) || window.HVX.artists[0];
 
-    // ── POPULATE HERO ──
-    document.title = artist.name + ' — HVX Music';
+    // ‚îÄ‚îÄ POPULATE HERO ‚îÄ‚îÄ
+    document.title = artist.name + ' ‚Äî HVX Music';
     const genreClass = artist.genre.toLowerCase().replace(' ', '-');
     const genreEl = document.getElementById('hero-genre-tag');
     genreEl.textContent = artist.genre;
@@ -669,10 +671,10 @@
 
     // Float chip
     if (artist.upcomingShows && artist.upcomingShows.length) {
-      document.getElementById('float-chip-1').textContent = '▸ Next: ' + artist.upcomingShows[0].date + ' @ ' + artist.upcomingShows[0].venue;
+      document.getElementById('float-chip-1').textContent = '‚ñ∏ Next: ' + artist.upcomingShows[0].date + ' @ ' + artist.upcomingShows[0].venue;
     }
 
-    // ── OVERVIEW ──
+    // ‚îÄ‚îÄ OVERVIEW ‚îÄ‚îÄ
     document.getElementById('ov-name').textContent = artist.name;
     document.getElementById('ov-bio').textContent = artist.longBio;
     const servicesEl = document.getElementById('ov-services');
@@ -684,15 +686,15 @@
       showsEl.innerHTML += `<div class="show-card">
         <span class="show-date">${s.date}</span>
         <div class="show-info"><div class="venue">${s.venue}</div><div class="city-s">${s.city}</div></div>
-        <span class="show-arrow">→</span>
+        <span class="show-arrow">‚Üí</span>
       </div>`;
     });
     const pressEl = document.getElementById('ov-press');
     artist.pressQuotes.forEach(q => {
-      pressEl.innerHTML += `<blockquote><p>"${q.quote}"</p><cite>— ${q.source}</cite></blockquote>`;
+      pressEl.innerHTML += `<blockquote><p>"${q.quote}"</p><cite>‚Äî ${q.source}</cite></blockquote>`;
     });
 
-    // ── MUSIC ──
+    // ‚îÄ‚îÄ MUSIC ‚îÄ‚îÄ
     const relGrid = document.getElementById('releases-grid');
     const bgGrads = [
       'linear-gradient(135deg,#1a1a2e,#2d1b4e)', 'linear-gradient(135deg,#1e2a1e,#2e4a2e)',
@@ -703,18 +705,18 @@
       relGrid.innerHTML += `<div class="release-card">
         <div class="release-art">
           <div class="release-art-inner" style="background:${bgGrads[i%bgGrads.length]};">
-            <div class="play-btn"><span>▶</span></div>
+            <div class="play-btn"><span>‚ñ∂</span></div>
           </div>
         </div>
         <div class="release-info">
           <div class="release-title">${r.title}</div>
-          <div class="release-meta">${r.year} · ${r.label}<br>${r.genre}</div>
-          <div class="release-streams">◈ ${r.streams} streams</div>
+          <div class="release-meta">${r.year} ¬∑ ${r.label}<br>${r.genre}</div>
+          <div class="release-streams">‚óà ${r.streams} streams</div>
         </div>
       </div>`;
     });
 
-    // ── SETS ──
+    // ‚îÄ‚îÄ SETS ‚îÄ‚îÄ
     const setsList = document.getElementById('sets-list');
     artist.sets.forEach(s => {
       setsList.innerHTML += `<div class="set-row">
@@ -723,7 +725,7 @@
         <span class="set-city">${s.city}</span>
         <span class="set-dur">${s.duration}</span>
         <span class="set-bpm">${s.bpm} BPM</span>
-        <div class="set-action" title="Download">↓</div>
+        <div class="set-action" title="Download">‚Üì</div>
       </div>`;
     });
     // Featured mix
@@ -740,7 +742,7 @@
       <div class="tracklist">${trackRows}</div>
     `;
 
-    // ── VENUES ──
+    // ‚îÄ‚îÄ VENUES ‚îÄ‚îÄ
     function renderVenues(arr, elId) {
       const el = document.getElementById(elId);
       arr.forEach(v => {
@@ -757,13 +759,13 @@
     renderVenues(artist.venues.upcoming, 'venues-upcoming');
     renderVenues(artist.venues.past, 'venues-past');
 
-    // ── ANALYTICS ──
+    // ‚îÄ‚îÄ ANALYTICS ‚îÄ‚îÄ
     const an = artist.analytics;
     document.getElementById('kpi-row').innerHTML = `
       <div class="kpi-card"><div class="kpi-label">Avg Reach / Show</div><div class="kpi-value">${an.avgReachPerShow.toLocaleString()}</div><div class="kpi-trend up">+12% vs last yr</div></div>
       <div class="kpi-card"><div class="kpi-label">Total Est. Reach</div><div class="kpi-value">${an.totalReach}</div><div class="kpi-trend up">+18% vs last yr</div></div>
       <div class="kpi-card"><div class="kpi-label">Shows This Year</div><div class="kpi-value">${an.showsThisYear}</div><div class="kpi-trend up">On Track</div></div>
-      <div class="kpi-card"><div class="kpi-label">Top Market</div><div class="kpi-value" style="font-size:1.5rem;">${an.topMarket}</div><div class="kpi-trend up">↑ Growing</div></div>
+      <div class="kpi-card"><div class="kpi-label">Top Market</div><div class="kpi-value" style="font-size:1.5rem;">${an.topMarket}</div><div class="kpi-trend up">‚Üë Growing</div></div>
     `;
 
     // Bar chart
@@ -818,13 +820,13 @@
       <div class="eng-card"><div class="eng-label">RA Watchlist</div><div class="eng-value">${eng.raWatchlist}</div></div>
     `;
 
-    // ── HIGHLIGHTS ──
+    // ‚îÄ‚îÄ HIGHLIGHTS ‚îÄ‚îÄ
     const storageKey = 'hvx_highlights_' + artist.id;
     const isAdmin = localStorage.getItem('hvx_admin') === 'true';
     const defaultHighlights = [
-      { id: 1, source: 'Instagram', date: 'Jun 14, 2026', caption: 'Closing set at Berghain — an unforgettable night. Thank you Berlin. 🖤', likes: 1842, emoji: '🎧' },
-      { id: 2, source: 'Video', date: 'May 31, 2026', caption: 'Exclusive aftermovie from Output, NYC. Full 3-hour set available on our channel.', likes: 962, emoji: '🎬' },
-      { id: 3, source: 'Photo', date: 'May 17, 2026', caption: 'Fabric room 1. One of the best crowds of the year.', likes: 1233, emoji: '📷' }
+      { id: 1, source: 'Instagram', date: 'Jun 14, 2026', caption: 'Closing set at Berghain ‚Äî an unforgettable night. Thank you Berlin. üñ§', likes: 1842, emoji: 'üéß' },
+      { id: 2, source: 'Video', date: 'May 31, 2026', caption: 'Exclusive aftermovie from Output, NYC. Full 3-hour set available on our channel.', likes: 962, emoji: 'üé¨' },
+      { id: 3, source: 'Photo', date: 'May 17, 2026', caption: 'Fabric room 1. One of the best crowds of the year.', likes: 1233, emoji: 'üì∑' }
     ];
     let highlights = JSON.parse(localStorage.getItem(storageKey) || 'null') || defaultHighlights;
 
@@ -841,10 +843,10 @@
             <div class="highlight-date">${h.date}</div>
             <p class="highlight-caption">${h.caption}</p>
             <div class="highlight-footer">
-              <span class="highlight-likes">♥ ${h.likes.toLocaleString()}</span>
+              <span class="highlight-likes">‚ô• ${h.likes.toLocaleString()}</span>
               <div style="display:flex;gap:10px;align-items:center;">
                 ${isAdmin ? `<button class="highlight-delete" data-id="${h.id}" onclick="deleteHighlight(${h.id})">Delete</button>` : ''}
-                <span class="highlight-share" title="Share">↗ Share</span>
+                <span class="highlight-share" title="Share">‚Üó Share</span>
               </div>
             </div>
           </div>`;
@@ -859,7 +861,7 @@
       renderHighlights();
     };
 
-    // ── TAB SWITCHING ──
+    // ‚îÄ‚îÄ TAB SWITCHING ‚îÄ‚îÄ
     const tabBtns = document.querySelectorAll('.tab-btn');
     const tabContents = document.querySelectorAll('.tab-content');
     const indicator = document.getElementById('tab-indicator');
@@ -901,7 +903,7 @@
       if (activeTab) setIndicator(activeTab);
     }, 100);
 
-    // ── RIPPLE ──
+    // ‚îÄ‚îÄ RIPPLE ‚îÄ‚îÄ
     document.querySelectorAll('button, a.btn-primary, a.btn-outline, .nav-cta').forEach(el => {
       el.addEventListener('click', e => {
         const r = document.createElement('span');
@@ -915,7 +917,7 @@
       });
     });
 
-    // ── SCROLL REVEAL ──
+    // ‚îÄ‚îÄ SCROLL REVEAL ‚îÄ‚îÄ
     const revealObs = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
