@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Artists — HVX Music</title>
+  <title>Artists ‚Äî HVX Music</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -34,7 +34,7 @@
       overflow-x: hidden;
     }
 
-    /* ── SCROLL PROGRESS ── */
+    /* ‚îÄ‚îÄ SCROLL PROGRESS ‚îÄ‚îÄ */
     #scroll-progress {
       position: fixed;
       top: 0; left: 0;
@@ -45,7 +45,7 @@
       transition: width 0.1s linear;
     }
 
-    /* ── CUSTOM CURSOR ── */
+    /* ‚îÄ‚îÄ CUSTOM CURSOR ‚îÄ‚îÄ */
     #cursor-dot {
       position: fixed;
       width: 8px; height: 8px;
@@ -69,7 +69,7 @@
     body.cursor-hover #cursor-dot { transform: translate(-50%,-50%) scale(2); background: var(--accent-2); }
     body.cursor-hover #cursor-ring { width: 54px; height: 54px; border-color: var(--accent-2); }
 
-    /* ── NAV ── */
+    /* ‚îÄ‚îÄ NAV ‚îÄ‚îÄ */
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -84,14 +84,16 @@
       border-bottom: 1px solid var(--border);
     }
     .nav-logo {
-      font-family: 'Syne', sans-serif;
-      font-size: 1.5rem;
-      font-weight: 800;
-      color: var(--white);
+      display: flex;
+      align-items: center;
       text-decoration: none;
-      letter-spacing: -0.02em;
     }
-    .nav-logo span { color: var(--accent); }
+    .nav-logo-video {
+      height: 48px;
+      width: auto;
+      display: block;
+      object-fit: contain;
+    }
     .nav-links {
       display: flex;
       gap: 36px;
@@ -140,7 +142,7 @@
       box-shadow: 0 8px 24px rgba(255,107,53,0.35);
     }
 
-    /* ── HERO ── */
+    /* ‚îÄ‚îÄ HERO ‚îÄ‚îÄ */
     .roster-hero {
       position: relative;
       padding: 160px 48px 80px;
@@ -184,9 +186,9 @@
     }
     .hero-title {
       font-family: 'Syne', sans-serif;
-      font-size: clamp(4rem, 10vw, 8rem);
+      font-size: clamp(2.5rem, 5vw, 4rem);
       font-weight: 800;
-      line-height: 0.92;
+      line-height: 1;
       letter-spacing: -0.03em;
       color: var(--white);
       margin-bottom: 28px;
@@ -211,7 +213,7 @@
       border-radius: 2px;
     }
 
-    /* ── FILTER BUTTONS ── */
+    /* ‚îÄ‚îÄ FILTER BUTTONS ‚îÄ‚îÄ */
     .filter-bar {
       display: flex;
       gap: 12px;
@@ -252,7 +254,7 @@
       color: var(--white);
     }
 
-    /* ── ARTISTS SECTION ── */
+    /* ‚îÄ‚îÄ ARTISTS SECTION ‚îÄ‚îÄ */
     .artists-section {
       padding: 60px 48px 120px;
     }
@@ -271,7 +273,7 @@
       gap: 28px;
     }
 
-    /* ── ARTIST CARD ── */
+    /* ‚îÄ‚îÄ ARTIST CARD ‚îÄ‚îÄ */
     .artist-card {
       background: var(--dark-2);
       border: 1px solid var(--border);
@@ -455,7 +457,7 @@
       opacity: 0.8;
     }
 
-    /* ── FOOTER ── */
+    /* ‚îÄ‚îÄ FOOTER ‚îÄ‚îÄ */
     footer {
       border-top: 1px solid var(--border);
       padding: 40px 48px;
@@ -488,7 +490,7 @@
     }
     .footer-links a:hover { color: var(--white); }
 
-    /* ── RIPPLE ── */
+    /* ‚îÄ‚îÄ RIPPLE ‚îÄ‚îÄ */
     .ripple {
       position: absolute;
       border-radius: 50%;
@@ -501,7 +503,7 @@
       to { transform: scale(4); opacity: 0; }
     }
 
-    /* ── HIDDEN ── */
+    /* ‚îÄ‚îÄ HIDDEN ‚îÄ‚îÄ */
     .artist-card.hidden { display: none; }
 
     @media (max-width: 1024px) {
@@ -524,15 +526,17 @@
 
   <!-- NAV -->
   <nav>
-    <a href="index.html" style="display:inline-block"><div class="logo-video-wrap"><video class="logo-video" autoplay loop muted playsinline><source src="assets/hvx-logo.mp4" type="video/mp4"></video></div></a>
+    <a href="index.html" class="nav-logo">
+      <video src="assets/hvx-logo-anim.mp4" autoplay muted loop playsinline class="nav-logo-video" aria-label="HVX Music"></video>
+    </a>
     <ul class="nav-links">
       <li><a href="artists.html" class="active">Artists</a></li>
       <li><a href="index.html#about">About</a></li>
+      <li><a href="index.html#services">Services</a></li>
       <li><a href="index.html#releases">Releases</a></li>
-      <li><a href="index.html#faq">FAQ</a></li>
       <li><a href="index.html#contact">Contact</a></li>
     </ul>
-    <a href="index.html#contact" class="nav-cta">Book Now</a>
+    <a href="index.html#demo" class="nav-cta">Submit Demo</a>
   </nav>
 
   <!-- HERO -->
@@ -698,7 +702,7 @@
 
   <!-- FOOTER -->
   <footer>
-    <div class="footer-logo-wrap"><video class="footer-logo-video" autoplay loop muted playsinline><source src="assets/hvx-logo.mp4" type="video/mp4"></video></div>
+    <a href="index.html" class="footer-logo">HVX<span>.</span></a>
     <p class="footer-copy">&copy; 2026 HVX Music Group. All rights reserved.</p>
     <ul class="footer-links">
       <li><a href="#">Privacy</a></li>
@@ -708,7 +712,7 @@
   </footer>
 
   <script>
-    // ── CURSOR ──
+    // ‚îÄ‚îÄ CURSOR ‚îÄ‚îÄ
     const dot = document.getElementById('cursor-dot');
     const ring = document.getElementById('cursor-ring');
     let mx = 0, my = 0, rx = 0, ry = 0;
@@ -725,14 +729,14 @@
       el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
     });
 
-    // ── SCROLL PROGRESS ──
+    // ‚îÄ‚îÄ SCROLL PROGRESS ‚îÄ‚îÄ
     const prog = document.getElementById('scroll-progress');
     window.addEventListener('scroll', () => {
       const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
       prog.style.width = pct + '%';
     });
 
-    // ── FILTER ──
+    // ‚îÄ‚îÄ FILTER ‚îÄ‚îÄ
     const filterBtns = document.querySelectorAll('.filter-btn');
     const cards = document.querySelectorAll('.artist-card');
     const countEl = document.getElementById('visible-count');
@@ -751,7 +755,7 @@
       });
     });
 
-    // ── SCROLL REVEAL ──
+    // ‚îÄ‚îÄ SCROLL REVEAL ‚îÄ‚îÄ
     document.body.classList.add('js-reveal');
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry, i) => {
@@ -763,7 +767,7 @@
     }, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
     cards.forEach(c => observer.observe(c));
 
-    // ── 3D TILT ──
+    // ‚îÄ‚îÄ 3D TILT ‚îÄ‚îÄ
     cards.forEach(card => {
       card.addEventListener('mousemove', e => {
         const r = card.getBoundingClientRect();
@@ -776,7 +780,7 @@
       });
     });
 
-    // ── RIPPLE ──
+    // ‚îÄ‚îÄ RIPPLE ‚îÄ‚îÄ
     document.querySelectorAll('button, .view-profile-btn, .nav-cta').forEach(el => {
       el.addEventListener('click', e => {
         const r = document.createElement('span');
