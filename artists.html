@@ -3,7 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Artists ‚Äî HVX Music</title>
+  <title>Artists — HVX Music | Electronic Music Roster</title>
+  <meta name="description" content="Meet the HVX Music artist roster. House, tech house, afro house, and melodic house artists from around the world, developed and distributed by HVX Music." />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Artists — HVX Music" />
+  <meta property="og:description" content="Meet the HVX Music electronic music artist roster." />
+  <meta property="og:url" content="https://hvx-music.netlify.app/artists.html" />
+  <link rel="canonical" href="https://hvx-music.netlify.app/artists.html" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -34,7 +40,7 @@
       overflow-x: hidden;
     }
 
-    /* ‚îÄ‚îÄ SCROLL PROGRESS ‚îÄ‚îÄ */
+    /* ── SCROLL PROGRESS ── */
     #scroll-progress {
       position: fixed;
       top: 0; left: 0;
@@ -45,7 +51,7 @@
       transition: width 0.1s linear;
     }
 
-    /* ‚îÄ‚îÄ CUSTOM CURSOR ‚îÄ‚îÄ */
+    /* ── CUSTOM CURSOR ── */
     #cursor-dot {
       position: fixed;
       width: 8px; height: 8px;
@@ -69,7 +75,7 @@
     body.cursor-hover #cursor-dot { transform: translate(-50%,-50%) scale(2); background: var(--accent-2); }
     body.cursor-hover #cursor-ring { width: 54px; height: 54px; border-color: var(--accent-2); }
 
-    /* ‚îÄ‚îÄ NAV ‚îÄ‚îÄ */
+    /* ── NAV ── */
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -89,7 +95,7 @@
       text-decoration: none;
     }
     .nav-logo-video {
-      height: 48px;
+      height: 40px;
       width: auto;
       display: block;
       object-fit: contain;
@@ -142,10 +148,10 @@
       box-shadow: 0 8px 24px rgba(255,107,53,0.35);
     }
 
-    /* ‚îÄ‚îÄ HERO ‚îÄ‚îÄ */
+    /* ── HERO ── */
     .roster-hero {
       position: relative;
-      padding: 160px 48px 80px;
+      padding: 100px 48px 48px;
       overflow: hidden;
     }
     .roster-hero::before {
@@ -213,7 +219,7 @@
       border-radius: 2px;
     }
 
-    /* ‚îÄ‚îÄ FILTER BUTTONS ‚îÄ‚îÄ */
+    /* ── FILTER BUTTONS ── */
     .filter-bar {
       display: flex;
       gap: 12px;
@@ -254,7 +260,7 @@
       color: var(--white);
     }
 
-    /* ‚îÄ‚îÄ ARTISTS SECTION ‚îÄ‚îÄ */
+    /* ── ARTISTS SECTION ── */
     .artists-section {
       padding: 60px 48px 120px;
     }
@@ -273,7 +279,7 @@
       gap: 28px;
     }
 
-    /* ‚îÄ‚îÄ ARTIST CARD ‚îÄ‚îÄ */
+    /* ── ARTIST CARD ── */
     .artist-card {
       background: var(--dark-2);
       border: 1px solid var(--border);
@@ -457,7 +463,7 @@
       opacity: 0.8;
     }
 
-    /* ‚îÄ‚îÄ FOOTER ‚îÄ‚îÄ */
+    /* ── FOOTER ── */
     footer {
       border-top: 1px solid var(--border);
       padding: 40px 48px;
@@ -490,7 +496,7 @@
     }
     .footer-links a:hover { color: var(--white); }
 
-    /* ‚îÄ‚îÄ RIPPLE ‚îÄ‚îÄ */
+    /* ── RIPPLE ── */
     .ripple {
       position: absolute;
       border-radius: 50%;
@@ -503,7 +509,7 @@
       to { transform: scale(4); opacity: 0; }
     }
 
-    /* ‚îÄ‚îÄ HIDDEN ‚îÄ‚îÄ */
+    /* ── HIDDEN ── */
     .artist-card.hidden { display: none; }
 
     @media (max-width: 1024px) {
@@ -712,7 +718,7 @@
   </footer>
 
   <script>
-    // ‚îÄ‚îÄ CURSOR ‚îÄ‚îÄ
+    // ── CURSOR ──
     const dot = document.getElementById('cursor-dot');
     const ring = document.getElementById('cursor-ring');
     let mx = 0, my = 0, rx = 0, ry = 0;
@@ -729,14 +735,14 @@
       el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
     });
 
-    // ‚îÄ‚îÄ SCROLL PROGRESS ‚îÄ‚îÄ
+    // ── SCROLL PROGRESS ──
     const prog = document.getElementById('scroll-progress');
     window.addEventListener('scroll', () => {
       const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
       prog.style.width = pct + '%';
     });
 
-    // ‚îÄ‚îÄ FILTER ‚îÄ‚îÄ
+    // ── FILTER ──
     const filterBtns = document.querySelectorAll('.filter-btn');
     const cards = document.querySelectorAll('.artist-card');
     const countEl = document.getElementById('visible-count');
@@ -755,7 +761,7 @@
       });
     });
 
-    // ‚îÄ‚îÄ SCROLL REVEAL ‚îÄ‚îÄ
+    // ── SCROLL REVEAL ──
     document.body.classList.add('js-reveal');
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry, i) => {
@@ -767,7 +773,7 @@
     }, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
     cards.forEach(c => observer.observe(c));
 
-    // ‚îÄ‚îÄ 3D TILT ‚îÄ‚îÄ
+    // ── 3D TILT ──
     cards.forEach(card => {
       card.addEventListener('mousemove', e => {
         const r = card.getBoundingClientRect();
@@ -780,7 +786,7 @@
       });
     });
 
-    // ‚îÄ‚îÄ RIPPLE ‚îÄ‚îÄ
+    // ── RIPPLE ──
     document.querySelectorAll('button, .view-profile-btn, .nav-cta').forEach(el => {
       el.addEventListener('click', e => {
         const r = document.createElement('span');
