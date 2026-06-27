@@ -3,7 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Artist ‚Äî HVX Music</title>
+  <title>Artist Profile — HVX Music</title>
+  <meta name="description" content="Artist profile on HVX Music. Discover releases, upcoming shows, DJ sets, and career highlights." />
+  <meta property="og:type" content="profile" />
+  <meta property="og:title" content="Artist Profile — HVX Music" />
+  <meta property="og:description" content="Discover HVX Music artists, releases, and upcoming shows." />
+  <meta property="og:url" content="https://hvx-music.netlify.app/artist-profile.html" />
+  <link rel="canonical" href="https://hvx-music.netlify.app/artist-profile.html" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -90,7 +96,7 @@
       font-size: 0.8rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase;
       margin-bottom: 24px; display: flex; align-items: center; gap: 8px;
     }
-    .hero-city::before { content: '‚óâ'; color: var(--accent); font-size: 0.6rem; }
+    .hero-city::before { content: '◉'; color: var(--accent); font-size: 0.6rem; }
     .hero-bio { font-size: 1rem; color: var(--off-white); line-height: 1.7; max-width: 480px; margin-bottom: 36px; }
     .hero-stats { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 36px; }
     .stat-chip {
@@ -158,7 +164,7 @@
       50% { transform: translateY(-8px); }
     }
 
-    /* ‚îÄ‚îÄ TAB NAV ‚îÄ‚îÄ */
+    /* ── TAB NAV ── */
     .tab-nav {
       position: sticky; top: 72px; z-index: 100;
       background: rgba(15,15,15,0.95); backdrop-filter: blur(20px);
@@ -181,7 +187,7 @@
       border-radius: 2px 2px 0 0; transition: left 0.3s ease, width 0.3s ease;
     }
 
-    /* ‚îÄ‚îÄ TAB CONTENT ‚îÄ‚îÄ */
+    /* ── TAB CONTENT ── */
     .tab-content { display: none; padding: 60px 56px; }
     .tab-content.active { display: block; }
 
@@ -192,7 +198,7 @@
     }
     .section-title span { color: var(--accent); }
 
-    /* ‚îÄ‚îÄ OVERVIEW ‚îÄ‚îÄ */
+    /* ── OVERVIEW ── */
     .about-block { max-width: 700px; margin-bottom: 56px; }
     .about-block p { font-size: 1rem; color: var(--off-white); line-height: 1.8; }
     .overview-cols { display: grid; grid-template-columns: 1fr 1.2fr; gap: 48px; margin-bottom: 56px; }
@@ -217,7 +223,7 @@
     blockquote p { font-size: 0.95rem; color: var(--off-white); line-height: 1.6; font-style: italic; margin-bottom: 8px; }
     blockquote cite { font-size: 0.72rem; color: var(--accent); font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; font-style: normal; }
 
-    /* ‚îÄ‚îÄ MUSIC ‚îÄ‚îÄ */
+    /* ── MUSIC ── */
     .releases-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
     .release-card {
       background: var(--dark-2); border: 1px solid var(--border); border-radius: 6px;
@@ -249,7 +255,7 @@
     .release-meta { font-size: 0.72rem; color: var(--muted); line-height: 1.5; }
     .release-streams { font-size: 0.72rem; color: var(--accent); font-weight: 600; margin-top: 6px; }
 
-    /* ‚îÄ‚îÄ SETS ‚îÄ‚îÄ */
+    /* ── SETS ── */
     .sets-list { display: flex; flex-direction: column; gap: 2px; margin-bottom: 48px; }
     .set-row {
       display: grid; grid-template-columns: 120px 1fr 120px 100px 120px auto;
@@ -292,7 +298,7 @@
     .track-time { font-size: 0.72rem; color: var(--accent); font-weight: 600; min-width: 40px; }
     .track-name { font-size: 0.85rem; color: var(--off-white); }
 
-    /* ‚îÄ‚îÄ VENUES ‚îÄ‚îÄ */
+    /* ── VENUES ── */
     .venues-section h3 { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; margin-top: 40px; }
     .venues-section h3:first-child { margin-top: 0; }
     .venues-list { display: flex; flex-direction: column; gap: 2px; margin-bottom: 8px; }
@@ -313,7 +319,7 @@
     .status-badge.confirmed { background: rgba(0,210,150,0.1); color: #00d296; border: 1px solid rgba(0,210,150,0.25); }
     .status-badge.past { background: var(--dark-3); color: var(--muted); border: 1px solid var(--border); }
 
-    /* ‚îÄ‚îÄ ANALYTICS ‚îÄ‚îÄ */
+    /* ── ANALYTICS ── */
     .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 56px; }
     .kpi-card {
       background: var(--dark-2); border: 1px solid var(--border); border-radius: 6px;
@@ -322,7 +328,7 @@
     .kpi-label { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
     .kpi-value { font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 800; color: var(--white); line-height: 1; margin-bottom: 6px; }
     .kpi-trend { font-size: 0.75rem; color: #00d296; font-weight: 600; }
-    .kpi-trend.up::before { content: '‚Üë '; }
+    .kpi-trend.up::before { content: '↑ '; }
 
     /* Bar chart */
     .chart-section { margin-bottom: 56px; }
@@ -379,7 +385,7 @@
     .eng-label { font-size: 0.68rem; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; }
     .eng-value { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--accent); }
 
-    /* ‚îÄ‚îÄ HIGHLIGHTS ‚îÄ‚îÄ */
+    /* ── HIGHLIGHTS ── */
     .highlights-grid { columns: 3; column-gap: 20px; }
     .highlight-card {
       break-inside: avoid; background: var(--dark-2); border: 1px solid var(--border);
@@ -405,7 +411,7 @@
     .highlight-delete { font-size: 0.7rem; color: #ff4444; cursor: none; border: 1px solid rgba(255,68,68,0.3); padding: 3px 8px; border-radius: 3px; transition: background 0.2s; }
     .highlight-delete:hover { background: rgba(255,68,68,0.1); }
 
-    /* ‚îÄ‚îÄ FOOTER ‚îÄ‚îÄ */
+    /* ── FOOTER ── */
     footer { border-top: 1px solid var(--border); padding: 40px 56px; display: flex; align-items: center; justify-content: space-between; }
     .footer-logo { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 800; color: var(--white); text-decoration: none; }
     .footer-logo span { color: var(--accent); }
@@ -486,8 +492,8 @@
         <div class="hero-img-placeholder" id="hero-img">
           <div class="hero-img-text" id="hero-img-text">NX</div>
         </div>
-        <div class="float-chip" id="float-chip-1">‚ñ∏ Next Show: Loading...</div>
-        <div class="float-chip" id="float-chip-2">‚ú¶ Available for Booking</div>
+        <div class="float-chip" id="float-chip-1">▸ Next Show: Loading...</div>
+        <div class="float-chip" id="float-chip-2">✦ Available for Booking</div>
       </div>
     </div>
   </section>
@@ -507,7 +513,7 @@
 
   <!-- OVERVIEW -->
   <section class="tab-content active" id="tab-overview">
-    <h2 class="section-title">About <span id="ov-name">‚Äî</span></h2>
+    <h2 class="section-title">About <span id="ov-name">—</span></h2>
     <div class="about-block"><p id="ov-bio"></p></div>
     <div class="overview-cols">
       <div class="list-block">
@@ -596,7 +602,7 @@
 
   <script src="hvx-data.js"></script>
   <script>
-    // ‚îÄ‚îÄ CURSOR ‚îÄ‚îÄ
+    // ── CURSOR ──
     const dot = document.getElementById('cursor-dot');
     const ring = document.getElementById('cursor-ring');
     let mx = 0, my = 0, rx = 0, ry = 0;
@@ -614,13 +620,13 @@
       if (e.target.matches('a,button,[data-hover]')) document.body.classList.remove('cursor-hover');
     });
 
-    // ‚îÄ‚îÄ SCROLL PROGRESS ‚îÄ‚îÄ
+    // ── SCROLL PROGRESS ──
     const prog = document.getElementById('scroll-progress');
     window.addEventListener('scroll', () => {
       prog.style.width = (window.scrollY / (document.body.scrollHeight - innerHeight) * 100) + '%';
     });
 
-    // ‚îÄ‚îÄ PARTICLES ON CLICK ‚îÄ‚îÄ
+    // ── PARTICLES ON CLICK ──
     document.addEventListener('click', e => {
       for (let i = 0; i < 6; i++) {
         const p = document.createElement('div');
@@ -641,13 +647,13 @@
       }
     });
 
-    // ‚îÄ‚îÄ READ URL PARAM ‚îÄ‚îÄ
+    // ── READ URL PARAM ──
     const params = new URLSearchParams(location.search);
     const artistId = params.get('id') || 'nexus';
     const artist = (window.HVX && window.HVX.artists.find(a => a.id === artistId)) || window.HVX.artists[0];
 
-    // ‚îÄ‚îÄ POPULATE HERO ‚îÄ‚îÄ
-    document.title = artist.name + ' ‚Äî HVX Music';
+    // ── POPULATE HERO ──
+    document.title = artist.name + ' — HVX Music';
     const genreClass = artist.genre.toLowerCase().replace(' ', '-');
     const genreEl = document.getElementById('hero-genre-tag');
     genreEl.textContent = artist.genre;
@@ -671,10 +677,10 @@
 
     // Float chip
     if (artist.upcomingShows && artist.upcomingShows.length) {
-      document.getElementById('float-chip-1').textContent = '‚ñ∏ Next: ' + artist.upcomingShows[0].date + ' @ ' + artist.upcomingShows[0].venue;
+      document.getElementById('float-chip-1').textContent = '▸ Next: ' + artist.upcomingShows[0].date + ' @ ' + artist.upcomingShows[0].venue;
     }
 
-    // ‚îÄ‚îÄ OVERVIEW ‚îÄ‚îÄ
+    // ── OVERVIEW ──
     document.getElementById('ov-name').textContent = artist.name;
     document.getElementById('ov-bio').textContent = artist.longBio;
     const servicesEl = document.getElementById('ov-services');
@@ -686,15 +692,15 @@
       showsEl.innerHTML += `<div class="show-card">
         <span class="show-date">${s.date}</span>
         <div class="show-info"><div class="venue">${s.venue}</div><div class="city-s">${s.city}</div></div>
-        <span class="show-arrow">‚Üí</span>
+        <span class="show-arrow">→</span>
       </div>`;
     });
     const pressEl = document.getElementById('ov-press');
     artist.pressQuotes.forEach(q => {
-      pressEl.innerHTML += `<blockquote><p>"${q.quote}"</p><cite>‚Äî ${q.source}</cite></blockquote>`;
+      pressEl.innerHTML += `<blockquote><p>"${q.quote}"</p><cite>— ${q.source}</cite></blockquote>`;
     });
 
-    // ‚îÄ‚îÄ MUSIC ‚îÄ‚îÄ
+    // ── MUSIC ──
     const relGrid = document.getElementById('releases-grid');
     const bgGrads = [
       'linear-gradient(135deg,#1a1a2e,#2d1b4e)', 'linear-gradient(135deg,#1e2a1e,#2e4a2e)',
@@ -705,18 +711,18 @@
       relGrid.innerHTML += `<div class="release-card">
         <div class="release-art">
           <div class="release-art-inner" style="background:${bgGrads[i%bgGrads.length]};">
-            <div class="play-btn"><span>‚ñ∂</span></div>
+            <div class="play-btn"><span>▶</span></div>
           </div>
         </div>
         <div class="release-info">
           <div class="release-title">${r.title}</div>
-          <div class="release-meta">${r.year} ¬∑ ${r.label}<br>${r.genre}</div>
-          <div class="release-streams">‚óà ${r.streams} streams</div>
+          <div class="release-meta">${r.year} · ${r.label}<br>${r.genre}</div>
+          <div class="release-streams">◈ ${r.streams} streams</div>
         </div>
       </div>`;
     });
 
-    // ‚îÄ‚îÄ SETS ‚îÄ‚îÄ
+    // ── SETS ──
     const setsList = document.getElementById('sets-list');
     artist.sets.forEach(s => {
       setsList.innerHTML += `<div class="set-row">
@@ -725,7 +731,7 @@
         <span class="set-city">${s.city}</span>
         <span class="set-dur">${s.duration}</span>
         <span class="set-bpm">${s.bpm} BPM</span>
-        <div class="set-action" title="Download">‚Üì</div>
+        <div class="set-action" title="Download">↓</div>
       </div>`;
     });
     // Featured mix
@@ -742,7 +748,7 @@
       <div class="tracklist">${trackRows}</div>
     `;
 
-    // ‚îÄ‚îÄ VENUES ‚îÄ‚îÄ
+    // ── VENUES ──
     function renderVenues(arr, elId) {
       const el = document.getElementById(elId);
       arr.forEach(v => {
@@ -759,13 +765,13 @@
     renderVenues(artist.venues.upcoming, 'venues-upcoming');
     renderVenues(artist.venues.past, 'venues-past');
 
-    // ‚îÄ‚îÄ ANALYTICS ‚îÄ‚îÄ
+    // ── ANALYTICS ──
     const an = artist.analytics;
     document.getElementById('kpi-row').innerHTML = `
       <div class="kpi-card"><div class="kpi-label">Avg Reach / Show</div><div class="kpi-value">${an.avgReachPerShow.toLocaleString()}</div><div class="kpi-trend up">+12% vs last yr</div></div>
       <div class="kpi-card"><div class="kpi-label">Total Est. Reach</div><div class="kpi-value">${an.totalReach}</div><div class="kpi-trend up">+18% vs last yr</div></div>
       <div class="kpi-card"><div class="kpi-label">Shows This Year</div><div class="kpi-value">${an.showsThisYear}</div><div class="kpi-trend up">On Track</div></div>
-      <div class="kpi-card"><div class="kpi-label">Top Market</div><div class="kpi-value" style="font-size:1.5rem;">${an.topMarket}</div><div class="kpi-trend up">‚Üë Growing</div></div>
+      <div class="kpi-card"><div class="kpi-label">Top Market</div><div class="kpi-value" style="font-size:1.5rem;">${an.topMarket}</div><div class="kpi-trend up">↑ Growing</div></div>
     `;
 
     // Bar chart
@@ -820,13 +826,13 @@
       <div class="eng-card"><div class="eng-label">RA Watchlist</div><div class="eng-value">${eng.raWatchlist}</div></div>
     `;
 
-    // ‚îÄ‚îÄ HIGHLIGHTS ‚îÄ‚îÄ
+    // ── HIGHLIGHTS ──
     const storageKey = 'hvx_highlights_' + artist.id;
     const isAdmin = localStorage.getItem('hvx_admin') === 'true';
     const defaultHighlights = [
-      { id: 1, source: 'Instagram', date: 'Jun 14, 2026', caption: 'Closing set at Berghain ‚Äî an unforgettable night. Thank you Berlin. üñ§', likes: 1842, emoji: 'üéß' },
-      { id: 2, source: 'Video', date: 'May 31, 2026', caption: 'Exclusive aftermovie from Output, NYC. Full 3-hour set available on our channel.', likes: 962, emoji: 'üé¨' },
-      { id: 3, source: 'Photo', date: 'May 17, 2026', caption: 'Fabric room 1. One of the best crowds of the year.', likes: 1233, emoji: 'üì∑' }
+      { id: 1, source: 'Instagram', date: 'Jun 14, 2026', caption: 'Closing set at Berghain — an unforgettable night. Thank you Berlin. 🖤', likes: 1842, emoji: '🎧' },
+      { id: 2, source: 'Video', date: 'May 31, 2026', caption: 'Exclusive aftermovie from Output, NYC. Full 3-hour set available on our channel.', likes: 962, emoji: '🎬' },
+      { id: 3, source: 'Photo', date: 'May 17, 2026', caption: 'Fabric room 1. One of the best crowds of the year.', likes: 1233, emoji: '📷' }
     ];
     let highlights = JSON.parse(localStorage.getItem(storageKey) || 'null') || defaultHighlights;
 
@@ -843,10 +849,10 @@
             <div class="highlight-date">${h.date}</div>
             <p class="highlight-caption">${h.caption}</p>
             <div class="highlight-footer">
-              <span class="highlight-likes">‚ô• ${h.likes.toLocaleString()}</span>
+              <span class="highlight-likes">♥ ${h.likes.toLocaleString()}</span>
               <div style="display:flex;gap:10px;align-items:center;">
                 ${isAdmin ? `<button class="highlight-delete" data-id="${h.id}" onclick="deleteHighlight(${h.id})">Delete</button>` : ''}
-                <span class="highlight-share" title="Share">‚Üó Share</span>
+                <span class="highlight-share" title="Share">↗ Share</span>
               </div>
             </div>
           </div>`;
@@ -861,7 +867,7 @@
       renderHighlights();
     };
 
-    // ‚îÄ‚îÄ TAB SWITCHING ‚îÄ‚îÄ
+    // ── TAB SWITCHING ──
     const tabBtns = document.querySelectorAll('.tab-btn');
     const tabContents = document.querySelectorAll('.tab-content');
     const indicator = document.getElementById('tab-indicator');
@@ -903,7 +909,7 @@
       if (activeTab) setIndicator(activeTab);
     }, 100);
 
-    // ‚îÄ‚îÄ RIPPLE ‚îÄ‚îÄ
+    // ── RIPPLE ──
     document.querySelectorAll('button, a.btn-primary, a.btn-outline, .nav-cta').forEach(el => {
       el.addEventListener('click', e => {
         const r = document.createElement('span');
@@ -917,7 +923,7 @@
       });
     });
 
-    // ‚îÄ‚îÄ SCROLL REVEAL ‚îÄ‚îÄ
+    // ── SCROLL REVEAL ──
     const revealObs = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
