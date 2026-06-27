@@ -1,10 +1,10 @@
 /* ============================================================
-   HVX MUSIC ‚Äî Interactive Script v2
+   HVX MUSIC — Interactive Script v2
    ============================================================ */
 
 (() => {
 
-  // ‚îÄ‚îÄ CUSTOM CURSOR ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+  // ── CUSTOM CURSOR ─────────────────────────────────────────
   const cursor   = document.getElementById('cursor');
   const follower = document.getElementById('cursor-follower');
   let mx = 0, my = 0, fx = 0, fy = 0;
@@ -41,7 +41,7 @@
   });
 
 
-  // ‚îÄ‚îÄ SCROLL PROGRESS BAR ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+  // ── SCROLL PROGRESS BAR ───────────────────────────────────
   const progressBar = document.getElementById('scroll-progress');
   function updateProgress() {
     const scrollTop = window.scrollY;
@@ -52,14 +52,14 @@
   window.addEventListener('scroll', updateProgress, { passive: true });
 
 
-  // ‚îÄ‚îÄ NAV SCROLL ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+  // ── NAV SCROLL ────────────────────────────────────────────
   const nav = document.getElementById('nav');
   window.addEventListener('scroll', () => {
     nav.classList.toggle('scrolled', window.scrollY > 40);
   }, { passive: true });
 
 
-  // ‚îÄ‚îÄ MOBILE MENU ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+  // ── MOBILE MENU ───────────────────────────────────────────
   const hamburger  = document.getElementById('hamburger');
   const mobileMenu = document.getElementById('mobile-menu');
   let menuOpen = false;
@@ -87,7 +87,7 @@
   });
 
 
-  // ‚îÄ‚îÄ SCROLL REVEAL ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+  // ── SCROLL REVEAL ─────────────────────────────────────────
   const baseReveal = '.stats-band,.section-header,.artist-card,.release-row,.about-card,.footer-top,.faq-item,.channel-link,.service-card,.demo-tips,.demo-text';
 
   const revealObs = new IntersectionObserver((entries) => {
@@ -129,7 +129,7 @@
   });
 
 
-  // ‚îÄ‚îÄ COUNTER ANIMATION ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+  // ── COUNTER ANIMATION ─────────────────────────────────────
   function animateCounter(el) {
     const target = +el.dataset.target;
     const duration = 1800;
@@ -153,7 +153,7 @@
   if (statsBand) counterObs.observe(statsBand);
 
 
-  // ‚îÄ‚îÄ ARTIST FILTER ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+  // ── ARTIST FILTER ─────────────────────────────────────────
   document.querySelectorAll('.filter-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -170,7 +170,7 @@
   });
 
 
-  // ‚îÄ‚îÄ RIPPLE ON BUTTONS ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+  // ── RIPPLE ON BUTTONS ─────────────────────────────────────
   function addRipple(e) {
     const btn  = e.currentTarget;
     const rect = btn.getBoundingClientRect();
@@ -186,7 +186,7 @@
   document.querySelectorAll('.btn').forEach(btn => btn.addEventListener('click', addRipple));
 
 
-  // ‚îÄ‚îÄ CLICK PARTICLE BURST ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+  // ── CLICK PARTICLE BURST ──────────────────────────────────
   const COLORS = ['#a259ff','#ff6b35','#ffffff','#c084fc','#fb923c'];
   document.addEventListener('click', e => {
     for (let i = 0; i < 8; i++) {
@@ -206,7 +206,7 @@
   });
 
 
-  // ‚îÄ‚îÄ MAGNETIC BUTTONS ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+  // ── MAGNETIC BUTTONS ──────────────────────────────────────
   document.querySelectorAll('.btn-primary, .btn-outline').forEach(btn => {
     btn.addEventListener('mousemove', e => {
       const rect = btn.getBoundingClientRect();
@@ -220,7 +220,7 @@
   });
 
 
-  // ‚îÄ‚îÄ FAQ ACCORDION ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+  // ── FAQ ACCORDION ─────────────────────────────────────────
   document.querySelectorAll('.faq-question').forEach(btn => {
     btn.addEventListener('click', () => {
       const item   = btn.closest('.faq-item');
@@ -246,7 +246,7 @@
   });
 
 
-  // ‚îÄ‚îÄ ARTIST CARD TILT ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+  // ── ARTIST CARD TILT ──────────────────────────────────────
   document.querySelectorAll('.artist-card').forEach(card => {
     card.addEventListener('mousemove', e => {
       const rect = card.getBoundingClientRect();
@@ -258,14 +258,14 @@
   });
 
 
-  // ‚îÄ‚îÄ RELEASE ROW HOVER ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+  // ── RELEASE ROW HOVER ─────────────────────────────────────
   document.querySelectorAll('.release-row').forEach(row => {
     row.addEventListener('mouseenter', () => { row.style.background = 'rgba(162,89,255,0.04)'; });
     row.addEventListener('mouseleave', () => { row.style.background = ''; });
   });
 
 
-  // ‚îÄ‚îÄ ABOUT CARD CLICK EXPAND ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+  // ── ABOUT CARD CLICK EXPAND ───────────────────────────────
   document.querySelectorAll('.about-card').forEach(card => {
     card.addEventListener('click', () => {
       card.classList.toggle('expanded');
@@ -281,7 +281,7 @@
   });
 
 
-  // ‚îÄ‚îÄ AUDIO VISUALIZER (live random) ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+  // ── AUDIO VISUALIZER (live random) ────────────────────────
   const bars = document.querySelectorAll('.bar');
   function randomizeBars() {
     bars.forEach(bar => {
@@ -291,7 +291,7 @@
   setInterval(randomizeBars, 700);
 
 
-  // ‚îÄ‚îÄ ACTIVE NAV LINK ON SCROLL ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+  // ── ACTIVE NAV LINK ON SCROLL ─────────────────────────────
   const sections = document.querySelectorAll('section[id]');
   const navLinks = document.querySelectorAll('.nav-link');
   const sectionObs = new IntersectionObserver(entries => {
@@ -306,20 +306,28 @@
   sections.forEach(s => sectionObs.observe(s));
 
 
-  // ‚îÄ‚îÄ CONTACT FORM ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+  // ── CONTACT FORM ──────────────────────────────────────────
   const form = document.getElementById('contact-form');
   if (form) {
     form.addEventListener('submit', e => {
       e.preventDefault();
+      const emailEl = form.querySelector('[type="email"]');
+      if (emailEl && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value)) {
+        emailEl.style.borderColor = '#ef4444';
+        emailEl.focus();
+        setTimeout(() => { emailEl.style.borderColor = ''; }, 2500);
+        return;
+      }
       const btn = form.querySelector('button[type="submit"]');
-      btn.textContent = 'Message Sent ‚úì';
+      const orig = btn.textContent;
+      btn.textContent = 'Message Sent &#10003;';
       btn.style.background = '#22c55e';
-      setTimeout(() => { btn.textContent = 'Send Message'; btn.style.background = ''; form.reset(); }, 3000);
+      setTimeout(() => { btn.textContent = orig; btn.style.background = ''; form.reset(); }, 3000);
     });
   }
 
 
-  // ‚îÄ‚îÄ SECTION ENTRANCE TEXT SCRAMBLE ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+  // ── SECTION ENTRANCE TEXT SCRAMBLE ────────────────────────
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#';
   function scramble(el) {
     const original = el.textContent;
@@ -349,7 +357,7 @@
   document.querySelectorAll('.section-tag').forEach(el => scrambleObs.observe(el));
 
 
-  // ‚îÄ‚îÄ VINYL SPEED UP ON HOVER ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+  // ── VINYL SPEED UP ON HOVER ───────────────────────────────
   const vinyl = document.querySelector('.vinyl');
   if (vinyl) {
     let speed = 18;
