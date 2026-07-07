@@ -375,4 +375,179 @@
     });
   }
 
+
+  // ── WIRE SOCIAL LINKS FROM CONFIG ────────────────────────
+  const cfg = window.HVX_CONFIG;
+  if (cfg) {
+    document.querySelectorAll('[data-social]').forEach(el => {
+      const key = el.dataset.social;
+      if (cfg.social[key]) {
+        el.href = cfg.social[key];
+        if (cfg.social[key] !== '#') {
+          el.target = '_blank';
+          el.rel = 'noopener noreferrer';
+        }
+      }
+    });
+  }
+
+
+  // ── RENDER ARTISTS FROM DATA ──────────────────────────────
+  const artistsGrid   = document.getElementById('artists-grid');
+  const artistsFilter = document.getElementById('artists-filter');
+
+  if (artistsGrid && window.HVX && window.HVX.artists.length) {
+    const data = window.HVX.artists;
+
+    // Build genre filter buttons dynamically
+    if (artistsFilter) {
+      const genres = [...new Set(data.filter(a => !a.placeholder).map(a => a.genre))];
+      if (genres.length > 1) {
+        genres.forEach(g => {
+          const btn = document.createElement('button');
+          btn.className = 'filter-btn';
+          btn.dataset.filter = g;
+          btn.textContent = g;
+          artistsFilter.appendChild(btn);
+        });
+        artistsFilter.style.display = '';
+      }
+    }
+
+    // Render cards
+    data.forEach(artist => {
+      const card = document.createElement('div');
+      card.className = 'artist-card';
+      card.dataset.genre = artist.genre;
+
+      const imgHTML = artist.photo
+        ? `<img src="${artist.photo}" alt="${artist.name}" class="artist-img" style="width:100%;height:100%;object-fit:cover;">`
+        : `<div class="artist-img-placeholder"><span>${artist.placeholder ? 'COMING SOON' : 'ARTIST'}</span></div>`;
+
+      const socialHTML = (!artist.placeholder && artist.social)
+        ? `<div class="artist-social">
+             <a href="${artist.social.instagram}" target="_blank" rel="noopener noreferrer" class="social-link">IG</a>
+             <a href="${artist.social.soundcloud}" target="_blank" rel="noopener noreferrer" class="social-link">SC</a>
+             <a href="${artist.social.spotify}"   target="_blank" rel="noopener noreferrer" class="social-link">SP</a>
+           </div>`
+        : '';
+
+      card.innerHTML = `
+        <div class="artist-img-wrap">
+          ${imgHTML}
+          <div class="artist-overlay">${socialHTML}</div>
+        </div>
+        <div class="artist-info">
+          <span class="artist-genre">${artist.genre}</span>
+          <h3 class="artist-name">${artist.placeholder ? 'Coming Soon' : artist.name}</h3>
+          <p class="artist-bio">${artist.bio}</p>
+        </div>`;
+
+      artistsGrid.appendChild(card);
+
+      card.addEventListener('mousemove', e => {
+        const rect = card.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width  - 0.5;
+        const y = (e.clientY - rect.top)  / rect.height - 0.5;
+        card.style.transform = `perspective(600px) rotateY(${x * 8}deg) rotateX(${-y * 8}deg) translateY(-4px)`;
+      });
+      card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+      card.classList.add('reveal');
+      revealObs.observe(card);
+    });
+
+    // Filter logic for dynamically created buttons
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+        document.querySelectorAll('.artist-card').forEach(card => {
+          const show = filter === 'all' || card.dataset.genre === filter;
+          card.style.transition   = 'opacity 0.4s, transform 0.4s';
+          card.style.opacity      = show ? '1' : '0.12';
+          card.style.transform    = show ? 'scale(1)' : 'scale(0.96)';
+          card.style.pointerEvents = show ? '' : 'none';
+        });
+      });
+    });
+  }
+
+
+  // ── RENDER RELEASES FROM DATA ─────────────────────────────
+  const releasesList = document.getElementById('releases-list');
+
+  if (releasesList && window.HVX) {
+    const releases = window.HVX.releases || [];
+
+    if (releases.length === 0) {
+      releasesList.innerHTML =
+        `<div class="releases-empty">
+           <p class="releases-empty-label">Catalog</p>
+           <p class="releases-empty-msg">First releases coming soon.</p>
+         </div>`;
+    } else {
+      releases.forEach(r => {
+        const date = r.date
+          ? new Date(r.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+          : '--';
+
+        const listenUrl = r.links
+          ? (r.links.spotify || r.links.beatport || r.links.soundcloud || r.links.appleMusic || null)
+          : null;
+
+        const row = document.createElement('div');
+        row.className = 'release-row';
+        row.innerHTML =
+          `<div class="release-artwork">${r.art ? `<img src="${r.art}" alt="${r.title}" style="width:100%;height:100%;object-fit:cover;border-radius:2px;">` : ''}</div>
+           <span class="release-date">${date}</span>
+           <div class="release-info">
+             <p class="release-artist">${r.artist}</p>
+             <p class="release-title">${r.title}</p>
+           </div>
+           <span class="release-genre">${r.genre}</span>
+           ${listenUrl
+             ? `<a href="${listenUrl}" target="_blank" rel="noopener noreferrer" class="release-link">Listen Now</a>`
+             : `<span class="release-link" style="opacity:.35;cursor:default;">Soon</span>`}`;
+
+        row.addEventListener('mouseenter', () => { row.style.background = 'rgba(162,89,255,0.04)'; });
+        row.addEventListener('mouseleave', () => { row.style.background = ''; });
+        row.classList.add('reveal');
+        revealObs.observe(row);
+        releasesList.appendChild(row);
+      });
+    }
+  }
+
+
+  // ── FORM HANDLER (demo + booking) ────────────────────────
+  function initForm(id, successText, resetText) {
+    const form = document.getElementById(id);
+    if (!form) return;
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const emailEl = form.querySelector('[type="email"]');
+      if (emailEl && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value)) {
+        emailEl.style.borderColor = '#ef4444';
+        emailEl.focus();
+        setTimeout(() => { emailEl.style.borderColor = ''; }, 2500);
+        return;
+      }
+      const btn  = form.querySelector('button[type="submit"]');
+      const orig = btn.textContent;
+      btn.textContent = successText;
+      btn.style.background = '#22c55e';
+      btn.disabled = true;
+      setTimeout(() => {
+        btn.textContent  = resetText || orig;
+        btn.style.background = '';
+        btn.disabled     = false;
+        form.reset();
+      }, 3500);
+    });
+  }
+
+  initForm('demo-form',    'Submitted - We will be in touch',       'Submit Demo');
+  initForm('booking-form', 'Request Sent - We will reply within 48h', 'Send Booking Request');
+
 })();
