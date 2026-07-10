@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>HVX Admin — Content Management</title>
+<title>HVX Admin ‚Äî Content Management</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
 :root {
@@ -225,11 +225,33 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
 ::-webkit-scrollbar-track{background:var(--black)}
 ::-webkit-scrollbar-thumb{background:var(--accent);border-radius:2px}
 
-    /* ── Logo video admin ── */
-    .logo-video-wrap{display:block;width:130px;height:44px;overflow:hidden;position:relative;flex-shrink:0}
-    .logo-video{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);height:270px;width:auto;mix-blend-mode:screen;pointer-events:none}
-    .login-logo-wrap{display:block;width:160px;height:54px;overflow:hidden;position:relative;margin-bottom:.5rem}
-    .login-logo-vid{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);height:310px;width:auto;mix-blend-mode:screen;pointer-events:none}
+/* MANAGER FORMS */
+.manager-form-card{background:var(--dark-2);border:1px solid var(--border);border-radius:6px;padding:1.5rem;margin-bottom:2rem}
+.manager-form-card h3{font-family:var(--font-h);font-size:1rem;font-weight:700;margin-bottom:1.2rem}
+.merch-admin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:2rem}
+.merch-admin-card{background:var(--dark-2);border:1px solid var(--border);border-radius:6px;overflow:hidden;transition:.3s}
+.merch-admin-card:hover{border-color:rgba(162,89,255,.3);transform:translateY(-2px)}
+.merch-admin-img{aspect-ratio:1;background:var(--dark-3);display:flex;align-items:center;justify-content:center;font-size:2rem;overflow:hidden}
+.merch-admin-img img{width:100%;height:100%;object-fit:cover}
+.merch-admin-body{padding:1rem}
+.merch-admin-name{font-family:var(--font-h);font-size:.9rem;font-weight:700;margin-bottom:.25rem}
+.merch-admin-price{color:var(--accent);font-size:.85rem;font-weight:600;margin-bottom:.5rem}
+
+/* CONTACT INBOX */
+.inbox-item{display:grid;grid-template-columns:12px 1fr auto;gap:1rem;align-items:start;padding:1rem 1.5rem;border-bottom:1px solid var(--border);cursor:pointer;transition:background .2s}
+.inbox-item:last-child{border-bottom:none}
+.inbox-item:hover{background:rgba(162,89,255,.04)}
+.inbox-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);margin-top:.35rem;flex-shrink:0}
+.inbox-item.read .inbox-dot{background:transparent;border:1px solid var(--border)}
+.inbox-subject{font-size:.88rem;color:var(--off-white);margin-bottom:.2rem}
+.inbox-item.unread .inbox-subject{font-weight:700;color:var(--white)}
+.inbox-preview{font-size:.78rem;color:var(--muted)}
+.inbox-date{font-size:.75rem;color:var(--muted);white-space:nowrap;margin-top:.15rem}
+.inbox-detail{background:var(--dark-3);border:1px solid var(--border);border-radius:6px;padding:1.5rem;margin:0 1.5rem 1rem;display:none}
+.inbox-detail.open{display:block}
+.inbox-detail-name{font-family:var(--font-h);font-weight:700;margin-bottom:.3rem}
+.inbox-detail-meta{font-size:.8rem;color:var(--muted);margin-bottom:1rem}
+.inbox-detail-msg{font-size:.88rem;color:var(--off-white);line-height:1.7;white-space:pre-wrap}
 </style>
 </head>
 <body>
@@ -241,7 +263,7 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
 
 <!-- LOGIN SCREEN -->
 <div class="login-screen" id="login-screen">
-  <div class="login-logo-wrap"><video class="login-logo-vid" autoplay loop muted playsinline><source src="assets/hvx-logo.mp4" type="video/mp4"></video></div><span style="font-size:.78rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)">Admin Panel</span>
+  <div class="login-logo">HVX<span>.</span> <span style="font-size:.9rem;font-weight:400;color:var(--muted)">Admin</span></div>
   <div class="login-card">
     <p class="login-title">Sign In</p>
     <p class="login-sub">Access the HVX content management panel.</p>
@@ -251,10 +273,10 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
     </div>
     <div class="form-group">
       <label class="form-label">Password</label>
-      <input type="password" class="form-input" id="login-pass" placeholder="••••••••" autocomplete="current-password"/>
+      <input type="password" class="form-input" id="login-pass" placeholder="‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢" autocomplete="current-password"/>
     </div>
-    <button class="btn btn-primary" id="login-btn">Sign In →</button>
-    <p class="login-error" id="login-error">Invalid credentials. Try: admin / hvxmusic2026</p>
+    <button class="btn btn-primary" id="login-btn">Sign In ‚Üí</button>
+    <p class="login-error" id="login-error">Invalid credentials. Please try again.</p>
   </div>
 </div>
 
@@ -264,7 +286,8 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-logo">
-      <div class="logo-video-wrap"><video class="logo-video" autoplay loop muted playsinline><source src="assets/hvx-logo.mp4" type="video/mp4"></video></div>
+      <div class="logo-t">HVX<span>.</span></div>
+      <p>Admin Panel</p>
     </div>
 
     <div class="nav-section">
@@ -288,6 +311,18 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
       <button class="nav-item" data-page="events">
         <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
         Events & Shows
+      </button>
+      <button class="nav-item" data-page="artist-manager">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+        Artist Manager
+      </button>
+      <button class="nav-item" data-page="merch-manager">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+        Merch Manager
+      </button>
+      <button class="nav-item" data-page="contact-inbox">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        Contact Inbox
       </button>
     </div>
 
@@ -334,7 +369,7 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
           <p class="page-sub">Welcome back. Here's what's happening with HVX Music.</p>
         </div>
         <div class="header-actions">
-          <a href="index.html" class="btn btn-outline btn-sm">← View Site</a>
+          <a href="index.html" class="btn btn-outline btn-sm">‚Üê View Site</a>
         </div>
       </div>
 
@@ -342,12 +377,12 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
         <div class="kpi-card">
           <p class="kpi-label">Total Artists</p>
           <p class="kpi-value">6</p>
-          <p class="kpi-trend">↑ +1 this month</p>
+          <p class="kpi-trend">‚Üë +1 this month</p>
         </div>
         <div class="kpi-card">
           <p class="kpi-label">Shows This Month</p>
           <p class="kpi-value">24</p>
-          <p class="kpi-trend">↑ +8 vs last month</p>
+          <p class="kpi-trend">‚Üë +8 vs last month</p>
         </div>
         <div class="kpi-card">
           <p class="kpi-label">Total Highlights</p>
@@ -357,14 +392,14 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
         <div class="kpi-card">
           <p class="kpi-label">Active Automations</p>
           <p class="kpi-value" id="dash-automations">3</p>
-          <p class="kpi-trend">↑ Running</p>
+          <p class="kpi-trend">‚Üë Running</p>
         </div>
       </div>
 
       <div class="table-wrap">
         <div class="table-head">
           <h3 class="table-title">Artist Roster</h3>
-          <a href="artists.html" class="btn btn-outline btn-sm">View All Artists →</a>
+          <a href="artists.html" class="btn btn-outline btn-sm">View All Artists ‚Üí</a>
         </div>
         <table>
           <thead>
@@ -412,9 +447,9 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
       <div class="highlight-form">
         <h3>Upload New Highlight</h3>
         <div class="upload-zone" id="upload-zone">
-          <div class="upload-icon">📸</div>
+          <div class="upload-icon">üì∏</div>
           <p class="upload-title">Drop image or video here</p>
-          <p class="upload-sub">Supports JPG, PNG, MP4 — max 20MB</p>
+          <p class="upload-sub">Supports JPG, PNG, MP4 ‚Äî max 20MB</p>
           <button class="btn btn-outline" onclick="document.getElementById('file-input').click()">Choose File</button>
           <input type="file" id="file-input" accept="image/*,video/mp4"/>
         </div>
@@ -462,7 +497,7 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
           <p class="page-sub">Manage roster, bios, and artist data.</p>
         </div>
         <div class="header-actions">
-          <a href="artists.html" target="_blank" class="btn btn-outline btn-sm">View Public Page →</a>
+          <a href="artists.html" target="_blank" class="btn btn-outline btn-sm">View Public Page ‚Üí</a>
         </div>
       </div>
       <div class="table-wrap">
@@ -510,46 +545,46 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
       </div>
 
       <div style="background:rgba(162,89,255,.08);border:1px solid rgba(162,89,255,.25);border-radius:6px;padding:1rem 1.5rem;margin-bottom:2rem;font-size:.83rem;color:var(--off-white);line-height:1.6">
-        ⚠️ <strong style="color:var(--accent)">Security note:</strong> API keys are stored locally in your browser (localStorage) for this prototype. In production, keys must be stored server-side and never exposed in client code. Use environment variables or a secrets manager.
+        ‚ö†Ô∏è <strong style="color:var(--accent)">Security note:</strong> API keys are stored locally in your browser (localStorage) for this prototype. In production, keys must be stored server-side and never exposed in client code. Use environment variables or a secrets manager.
       </div>
 
       <!-- INSTAGRAM -->
       <div class="api-section">
         <div class="api-section-head" onclick="toggleApi('ig')">
           <div class="api-section-title">
-            <div class="api-icon ig">📷</div>
+            <div class="api-icon ig">üì∑</div>
             Instagram Graph API
             <span class="api-status"><span class="status-dot pending"></span> Not connected</span>
           </div>
-          <span style="color:var(--muted);font-size:.8rem">Expand ▾</span>
+          <span style="color:var(--muted);font-size:.8rem">Expand ‚ñæ</span>
         </div>
         <div class="api-body" id="api-ig">
           <p class="api-desc">Connect the Instagram Graph API to automatically pull posts, stories and reels from your artists' accounts into the Highlights feed. Requires a Meta Business App with <code>instagram_basic</code> and <code>instagram_content_publish</code> permissions.</p>
           <div class="form-group">
             <label class="form-label">App ID</label>
             <div class="api-key-row">
-              <input type="text" class="api-key-input" id="ig-app-id" placeholder="Enter Instagram App ID…"/>
+              <input type="text" class="api-key-input" id="ig-app-id" placeholder="Enter Instagram App ID‚Ä¶"/>
               <button class="save-btn" onclick="saveKey('ig-app-id','ig_app_id')">Save</button>
             </div>
           </div>
           <div class="form-group">
             <label class="form-label">App Secret</label>
             <div class="api-key-row">
-              <input type="password" class="api-key-input" id="ig-secret" placeholder="••••••••••••••••••••"/>
+              <input type="password" class="api-key-input" id="ig-secret" placeholder="‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢"/>
               <button class="save-btn" onclick="saveKey('ig-secret','ig_secret')">Save</button>
             </div>
           </div>
           <div class="form-group">
             <label class="form-label">Long-Lived Access Token</label>
             <div class="api-key-row">
-              <input type="text" class="api-key-input" id="ig-token" placeholder="EAABwzLixnjYBO…"/>
+              <input type="text" class="api-key-input" id="ig-token" placeholder="EAABwzLixnjYBO‚Ä¶"/>
               <button class="copy-btn" onclick="copyField('ig-token')">Copy</button>
               <button class="save-btn" onclick="saveKey('ig-token','ig_token')">Save</button>
             </div>
           </div>
           <div class="automation-card">
             <div class="automation-info">
-              <p class="automation-name">Auto-sync Instagram posts → Highlights</p>
+              <p class="automation-name">Auto-sync Instagram posts ‚Üí Highlights</p>
               <p class="automation-desc">Every 6 hours, fetch latest posts from connected artist accounts and add to the Highlights feed.</p>
             </div>
             <div class="toggle-wrap">
@@ -568,21 +603,21 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
             Spotify for Artists API
             <span class="api-status"><span class="status-dot pending"></span> Not connected</span>
           </div>
-          <span style="color:var(--muted);font-size:.8rem">Expand ▾</span>
+          <span style="color:var(--muted);font-size:.8rem">Expand ‚ñæ</span>
         </div>
         <div class="api-body" id="api-spotify">
           <p class="api-desc">Connect Spotify to automatically update monthly listener counts, stream totals, and top tracks shown in each artist's Analytics tab.</p>
           <div class="form-group">
             <label class="form-label">Client ID</label>
             <div class="api-key-row">
-              <input type="text" class="api-key-input" id="sp-id" placeholder="Enter Spotify Client ID…"/>
+              <input type="text" class="api-key-input" id="sp-id" placeholder="Enter Spotify Client ID‚Ä¶"/>
               <button class="save-btn" onclick="saveKey('sp-id','spotify_client_id')">Save</button>
             </div>
           </div>
           <div class="form-group">
             <label class="form-label">Client Secret</label>
             <div class="api-key-row">
-              <input type="password" class="api-key-input" id="sp-secret" placeholder="••••••••••••••••••••"/>
+              <input type="password" class="api-key-input" id="sp-secret" placeholder="‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢"/>
               <button class="save-btn" onclick="saveKey('sp-secret','spotify_secret')">Save</button>
             </div>
           </div>
@@ -607,21 +642,21 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
             Resident Advisor
             <span class="api-status"><span class="status-dot pending"></span> Not connected</span>
           </div>
-          <span style="color:var(--muted);font-size:.8rem">Expand ▾</span>
+          <span style="color:var(--muted);font-size:.8rem">Expand ‚ñæ</span>
         </div>
         <div class="api-body" id="api-ra">
           <p class="api-desc">Connect to RA's unofficial API or scraper endpoint to pull event listings, RA Watchlist numbers, and ratings directly into artist profiles.</p>
           <div class="form-group">
             <label class="form-label">RA API Endpoint</label>
             <div class="api-key-row">
-              <input type="text" class="api-key-input" id="ra-endpoint" placeholder="https://ra.co/api/…"/>
+              <input type="text" class="api-key-input" id="ra-endpoint" placeholder="https://ra.co/api/‚Ä¶"/>
               <button class="save-btn" onclick="saveKey('ra-endpoint','ra_endpoint')">Save</button>
             </div>
           </div>
           <div class="form-group">
             <label class="form-label">Bearer Token</label>
             <div class="api-key-row">
-              <input type="password" class="api-key-input" id="ra-token" placeholder="Bearer token…"/>
+              <input type="password" class="api-key-input" id="ra-token" placeholder="Bearer token‚Ä¶"/>
               <button class="save-btn" onclick="saveKey('ra-token','ra_token')">Save</button>
             </div>
           </div>
@@ -636,21 +671,21 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
             SoundCloud API
             <span class="api-status"><span class="status-dot pending"></span> Not connected</span>
           </div>
-          <span style="color:var(--muted);font-size:.8rem">Expand ▾</span>
+          <span style="color:var(--muted);font-size:.8rem">Expand ‚ñæ</span>
         </div>
         <div class="api-body" id="api-sc">
           <p class="api-desc">Pull play counts, follower numbers, and latest tracks from SoundCloud to auto-update the Music and Sets tabs on artist profiles.</p>
           <div class="form-group">
             <label class="form-label">Client ID</label>
             <div class="api-key-row">
-              <input type="text" class="api-key-input" id="sc-id" placeholder="SoundCloud Client ID…"/>
+              <input type="text" class="api-key-input" id="sc-id" placeholder="SoundCloud Client ID‚Ä¶"/>
               <button class="save-btn" onclick="saveKey('sc-id','sc_client_id')">Save</button>
             </div>
           </div>
           <div class="form-group">
             <label class="form-label">OAuth Token</label>
             <div class="api-key-row">
-              <input type="text" class="api-key-input" id="sc-token" placeholder="OAuth 2.0 token…"/>
+              <input type="text" class="api-key-input" id="sc-token" placeholder="OAuth 2.0 token‚Ä¶"/>
               <button class="copy-btn" onclick="copyField('sc-token')">Copy</button>
               <button class="save-btn" onclick="saveKey('sc-token','sc_token')">Save</button>
             </div>
@@ -662,25 +697,25 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
       <div class="api-section">
         <div class="api-section-head" onclick="toggleApi('webhook')">
           <div class="api-section-title">
-            <div class="api-icon webhook">🔗</div>
+            <div class="api-icon webhook">üîó</div>
             Custom Webhooks
             <span class="api-status"><span class="status-dot disconnected"></span> Inactive</span>
           </div>
-          <span style="color:var(--muted);font-size:.8rem">Expand ▾</span>
+          <span style="color:var(--muted);font-size:.8rem">Expand ‚ñæ</span>
         </div>
         <div class="api-body" id="api-webhook">
           <p class="api-desc">Configure outgoing webhooks to notify external systems (Make, Zapier, n8n, custom backend) when content is uploaded, a show is confirmed, or an artist profile is updated.</p>
           <div class="form-group">
             <label class="form-label">Webhook URL (on highlight upload)</label>
             <div class="api-key-row">
-              <input type="text" class="api-key-input" id="wh-upload" placeholder="https://hooks.zapier.com/hooks/catch/…"/>
+              <input type="text" class="api-key-input" id="wh-upload" placeholder="https://hooks.zapier.com/hooks/catch/‚Ä¶"/>
               <button class="save-btn" onclick="saveKey('wh-upload','webhook_upload')">Save</button>
             </div>
           </div>
           <div class="form-group">
             <label class="form-label">Webhook URL (on show confirmed)</label>
             <div class="api-key-row">
-              <input type="text" class="api-key-input" id="wh-show" placeholder="https://hooks.make.com/…"/>
+              <input type="text" class="api-key-input" id="wh-show" placeholder="https://hooks.make.com/‚Ä¶"/>
               <button class="save-btn" onclick="saveKey('wh-show','webhook_show')">Save</button>
             </div>
           </div>
@@ -745,15 +780,15 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
           <h3 class="settings-card-title">Admin Password</h3>
           <div class="form-group">
             <label class="form-label">Current Password</label>
-            <input type="password" class="form-input" placeholder="••••••••"/>
+            <input type="password" class="form-input" placeholder="‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢"/>
           </div>
           <div class="form-group">
             <label class="form-label">New Password</label>
-            <input type="password" class="form-input" placeholder="••••••••"/>
+            <input type="password" class="form-input" placeholder="‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢"/>
           </div>
           <div class="form-group">
             <label class="form-label">Confirm New Password</label>
-            <input type="password" class="form-input" placeholder="••••••••"/>
+            <input type="password" class="form-input" placeholder="‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢"/>
           </div>
           <button class="btn btn-primary" style="width:auto" onclick="toast('Password updated','success')">Update Password</button>
         </div>
@@ -765,28 +800,134 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
       </div>
     </div>
 
+    <!-- ARTIST MANAGER -->
+    <div class="page-section" id="page-artist-manager">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Artist Manager</h1>
+          <p class="page-sub">Add and manage artists shown on the public roster.</p>
+        </div>
+        <div class="header-actions">
+          <a href="artists.html" target="_blank" class="btn btn-outline btn-sm">View Public Roster</a>
+        </div>
+      </div>
+
+      <div class="manager-form-card" id="artist-form-card">
+        <h3 id="artist-form-title">Add New Artist</h3>
+        <input type="hidden" id="edit-artist-id"/>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Name</label><input type="text" class="form-input" id="af-name" placeholder="Artist Name"/></div>
+          <div class="form-group"><label class="form-label">Genre</label><input type="text" class="form-input" id="af-genre" placeholder="House, Tech House..."/></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">City</label><input type="text" class="form-input" id="af-city" placeholder="New York, US"/></div>
+          <div class="form-group"><label class="form-label">Photo URL</label><input type="text" class="form-input" id="af-photo" placeholder="https://..."/></div>
+        </div>
+        <div class="form-group"><label class="form-label">Biography</label><textarea class="form-input form-textarea" id="af-bio" placeholder="Artist biography..."></textarea></div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Instagram URL</label><input type="text" class="form-input" id="af-ig" placeholder="https://instagram.com/..."/></div>
+          <div class="form-group"><label class="form-label">SoundCloud URL</label><input type="text" class="form-input" id="af-sc" placeholder="https://soundcloud.com/..."/></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Spotify URL</label><input type="text" class="form-input" id="af-sp" placeholder="https://open.spotify.com/..."/></div>
+          <div class="form-group" style="display:flex;align-items:flex-end;gap:.5rem">
+            <button class="btn btn-primary" onclick="saveArtist()" style="width:auto">Save Artist</button>
+            <button class="btn btn-outline btn-sm" id="cancel-artist-btn" style="display:none" onclick="cancelArtistEdit()">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <div class="table-head"><h3 class="table-title">Current Roster</h3></div>
+        <table>
+          <thead><tr><th>Artist</th><th>Genre</th><th>City</th><th>Actions</th></tr></thead>
+          <tbody id="artist-manager-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- MERCH MANAGER -->
+    <div class="page-section" id="page-merch-manager">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Merch Manager</h1>
+          <p class="page-sub">Add and manage products shown in the Merch section.</p>
+        </div>
+        <div class="header-actions">
+          <a href="index.html#merch" target="_blank" class="btn btn-outline btn-sm">View Store</a>
+        </div>
+      </div>
+
+      <div class="manager-form-card">
+        <h3 id="merch-form-title">Add New Product</h3>
+        <input type="hidden" id="edit-merch-id"/>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Product Name</label><input type="text" class="form-input" id="mf-name" placeholder="HVX Logo Tee"/></div>
+          <div class="form-group"><label class="form-label">Price (USD)</label><input type="text" class="form-input" id="mf-price" placeholder="35"/></div>
+        </div>
+        <div class="form-group"><label class="form-label">Description</label><input type="text" class="form-input" id="mf-desc" placeholder="Short product description"/></div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Image URL</label><input type="text" class="form-input" id="mf-img" placeholder="https://..."/></div>
+          <div class="form-group"><label class="form-label">Status</label><select class="form-input" id="mf-status"><option value="available">Available</option><option value="soldout">Sold Out</option><option value="coming">Coming Soon</option></select></div>
+        </div>
+        <div style="display:flex;gap:.5rem">
+          <button class="btn btn-primary" onclick="saveMerchProduct()" style="width:auto">Save Product</button>
+          <button class="btn btn-outline btn-sm" id="cancel-merch-btn" style="display:none" onclick="cancelMerchEdit()">Cancel</button>
+        </div>
+      </div>
+
+      <div class="merch-admin-grid" id="merch-admin-grid">
+        <p style="color:var(--muted);font-size:.85rem;grid-column:1/-1">No products yet. Add one above.</p>
+      </div>
+    </div>
+
+    <!-- CONTACT INBOX -->
+    <div class="page-section" id="page-contact-inbox">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Contact Inbox</h1>
+          <p class="page-sub">Messages submitted through the contact form on the site.</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-outline btn-sm" onclick="markAllRead()">Mark All Read</button>
+          <button class="btn btn-green btn-sm" onclick="exportContactsExcel()">Export to Excel</button>
+        </div>
+      </div>
+
+      <div class="kpi-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:2rem">
+        <div class="kpi-card"><p class="kpi-label">Total Messages</p><p class="kpi-value" id="inbox-total">0</p></div>
+        <div class="kpi-card"><p class="kpi-label">Unread</p><p class="kpi-value" id="inbox-unread">0</p></div>
+        <div class="kpi-card"><p class="kpi-label">This Week</p><p class="kpi-value" id="inbox-week">0</p></div>
+      </div>
+
+      <div class="table-wrap">
+        <div class="table-head"><h3 class="table-title">Messages</h3></div>
+        <div id="inbox-list"><p style="padding:1.5rem;color:var(--muted);font-size:.85rem">No messages yet.</p></div>
+      </div>
+    </div>
+
   </main>
 </div>
 
 <script>
-// ── CURSOR ─────────────────────────────────────────────────────────────────
+// ‚îÄ‚îÄ CURSOR ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
 const cur=document.getElementById('cursor'),curf=document.getElementById('cursor-f');
 let mx=0,my=0,fx=0,fy=0;
 document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
 (function af(){fx+=(mx-fx)*.12;fy+=(my-fy)*.12;curf.style.left=fx+'px';curf.style.top=fy+'px';requestAnimationFrame(af)})();
 
-// ── SCROLL PROGRESS ────────────────────────────────────────────────────────
+// ‚îÄ‚îÄ SCROLL PROGRESS ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
 const sp=document.getElementById('sp');
 window.addEventListener('scroll',()=>{const d=document.documentElement;sp.style.width=(d.scrollTop/(d.scrollHeight-d.clientHeight)*100)+'%'},{passive:true});
 
-// ── RIPPLE ─────────────────────────────────────────────────────────────────
+// ‚îÄ‚îÄ RIPPLE ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
 document.addEventListener('click',e=>{const btn=e.target.closest('.btn');if(!btn)return;const r=btn.getBoundingClientRect();const rip=document.createElement('span');const s=Math.max(r.width,r.height);rip.className='ripple';rip.style.cssText=`width:${s}px;height:${s}px;left:${e.clientX-r.left-s/2}px;top:${e.clientY-r.top-s/2}px`;btn.appendChild(rip);rip.addEventListener('animationend',()=>rip.remove())});
 
-// ── TOAST ──────────────────────────────────────────────────────────────────
+// ‚îÄ‚îÄ TOAST ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
 function toast(msg,type='success'){const w=document.getElementById('toast-wrap');const t=document.createElement('div');t.className=`toast ${type}`;t.innerHTML=`<span class="toast-dot"></span>${msg}`;w.appendChild(t);setTimeout(()=>t.classList.add('show'),10);setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),400)},3200)}
 
-// ── AUTH ───────────────────────────────────────────────────────────────────
-const CREDS={user:'admin',pass:'hvxmusic2026'};
+// ‚îÄ‚îÄ AUTH ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+const CREDS={user:'hvxmusic2026',pass:'adminhvx'};
 
 function checkSession(){if(localStorage.getItem('hvx_admin')==='true'){showAdmin()}}
 function showAdmin(){document.getElementById('login-screen').classList.add('hidden');document.getElementById('admin-wrap').classList.remove('hidden');localStorage.setItem('hvx_admin','true');renderFeed();updateDashStats();renderActivity()}
@@ -801,7 +942,7 @@ document.getElementById('login-btn').addEventListener('click',()=>{
 document.getElementById('login-pass').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('login-btn').click()});
 document.getElementById('logout-btn').addEventListener('click',()=>{localStorage.removeItem('hvx_admin');location.reload()});
 
-// ── NAVIGATION ─────────────────────────────────────────────────────────────
+// ‚îÄ‚îÄ NAVIGATION ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
 document.querySelectorAll('.nav-item[data-page]').forEach(btn=>{
   btn.addEventListener('click',()=>{
     document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
@@ -810,10 +951,13 @@ document.querySelectorAll('.nav-item[data-page]').forEach(btn=>{
     document.getElementById('page-'+btn.dataset.page).classList.add('active');
     if(btn.dataset.page==='highlights')renderFeed();
     if(btn.dataset.page==='activity')renderActivity();
+    if(btn.dataset.page==='artist-manager')renderArtistManager();
+    if(btn.dataset.page==='merch-manager')renderMerchAdmin();
+    if(btn.dataset.page==='contact-inbox')renderInbox();
   });
 });
 
-// ── ACTIVITY LOG ───────────────────────────────────────────────────────────
+// ‚îÄ‚îÄ ACTIVITY LOG ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
 function logActivity(text,color='purple'){
   const logs=JSON.parse(localStorage.getItem('hvx_activity')||'[]');
   logs.unshift({text,color,time:new Date().toLocaleTimeString()});
@@ -832,7 +976,7 @@ function renderActivity(){
 function clearActivity(){localStorage.removeItem('hvx_activity');renderActivity();toast('Activity log cleared','success')}
 function updateDashActivity(){renderActivity()}
 
-// ── HIGHLIGHTS FEED ────────────────────────────────────────────────────────
+// ‚îÄ‚îÄ HIGHLIGHTS FEED ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
 function getHighlights(){return JSON.parse(localStorage.getItem('hvx_highlights')||'[]')}
 function saveHighlights(h){localStorage.setItem('hvx_highlights',JSON.stringify(h))}
 
@@ -854,7 +998,7 @@ function renderFeed(){
           <span class="feed-artist">${h.artist.toUpperCase()}</span>
           <span class="feed-date">${h.date}</span>
         </div>
-        <p class="feed-caption">${h.caption||'—'}</p>
+        <p class="feed-caption">${h.caption||'‚Äî'}</p>
         <div class="feed-actions">
           <button class="btn btn-danger btn-sm" onclick="deleteHighlight(${h.id})">Delete</button>
         </div>
@@ -872,13 +1016,13 @@ document.getElementById('upload-caption')?.addEventListener('input',function(){
 let uploadedFile=null;
 document.getElementById('file-input')?.addEventListener('change',e=>{
   uploadedFile=e.target.files[0];
-  if(uploadedFile){document.querySelector('.upload-title').textContent=uploadedFile.name;document.querySelector('.upload-icon').textContent='✅'}
+  if(uploadedFile){document.querySelector('.upload-title').textContent=uploadedFile.name;document.querySelector('.upload-icon').textContent='‚úÖ'}
 });
 
 const zone=document.getElementById('upload-zone');
 zone?.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('dragover')});
 zone?.addEventListener('dragleave',()=>zone.classList.remove('dragover'));
-zone?.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('dragover');uploadedFile=e.dataTransfer.files[0];if(uploadedFile){document.querySelector('.upload-title').textContent=uploadedFile.name;document.querySelector('.upload-icon').textContent='✅'}});
+zone?.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('dragover');uploadedFile=e.dataTransfer.files[0];if(uploadedFile){document.querySelector('.upload-title').textContent=uploadedFile.name;document.querySelector('.upload-icon').textContent='‚úÖ'}});
 
 document.getElementById('upload-btn')?.addEventListener('click',()=>{
   const artist=document.getElementById('upload-artist').value;
@@ -898,7 +1042,7 @@ document.getElementById('upload-btn')?.addEventListener('click',()=>{
     document.getElementById('cap-count').textContent='0';
     uploadedFile=null;
     document.querySelector('.upload-title').textContent='Drop image or video here';
-    document.querySelector('.upload-icon').textContent='📸';
+    document.querySelector('.upload-icon').textContent='üì∏';
     // Fire webhook if configured
     const wh=localStorage.getItem('webhook_upload');
     if(wh)fetch(wh,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({event:'highlight_uploaded',artist,source,caption})}).catch(()=>{});
@@ -926,7 +1070,7 @@ function updateDashStats(){
   if(el)el.textContent=getHighlights().length;
 }
 
-// ── API KEYS ───────────────────────────────────────────────────────────────
+// ‚îÄ‚îÄ API KEYS ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
 function toggleApi(id){const body=document.getElementById('api-'+id);body.classList.toggle('open')}
 
 function saveKey(inputId,storageKey){
@@ -959,7 +1103,7 @@ function loadKeys(){
   });
 }
 
-// ── TOGGLE SWITCH ──────────────────────────────────────────────────────────
+// ‚îÄ‚îÄ TOGGLE SWITCH ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
 function toggleSwitch(el){
   el.classList.toggle('on');
   const label=el.nextElementSibling;
@@ -969,9 +1113,272 @@ function toggleSwitch(el){
   logActivity(`Automation ${el.classList.contains('on')?'enabled':'disabled'}: ${el.id.replace('toggle-','')}`,'green');
 }
 
-// ── INIT ───────────────────────────────────────────────────────────────────
+// ‚îÄ‚îÄ INIT ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
 checkSession();
 loadKeys();
+
+// ‚îÄ‚îÄ ARTIST MANAGER ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+function getAdminArtists(){return JSON.parse(localStorage.getItem('hvx_artists')||'null')||[]}
+function saveAdminArtists(list){localStorage.setItem('hvx_artists',JSON.stringify(list))}
+
+function renderArtistManager(){
+  const tbody=document.getElementById('artist-manager-tbody');
+  if(!tbody)return;
+  const artists=getAdminArtists();
+  if(!artists.length){
+    tbody.innerHTML='<tr><td colspan="4" style="padding:1.5rem;color:var(--muted);text-align:center;font-size:.85rem">No artists yet. Add one above.</td></tr>';
+    return;
+  }
+  tbody.innerHTML=artists.map((a,i)=>`
+    <tr>
+      <td><div class="artist-cell"><div class="artist-avatar" style="background:linear-gradient(135deg,var(--accent),#6b21d4)">${(a.name||'?').slice(0,2).toUpperCase()}</div><div><div class="artist-name-cell">${a.name||'Artist Name'}</div></div></div></td>
+      <td><span class="badge badge-accent">${a.genre||'--'}</span></td>
+      <td>${a.city||'--'}</td>
+      <td style="display:flex;gap:.5rem;flex-wrap:wrap">
+        <button class="btn btn-outline btn-sm" onclick="editArtist(${i})">Edit</button>
+        <button class="btn btn-danger" onclick="deleteArtist(${i})">Delete</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function saveArtist(){
+  const name=document.getElementById('af-name').value.trim();
+  if(!name){toast('Artist name is required','error');return}
+  const artists=getAdminArtists();
+  const idxRaw=document.getElementById('edit-artist-id').value;
+  const idx=idxRaw!==''?+idxRaw:null;
+  const artist={
+    id:idx!==null?artists[idx].id:'artist-'+Date.now(),
+    name,
+    genre:document.getElementById('af-genre').value.trim()||'House',
+    city:document.getElementById('af-city').value.trim()||'TBA',
+    bio:document.getElementById('af-bio').value.trim()||'Biography coming soon.',
+    photo:document.getElementById('af-photo').value.trim()||null,
+    placeholder:false,
+    social:{
+      instagram:document.getElementById('af-ig').value.trim()||'#',
+      soundcloud:document.getElementById('af-sc').value.trim()||'#',
+      spotify:document.getElementById('af-sp').value.trim()||'#'
+    }
+  };
+  if(idx!==null){artists[idx]=artist}else{artists.push(artist)}
+  saveAdminArtists(artists);
+  toast(idx!==null?'Artist updated!':'Artist added!','success');
+  logActivity('Artist '+(idx!==null?'updated':'added')+': '+name,'purple');
+  cancelArtistEdit();
+  renderArtistManager();
+}
+
+function editArtist(i){
+  const a=getAdminArtists()[i];
+  document.getElementById('edit-artist-id').value=i;
+  document.getElementById('af-name').value=a.name||'';
+  document.getElementById('af-genre').value=a.genre||'';
+  document.getElementById('af-city').value=a.city||'';
+  document.getElementById('af-bio').value=a.bio||'';
+  document.getElementById('af-photo').value=a.photo||'';
+  document.getElementById('af-ig').value=(a.social&&a.social.instagram)||'';
+  document.getElementById('af-sc').value=(a.social&&a.social.soundcloud)||'';
+  document.getElementById('af-sp').value=(a.social&&a.social.spotify)||'';
+  document.getElementById('artist-form-title').textContent='Edit Artist';
+  document.getElementById('cancel-artist-btn').style.display='';
+  document.getElementById('artist-form-card').scrollIntoView({behavior:'smooth'});
+}
+
+function deleteArtist(i){
+  if(!confirm('Delete this artist from the roster?'))return;
+  const artists=getAdminArtists();
+  const name=artists[i].name;
+  artists.splice(i,1);
+  saveAdminArtists(artists);
+  renderArtistManager();
+  logActivity('Artist deleted: '+name,'orange');
+  toast('Artist deleted','error');
+}
+
+function cancelArtistEdit(){
+  ['af-name','af-genre','af-city','af-bio','af-photo','af-ig','af-sc','af-sp'].forEach(function(id){
+    var el=document.getElementById(id);if(el)el.value='';
+  });
+  document.getElementById('edit-artist-id').value='';
+  document.getElementById('artist-form-title').textContent='Add New Artist';
+  document.getElementById('cancel-artist-btn').style.display='none';
+}
+
+// ‚îÄ‚îÄ MERCH MANAGER ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+function getAdminMerch(){return JSON.parse(localStorage.getItem('hvx_merch')||'[]')}
+function saveAdminMerch(list){localStorage.setItem('hvx_merch',JSON.stringify(list))}
+
+function renderMerchAdmin(){
+  const grid=document.getElementById('merch-admin-grid');
+  if(!grid)return;
+  const products=getAdminMerch();
+  if(!products.length){
+    grid.innerHTML='<p style="color:var(--muted);font-size:.85rem;grid-column:1/-1">No products yet. Add one above.</p>';
+    return;
+  }
+  grid.innerHTML=products.map((p,i)=>`
+    <div class="merch-admin-card">
+      <div class="merch-admin-img">${p.img?('<img src="'+p.img+'" alt="'+p.name+'">'):'<span style="font-size:2rem">&#128717;</span>'}</div>
+      <div class="merch-admin-body">
+        <div class="merch-admin-name">${p.name}</div>
+        <div class="merch-admin-price">$${p.price}</div>
+        <p style="font-size:.75rem;color:var(--muted);margin:.3rem 0 .8rem">${p.desc||''}</p>
+        <span class="badge ${p.status==='available'?'badge-green':p.status==='soldout'?'badge-muted':'badge-orange'}" style="margin-bottom:.7rem">${p.status==='available'?'Available':p.status==='soldout'?'Sold Out':'Coming Soon'}</span>
+        <div style="display:flex;gap:.5rem;margin-top:.5rem">
+          <button class="btn btn-outline btn-sm" onclick="editMerch(${i})">Edit</button>
+          <button class="btn btn-danger" onclick="deleteMerch(${i})">Delete</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function saveMerchProduct(){
+  const name=document.getElementById('mf-name').value.trim();
+  if(!name){toast('Product name is required','error');return}
+  const products=getAdminMerch();
+  const idxRaw=document.getElementById('edit-merch-id').value;
+  const idx=idxRaw!==''?+idxRaw:null;
+  const product={
+    id:idx!==null?products[idx].id:'merch-'+Date.now(),
+    name,
+    price:document.getElementById('mf-price').value.trim()||'0',
+    desc:document.getElementById('mf-desc').value.trim(),
+    img:document.getElementById('mf-img').value.trim()||null,
+    status:document.getElementById('mf-status').value
+  };
+  if(idx!==null){products[idx]=product}else{products.push(product)}
+  saveAdminMerch(products);
+  toast(idx!==null?'Product updated!':'Product added!','success');
+  logActivity('Merch '+(idx!==null?'updated':'added')+': '+name,'purple');
+  cancelMerchEdit();
+  renderMerchAdmin();
+}
+
+function editMerch(i){
+  const p=getAdminMerch()[i];
+  document.getElementById('edit-merch-id').value=i;
+  document.getElementById('mf-name').value=p.name||'';
+  document.getElementById('mf-price').value=p.price||'';
+  document.getElementById('mf-desc').value=p.desc||'';
+  document.getElementById('mf-img').value=p.img||'';
+  document.getElementById('mf-status').value=p.status||'available';
+  document.getElementById('merch-form-title').textContent='Edit Product';
+  document.getElementById('cancel-merch-btn').style.display='';
+}
+
+function deleteMerch(i){
+  if(!confirm('Delete this product?'))return;
+  const products=getAdminMerch();
+  const name=products[i].name;
+  products.splice(i,1);
+  saveAdminMerch(products);
+  renderMerchAdmin();
+  logActivity('Merch deleted: '+name,'orange');
+  toast('Product deleted','error');
+}
+
+function cancelMerchEdit(){
+  ['mf-name','mf-price','mf-desc','mf-img'].forEach(function(id){
+    var el=document.getElementById(id);if(el)el.value='';
+  });
+  document.getElementById('edit-merch-id').value='';
+  var st=document.getElementById('mf-status');if(st)st.value='available';
+  document.getElementById('merch-form-title').textContent='Add New Product';
+  document.getElementById('cancel-merch-btn').style.display='none';
+}
+
+// ‚îÄ‚îÄ CONTACT INBOX ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+function getContacts(){return JSON.parse(localStorage.getItem('hvx_contacts')||'[]')}
+function saveContacts(list){localStorage.setItem('hvx_contacts',JSON.stringify(list))}
+
+function renderInbox(){
+  const contacts=getContacts();
+  const el=document.getElementById('inbox-list');
+  if(!el)return;
+  const now=new Date();
+  const weekAgo=now-7*24*60*60*1000;
+  const unread=contacts.filter(function(c){return!c.read}).length;
+  const thisWeek=contacts.filter(function(c){return new Date(c.date)>weekAgo}).length;
+  var tot=document.getElementById('inbox-total');
+  var unr=document.getElementById('inbox-unread');
+  var wk=document.getElementById('inbox-week');
+  if(tot)tot.textContent=contacts.length;
+  if(unr)unr.textContent=unread;
+  if(wk)wk.textContent=thisWeek;
+  if(!contacts.length){el.innerHTML='<p style="padding:1.5rem;color:var(--muted);font-size:.85rem">No messages yet.</p>';return}
+  el.innerHTML=contacts.map(function(c,i){
+    return '<div class="inbox-item '+(c.read?'read':'unread')+'" onclick="openInboxItem('+i+')">'+
+      '<span class="inbox-dot"></span>'+
+      '<div>'+
+        '<div class="inbox-subject">'+(c.name||'Anonymous')+' - '+(c.type||'Inquiry')+'</div>'+
+        '<div class="inbox-preview">'+((c.message||'').slice(0,80))+'</div>'+
+        '<div class="inbox-detail" id="inbox-detail-'+i+'">'+
+          '<div class="inbox-detail-name">'+(c.name||'Anonymous')+'</div>'+
+          '<div class="inbox-detail-meta">'+(c.email||'')+' | '+(c.type||'Inquiry')+' | '+new Date(c.date).toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})+'</div>'+
+          '<div class="inbox-detail-msg">'+(c.message||'(no message)')+'</div>'+
+          '<div style="margin-top:.75rem;display:flex;gap:.5rem">'+
+            '<button class="btn btn-outline btn-sm" onclick="event.stopPropagation();toggleRead('+i+')">'+(c.read?'Mark Unread':'Mark Read')+'</button>'+
+            '<button class="btn btn-danger" onclick="event.stopPropagation();deleteContact('+i+')">Delete</button>'+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+      '<span class="inbox-date">'+new Date(c.date).toLocaleDateString('en-GB',{day:'2-digit',month:'short'})+'</span>'+
+    '</div>';
+  }).join('');
+}
+
+function openInboxItem(i){
+  var contacts=getContacts();
+  if(!contacts[i].read){contacts[i].read=true;saveContacts(contacts)}
+  document.querySelectorAll('.inbox-detail').forEach(function(d,j){
+    if(j===i){d.classList.toggle('open')}else{d.classList.remove('open')}
+  });
+  renderInbox();
+}
+
+function toggleRead(i){
+  var contacts=getContacts();
+  contacts[i].read=!contacts[i].read;
+  saveContacts(contacts);
+  renderInbox();
+}
+
+function deleteContact(i){
+  if(!confirm('Delete this message?'))return;
+  var contacts=getContacts();
+  contacts.splice(i,1);
+  saveContacts(contacts);
+  renderInbox();
+  toast('Message deleted','error');
+}
+
+function markAllRead(){
+  var contacts=getContacts().map(function(c){return Object.assign({},c,{read:true})});
+  saveContacts(contacts);
+  renderInbox();
+  toast('All messages marked as read','success');
+}
+
+function exportContactsExcel(){
+  var contacts=getContacts();
+  if(!contacts.length){toast('No messages to export','error');return}
+  if(typeof XLSX==='undefined'){toast('Export library not loaded','error');return}
+  var rows=contacts.map(function(c){return{
+    Name:c.name||'',Email:c.email||'',Type:c.type||'',
+    Message:c.message||'',Date:new Date(c.date).toLocaleString(),
+    Status:c.read?'Read':'Unread'
+  }});
+  var ws=XLSX.utils.json_to_sheet(rows);
+  var wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,'Contacts',ws);
+  XLSX.writeFile(wb,'hvx-contacts.xlsx');
+  toast('Contacts exported to Excel!','success');
+  logActivity('Contact inbox exported to Excel','green');
+}
 </script>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 </body>
 </html>
