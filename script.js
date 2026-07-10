@@ -1,10 +1,10 @@
 /* ============================================================
-   HVX MUSIC — Interactive Script v2
+   HVX MUSIC ‚Äî Interactive Script v2
    ============================================================ */
 
 (() => {
 
-  // ── CUSTOM CURSOR ─────────────────────────────────────────
+  // ‚îÄ‚îÄ CUSTOM CURSOR ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   const cursor   = document.getElementById('cursor');
   const follower = document.getElementById('cursor-follower');
   let mx = 0, my = 0, fx = 0, fy = 0;
@@ -41,7 +41,7 @@
   });
 
 
-  // ── SCROLL PROGRESS BAR ───────────────────────────────────
+  // ‚îÄ‚îÄ SCROLL PROGRESS BAR ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   const progressBar = document.getElementById('scroll-progress');
   function updateProgress() {
     const scrollTop = window.scrollY;
@@ -52,14 +52,14 @@
   window.addEventListener('scroll', updateProgress, { passive: true });
 
 
-  // ── NAV SCROLL ────────────────────────────────────────────
+  // ‚îÄ‚îÄ NAV SCROLL ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   const nav = document.getElementById('nav');
   window.addEventListener('scroll', () => {
     nav.classList.toggle('scrolled', window.scrollY > 40);
   }, { passive: true });
 
 
-  // ── MOBILE MENU ───────────────────────────────────────────
+  // ‚îÄ‚îÄ MOBILE MENU ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   const hamburger  = document.getElementById('hamburger');
   const mobileMenu = document.getElementById('mobile-menu');
   let menuOpen = false;
@@ -87,7 +87,7 @@
   });
 
 
-  // ── SCROLL REVEAL ─────────────────────────────────────────
+  // ‚îÄ‚îÄ SCROLL REVEAL ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   const baseReveal = '.stats-band,.section-header,.artist-card,.release-row,.about-card,.footer-top,.faq-item,.channel-link,.service-card,.demo-tips,.demo-text';
 
   const revealObs = new IntersectionObserver((entries) => {
@@ -129,7 +129,7 @@
   });
 
 
-  // ── COUNTER ANIMATION ─────────────────────────────────────
+  // ‚îÄ‚îÄ COUNTER ANIMATION ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   function animateCounter(el) {
     const target = +el.dataset.target;
     const duration = 1800;
@@ -153,7 +153,7 @@
   if (statsBand) counterObs.observe(statsBand);
 
 
-  // ── ARTIST FILTER ─────────────────────────────────────────
+  // ‚îÄ‚îÄ ARTIST FILTER ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   document.querySelectorAll('.filter-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -170,7 +170,7 @@
   });
 
 
-  // ── RIPPLE ON BUTTONS ─────────────────────────────────────
+  // ‚îÄ‚îÄ RIPPLE ON BUTTONS ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   function addRipple(e) {
     const btn  = e.currentTarget;
     const rect = btn.getBoundingClientRect();
@@ -186,7 +186,7 @@
   document.querySelectorAll('.btn').forEach(btn => btn.addEventListener('click', addRipple));
 
 
-  // ── CLICK PARTICLE BURST ──────────────────────────────────
+  // ‚îÄ‚îÄ CLICK PARTICLE BURST ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   const COLORS = ['#a259ff','#ff6b35','#ffffff','#c084fc','#fb923c'];
   document.addEventListener('click', e => {
     for (let i = 0; i < 8; i++) {
@@ -206,7 +206,7 @@
   });
 
 
-  // ── MAGNETIC BUTTONS ──────────────────────────────────────
+  // ‚îÄ‚îÄ MAGNETIC BUTTONS ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   document.querySelectorAll('.btn-primary, .btn-outline').forEach(btn => {
     btn.addEventListener('mousemove', e => {
       const rect = btn.getBoundingClientRect();
@@ -220,7 +220,7 @@
   });
 
 
-  // ── FAQ ACCORDION ─────────────────────────────────────────
+  // ‚îÄ‚îÄ FAQ ACCORDION ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   document.querySelectorAll('.faq-question').forEach(btn => {
     btn.addEventListener('click', () => {
       const item   = btn.closest('.faq-item');
@@ -246,7 +246,7 @@
   });
 
 
-  // ── ARTIST CARD TILT ──────────────────────────────────────
+  // ‚îÄ‚îÄ ARTIST CARD TILT ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   document.querySelectorAll('.artist-card').forEach(card => {
     card.addEventListener('mousemove', e => {
       const rect = card.getBoundingClientRect();
@@ -258,14 +258,14 @@
   });
 
 
-  // ── RELEASE ROW HOVER ─────────────────────────────────────
+  // ‚îÄ‚îÄ RELEASE ROW HOVER ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   document.querySelectorAll('.release-row').forEach(row => {
     row.addEventListener('mouseenter', () => { row.style.background = 'rgba(162,89,255,0.04)'; });
     row.addEventListener('mouseleave', () => { row.style.background = ''; });
   });
 
 
-  // ── ABOUT CARD CLICK EXPAND ───────────────────────────────
+  // ‚îÄ‚îÄ ABOUT CARD CLICK EXPAND ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   document.querySelectorAll('.about-card').forEach(card => {
     card.addEventListener('click', () => {
       card.classList.toggle('expanded');
@@ -281,7 +281,7 @@
   });
 
 
-  // ── AUDIO VISUALIZER (live random) ────────────────────────
+  // ‚îÄ‚îÄ AUDIO VISUALIZER (live random) ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   const bars = document.querySelectorAll('.bar');
   function randomizeBars() {
     bars.forEach(bar => {
@@ -291,7 +291,7 @@
   setInterval(randomizeBars, 700);
 
 
-  // ── ACTIVE NAV LINK ON SCROLL ─────────────────────────────
+  // ‚îÄ‚îÄ ACTIVE NAV LINK ON SCROLL ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   const sections = document.querySelectorAll('section[id]');
   const navLinks = document.querySelectorAll('.nav-link');
   const sectionObs = new IntersectionObserver(entries => {
@@ -306,28 +306,37 @@
   sections.forEach(s => sectionObs.observe(s));
 
 
-  // ── CONTACT FORM ──────────────────────────────────────────
-  const form = document.getElementById('contact-form');
-  if (form) {
-    form.addEventListener('submit', e => {
+  // ‚îÄ‚îÄ CONTACT FORM ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+  const contactForm = document.getElementById('contact-form');
+  if (contactForm) {
+    contactForm.addEventListener('submit', e => {
       e.preventDefault();
-      const emailEl = form.querySelector('[type="email"]');
+      const emailEl = contactForm.querySelector('[type="email"]');
       if (emailEl && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value)) {
         emailEl.style.borderColor = '#ef4444';
         emailEl.focus();
         setTimeout(() => { emailEl.style.borderColor = ''; }, 2500);
         return;
       }
-      const btn = form.querySelector('button[type="submit"]');
+      // Save submission to localStorage for admin inbox
+      try {
+        const name = (contactForm.querySelector('[placeholder="Your Name"]') || {}).value || 'Anonymous';
+        const type = (contactForm.querySelector('select') || {}).value || 'Inquiry';
+        const msg  = (contactForm.querySelector('textarea') || {}).value || '';
+        const inbox = JSON.parse(localStorage.getItem('hvx_contacts') || '[]');
+        inbox.unshift({ id: Date.now(), name, email: emailEl.value, type, message: msg, date: new Date().toISOString(), read: false });
+        localStorage.setItem('hvx_contacts', JSON.stringify(inbox));
+      } catch(_e) {}
+      const btn  = contactForm.querySelector('button[type="submit"]');
       const orig = btn.textContent;
-      btn.textContent = 'Message Sent &#10003;';
+      btn.textContent = 'Message Sent - Thank you!';
       btn.style.background = '#22c55e';
-      setTimeout(() => { btn.textContent = orig; btn.style.background = ''; form.reset(); }, 3000);
+      setTimeout(() => { btn.textContent = orig; btn.style.background = ''; contactForm.reset(); }, 3000);
     });
   }
 
 
-  // ── SECTION ENTRANCE TEXT SCRAMBLE ────────────────────────
+  // ‚îÄ‚îÄ SECTION ENTRANCE TEXT SCRAMBLE ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#';
   function scramble(el) {
     const original = el.textContent;
@@ -357,7 +366,7 @@
   document.querySelectorAll('.section-tag').forEach(el => scrambleObs.observe(el));
 
 
-  // ── VINYL SPEED UP ON HOVER ───────────────────────────────
+  // ‚îÄ‚îÄ VINYL SPEED UP ON HOVER ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   const vinyl = document.querySelector('.vinyl');
   if (vinyl) {
     let speed = 18;
@@ -376,7 +385,7 @@
   }
 
 
-  // ── WIRE SOCIAL LINKS FROM CONFIG ────────────────────────
+  // ‚îÄ‚îÄ WIRE SOCIAL LINKS FROM CONFIG ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   const cfg = window.HVX_CONFIG;
   if (cfg) {
     document.querySelectorAll('[data-social]').forEach(el => {
@@ -392,12 +401,15 @@
   }
 
 
-  // ── RENDER ARTISTS FROM DATA ──────────────────────────────
+  // ‚îÄ‚îÄ RENDER ARTISTS FROM DATA ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   const artistsGrid   = document.getElementById('artists-grid');
   const artistsFilter = document.getElementById('artists-filter');
 
-  if (artistsGrid && window.HVX && window.HVX.artists.length) {
-    const data = window.HVX.artists;
+  const _storedArtists = (() => { try { return JSON.parse(localStorage.getItem('hvx_artists')); } catch(_e) { return null; } })();
+  const _artistSrc = (_storedArtists && _storedArtists.length) ? _storedArtists : (window.HVX && window.HVX.artists || []);
+
+  if (artistsGrid && _artistSrc.length) {
+    const data = _artistSrc;
 
     // Build genre filter buttons dynamically
     if (artistsFilter) {
@@ -474,7 +486,7 @@
   }
 
 
-  // ── RENDER RELEASES FROM DATA ─────────────────────────────
+  // ‚îÄ‚îÄ RENDER RELEASES FROM DATA ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   const releasesList = document.getElementById('releases-list');
 
   if (releasesList && window.HVX) {
@@ -520,7 +532,7 @@
   }
 
 
-  // ── FORM HANDLER (demo + booking) ────────────────────────
+  // ‚îÄ‚îÄ FORM HANDLER (demo + booking) ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
   function initForm(id, successText, resetText) {
     const form = document.getElementById(id);
     if (!form) return;
@@ -547,7 +559,31 @@
     });
   }
 
-  initForm('demo-form',    'Submitted - We will be in touch',       'Submit Demo');
-  initForm('booking-form', 'Request Sent - We will reply within 48h', 'Send Booking Request');
+  initForm('demo-form', 'Submitted - We will be in touch', 'Submit Demo');
+
+
+  // ‚îÄ‚îÄ RENDER MERCH FROM ADMIN DATA ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+  const merchGrid = document.getElementById('merch-grid');
+  if (merchGrid) {
+    const products = (() => { try { return JSON.parse(localStorage.getItem('hvx_merch') || '[]'); } catch(_e) { return []; } })();
+    if (!products.length) {
+      merchGrid.innerHTML = '<div class="merch-empty"><p class="merch-empty-label">HVX Store</p><p class="merch-empty-msg">Shop coming soon.</p></div>';
+    } else {
+      products.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'merch-card reveal';
+        card.innerHTML =
+          `<div class="merch-card-img">${p.img ? `<img src="${p.img}" alt="${p.name}">` : '&#128717;'}</div>
+           <div class="merch-card-body">
+             <p class="merch-card-name">${p.name}</p>
+             <p class="merch-card-price">$${p.price}</p>
+             ${p.desc ? `<p class="merch-card-desc">${p.desc}</p>` : ''}
+             <span class="merch-card-badge ${p.status || 'available'}">${p.status === 'soldout' ? 'Sold Out' : p.status === 'coming' ? 'Coming Soon' : 'Available'}</span>
+           </div>`;
+        revealObs.observe(card);
+        merchGrid.appendChild(card);
+      });
+    }
+  }
 
 })();
