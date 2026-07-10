@@ -1,460 +1,1384 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HVX Music &mdash; Electronic Music Label | New York City</title>
-  <meta name="description" content="HVX Music is an independent electronic music label based in New York City. Artist development, music distribution, creative content, and global positioning for house, tech house, afro house, and melodic house artists." />
-  <meta name="keywords" content="HVX Music, electronic music label, artist management, tech house, house music, afro house, melodic house, New York, music distribution" />
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="HVX Music &mdash; Electronic Music Label" />
-  <meta property="og:description" content="Independent electronic music label based in New York City. Artist development, distribution, and creative direction." />
-  <meta property="og:image" content="assets/hvx-logo-transparent.png" />
-  <meta property="og:url" content="https://hvx-music.netlify.app" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="HVX Music &mdash; Electronic Music Label" />
-  <meta name="twitter:description" content="Independent electronic music label based in New York City." />
-  <link rel="canonical" href="https://hvx-music.netlify.app" />
-  <link rel="stylesheet" href="styles.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>HVX Admin ‚Äî Content Management</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --black:#080808;--dark:#0f0f0f;--dark-2:#161616;--dark-3:#1e1e1e;
+  --border:rgba(255,255,255,0.07);--white:#fff;--off-white:#c8c8c8;--muted:#6b6b6b;
+  --accent:#a259ff;--accent-2:#ff6b35;--green:#22c55e;--red:#ef4444;
+  --font-h:'Syne',sans-serif;--font-b:'Manrope',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:var(--font-b);cursor:none;overflow-x:hidden;min-height:100vh}
+a{color:inherit;text-decoration:none}
+button,input,select,textarea{font-family:var(--font-b)}
+
+/* CURSOR */
+.cursor{width:8px;height:8px;background:var(--accent);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .3s,height .3s,background .3s}
+.cursor-f{width:28px;height:28px;border:1px solid rgba(162,89,255,.5);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .3s,height .3s,opacity .3s}
+
+/* SCROLL PROGRESS */
+.sp{position:fixed;top:0;left:0;height:2px;width:0;background:linear-gradient(90deg,var(--accent),var(--accent-2));z-index:10000;transition:width .1s linear}
+
+/* LOGIN */
+.login-screen{position:fixed;inset:0;background:var(--black);display:flex;align-items:center;justify-content:center;z-index:500;flex-direction:column;gap:2rem}
+.login-screen.hidden{display:none}
+.login-logo{font-family:var(--font-h);font-size:2rem;font-weight:800;letter-spacing:-.02em}
+.login-logo span{color:var(--accent)}
+.login-card{width:100%;max-width:380px;background:var(--dark-2);border:1px solid var(--border);border-radius:6px;padding:2.5rem}
+.login-title{font-family:var(--font-h);font-size:1.4rem;font-weight:700;margin-bottom:.4rem}
+.login-sub{font-size:.82rem;color:var(--muted);margin-bottom:2rem}
+.form-group{margin-bottom:1rem}
+.form-label{display:block;font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem}
+.form-input{width:100%;background:var(--dark-3);border:1px solid var(--border);border-radius:3px;padding:.75rem 1rem;color:var(--white);font-size:.9rem;outline:none;transition:border-color .3s}
+.form-input:focus{border-color:var(--accent)}
+.form-input::placeholder{color:var(--muted)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;padding:.7rem 1.5rem;border-radius:3px;font-size:.85rem;font-weight:600;cursor:none;transition:.3s;border:none;position:relative;overflow:hidden}
+.btn-primary{background:var(--accent);color:#fff;width:100%}
+.btn-primary:hover{background:#b472ff}
+.btn-outline{background:transparent;color:var(--white);border:1px solid var(--border)}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent)}
+.btn-danger{background:transparent;color:var(--red);border:1px solid rgba(239,68,68,.3);font-size:.78rem;padding:.4rem .9rem}
+.btn-danger:hover{background:rgba(239,68,68,.1)}
+.btn-green{background:var(--green);color:#fff}
+.btn-sm{padding:.4rem .9rem;font-size:.78rem}
+.login-error{font-size:.8rem;color:var(--red);margin-top:.8rem;display:none}
+
+/* LAYOUT */
+.admin-wrap{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+.admin-wrap.hidden{display:none}
+
+/* SIDEBAR */
+.sidebar{background:var(--dark);border-right:1px solid var(--border);padding:2rem 0;position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column}
+.sidebar-logo{padding:0 1.5rem 2rem;border-bottom:1px solid var(--border);margin-bottom:1.5rem}
+.sidebar-logo .logo-t{font-family:var(--font-h);font-size:1.3rem;font-weight:800}
+.sidebar-logo .logo-t span{color:var(--accent)}
+.sidebar-logo p{font-size:.72rem;color:var(--muted);margin-top:.3rem;letter-spacing:.06em;text-transform:uppercase}
+.nav-section{padding:0 1rem;margin-bottom:.5rem}
+.nav-section-label{font-size:.62rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);padding:.5rem .5rem .5rem;display:block}
+.nav-item{display:flex;align-items:center;gap:.75rem;padding:.65rem .75rem;border-radius:4px;font-size:.85rem;font-weight:500;color:var(--off-white);cursor:none;transition:.25s;width:100%;background:none;border:none;text-align:left}
+.nav-item:hover{background:rgba(162,89,255,.08);color:var(--white)}
+.nav-item.active{background:rgba(162,89,255,.15);color:var(--accent)}
+.nav-item svg{flex-shrink:0;opacity:.7}
+.nav-item.active svg{opacity:1}
+.sidebar-bottom{margin-top:auto;padding:1.5rem;border-top:1px solid var(--border)}
+.sidebar-user{display:flex;align-items:center;gap:.8rem;margin-bottom:1rem}
+.user-avatar{width:36px;height:36px;background:linear-gradient(135deg,var(--accent),var(--accent-2));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;font-family:var(--font-h)}
+.user-name{font-size:.85rem;font-weight:600}
+.user-role{font-size:.7rem;color:var(--muted)}
+.logout-btn{width:100%;background:none;border:1px solid var(--border);border-radius:3px;padding:.5rem;font-size:.78rem;color:var(--muted);cursor:none;transition:.25s}
+.logout-btn:hover{border-color:var(--red);color:var(--red)}
+
+/* MAIN CONTENT */
+.main-content{padding:2.5rem 3rem;overflow-y:auto}
+.page-section{display:none}
+.page-section.active{display:block}
+
+/* PAGE HEADER */
+.page-header{margin-bottom:2.5rem;display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.page-title{font-family:var(--font-h);font-size:1.8rem;font-weight:700;margin-bottom:.3rem}
+.page-sub{font-size:.85rem;color:var(--muted)}
+.header-actions{display:flex;gap:.75rem;align-items:center;flex-wrap:wrap}
+
+/* KPI CARDS */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2.5rem}
+.kpi-card{background:var(--dark-2);border:1px solid var(--border);border-radius:6px;padding:1.5rem;transition:.3s}
+.kpi-card:hover{border-color:rgba(162,89,255,.3);transform:translateY(-2px)}
+.kpi-label{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem}
+.kpi-value{font-family:var(--font-h);font-size:2rem;font-weight:800;background:linear-gradient(120deg,#fff,var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.kpi-trend{font-size:.75rem;color:var(--green);margin-top:.4rem}
+
+/* TABLES */
+.table-wrap{background:var(--dark-2);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:2rem}
+.table-head{display:flex;justify-content:space-between;align-items:center;padding:1.2rem 1.5rem;border-bottom:1px solid var(--border)}
+.table-title{font-family:var(--font-h);font-size:1rem;font-weight:700}
+table{width:100%;border-collapse:collapse}
+thead th{padding:.8rem 1.5rem;text-align:left;font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border)}
+tbody tr{border-bottom:1px solid var(--border);transition:background .2s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:rgba(162,89,255,.04)}
+tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
+.badge{display:inline-flex;align-items:center;gap:.4rem;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.25rem .7rem;border-radius:100px}
+.badge-accent{background:rgba(162,89,255,.15);color:var(--accent);border:1px solid rgba(162,89,255,.3)}
+.badge-orange{background:rgba(255,107,53,.15);color:var(--accent-2);border:1px solid rgba(255,107,53,.3)}
+.badge-green{background:rgba(34,197,94,.12);color:var(--green);border:1px solid rgba(34,197,94,.25)}
+.badge-muted{background:rgba(255,255,255,.05);color:var(--muted);border:1px solid var(--border)}
+.artist-cell{display:flex;align-items:center;gap:.9rem}
+.artist-avatar{width:36px;height:36px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:700;font-family:var(--font-h);flex-shrink:0}
+.artist-avatar.av-nexus{background:linear-gradient(135deg,#a259ff,#6b21d4)}
+.artist-avatar.av-kara{background:linear-gradient(135deg,#ff6b35,#c2410c)}
+.artist-avatar.av-delvyn{background:linear-gradient(135deg,#10b981,#065f46)}
+.artist-avatar.av-solen{background:linear-gradient(135deg,#3b82f6,#1e3a8a)}
+.artist-avatar.av-mira{background:linear-gradient(135deg,#f59e0b,#92400e)}
+.artist-avatar.av-axio{background:linear-gradient(135deg,#ec4899,#831843)}
+.artist-name-cell{font-weight:700;font-family:var(--font-h)}
+.artist-genre{font-size:.72rem;color:var(--muted)}
+
+/* HIGHLIGHTS SECTION */
+.upload-zone{border:2px dashed var(--border);border-radius:6px;padding:3rem 2rem;text-align:center;transition:.3s;cursor:none;margin-bottom:1.5rem}
+.upload-zone:hover,.upload-zone.dragover{border-color:var(--accent);background:var(--accent-glow)}
+.upload-icon{font-size:2rem;margin-bottom:.75rem;opacity:.4}
+.upload-title{font-family:var(--font-h);font-size:1rem;font-weight:700;margin-bottom:.4rem}
+.upload-sub{font-size:.82rem;color:var(--muted);margin-bottom:1.2rem}
+#file-input{display:none}
+
+.highlight-form{background:var(--dark-2);border:1px solid var(--border);border-radius:6px;padding:1.5rem;margin-bottom:2rem}
+.highlight-form h3{font-family:var(--font-h);font-size:1rem;font-weight:700;margin-bottom:1.2rem}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.form-group{margin-bottom:1rem}
+.form-textarea{resize:vertical;min-height:80px}
+.char-count{font-size:.7rem;color:var(--muted);text-align:right;margin-top:.3rem}
+
+/* FEED GRID */
+.feed-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.feed-card{background:var(--dark-2);border:1px solid var(--border);border-radius:6px;overflow:hidden;transition:.3s}
+.feed-card:hover{border-color:rgba(162,89,255,.3);transform:translateY(-2px)}
+.feed-img{aspect-ratio:1;background:var(--dark-3);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.feed-img-preview{width:100%;height:100%;object-fit:cover;display:block}
+.feed-img-placeholder{font-size:.65rem;font-weight:700;letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
+.feed-source-badge{position:absolute;top:.6rem;right:.6rem;background:rgba(8,8,8,.8);border:1px solid var(--border);border-radius:100px;padding:.2rem .6rem;font-size:.62rem;font-weight:700;letter-spacing:.08em}
+.feed-body{padding:1rem}
+.feed-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem}
+.feed-artist{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.feed-date{font-size:.7rem;color:var(--muted)}
+.feed-caption{font-size:.82rem;color:var(--off-white);line-height:1.55;margin-bottom:.8rem}
+.feed-actions{display:flex;gap:.5rem;justify-content:flex-end}
+
+/* API KEYS */
+.api-section{background:var(--dark-2);border:1px solid var(--border);border-radius:6px;margin-bottom:1.5rem;overflow:hidden}
+.api-section-head{display:flex;align-items:center;justify-content:space-between;padding:1.2rem 1.5rem;border-bottom:1px solid var(--border);cursor:none}
+.api-section-title{display:flex;align-items:center;gap:.75rem;font-family:var(--font-h);font-size:.95rem;font-weight:700}
+.api-icon{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.85rem}
+.api-icon.ig{background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045)}
+.api-icon.spotify{background:#1db954}
+.api-icon.ra{background:#0b0b0b;border:1px solid #333}
+.api-icon.sc{background:#ff5500}
+.api-icon.webhook{background:var(--dark-3);border:1px solid var(--border)}
+.api-status{display:flex;align-items:center;gap:.4rem;font-size:.72rem;font-weight:600}
+.status-dot{width:6px;height:6px;border-radius:50%}
+.status-dot.connected{background:var(--green);animation:pulse 2s infinite}
+.status-dot.pending{background:var(--accent-2)}
+.status-dot.disconnected{background:var(--muted)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.api-body{padding:1.5rem;display:none}
+.api-body.open{display:block}
+.api-key-row{display:flex;gap:.75rem;margin-bottom:1rem}
+.api-key-input{flex:1;background:var(--dark-3);border:1px solid var(--border);border-radius:3px;padding:.65rem 1rem;color:var(--muted);font-size:.83rem;font-family:monospace;outline:none;transition:border .3s;letter-spacing:.05em}
+.api-key-input:focus{border-color:var(--accent);color:var(--white)}
+.api-desc{font-size:.78rem;color:var(--muted);line-height:1.6;margin-bottom:1rem;padding:.75rem;background:rgba(255,255,255,.03);border-radius:3px;border-left:2px solid var(--accent)}
+.copy-btn{padding:.65rem .9rem;background:var(--dark-3);border:1px solid var(--border);border-radius:3px;color:var(--off-white);font-size:.75rem;cursor:none;transition:.25s;white-space:nowrap}
+.copy-btn:hover{border-color:var(--accent);color:var(--accent)}
+.save-btn{padding:.65rem 1.2rem;background:var(--accent);border:none;border-radius:3px;color:#fff;font-size:.8rem;font-weight:600;cursor:none;transition:.25s}
+.save-btn:hover{background:#b472ff}
+
+.automation-card{background:var(--dark-3);border:1px solid var(--border);border-radius:4px;padding:1.2rem;margin-bottom:.75rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.automation-info{flex:1}
+.automation-name{font-size:.88rem;font-weight:600;margin-bottom:.2rem}
+.automation-desc{font-size:.75rem;color:var(--muted)}
+.toggle-wrap{display:flex;align-items:center;gap:.6rem}
+.toggle{width:40px;height:22px;background:var(--dark);border:1px solid var(--border);border-radius:100px;position:relative;cursor:none;transition:.3s;flex-shrink:0}
+.toggle.on{background:var(--accent);border-color:var(--accent)}
+.toggle::after{content:'';position:absolute;top:3px;left:3px;width:14px;height:14px;background:#fff;border-radius:50%;transition:.3s}
+.toggle.on::after{transform:translateX(18px)}
+.toggle-label{font-size:.72rem;color:var(--muted);white-space:nowrap}
+
+/* ACTIVITY LOG */
+.log-list{display:flex;flex-direction:column;gap:0}
+.log-item{display:flex;align-items:flex-start;gap:1rem;padding:1rem 1.5rem;border-bottom:1px solid var(--border);font-size:.82rem}
+.log-item:last-child{border-bottom:none}
+.log-dot{width:8px;height:8px;border-radius:50%;margin-top:.3rem;flex-shrink:0}
+.log-dot.green{background:var(--green)}
+.log-dot.purple{background:var(--accent)}
+.log-dot.orange{background:var(--accent-2)}
+.log-text{flex:1;line-height:1.5;color:var(--off-white)}
+.log-time{color:var(--muted);font-size:.75rem;white-space:nowrap}
+
+/* SETTINGS */
+.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.settings-card{background:var(--dark-2);border:1px solid var(--border);border-radius:6px;padding:1.5rem}
+.settings-card-title{font-family:var(--font-h);font-size:1rem;font-weight:700;margin-bottom:1.2rem;padding-bottom:.8rem;border-bottom:1px solid var(--border)}
+.danger-zone{background:rgba(239,68,68,.05);border:1px solid rgba(239,68,68,.2);border-radius:6px;padding:1.5rem;margin-top:1.5rem}
+.danger-title{font-family:var(--font-h);font-weight:700;color:var(--red);margin-bottom:.5rem}
+.danger-desc{font-size:.82rem;color:var(--muted);margin-bottom:1rem;line-height:1.6}
+
+/* TOAST */
+.toast-wrap{position:fixed;bottom:1.5rem;right:1.5rem;z-index:9990;display:flex;flex-direction:column;gap:.5rem;pointer-events:none}
+.toast{background:var(--dark-2);border:1px solid var(--border);border-radius:4px;padding:.8rem 1.2rem;font-size:.83rem;display:flex;align-items:center;gap:.6rem;transform:translateX(120%);transition:transform .35s cubic-bezier(.4,0,.2,1);pointer-events:none}
+.toast.show{transform:translateX(0)}
+.toast.success{border-color:rgba(34,197,94,.3)}
+.toast.error{border-color:rgba(239,68,68,.3)}
+.toast-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.toast.success .toast-dot{background:var(--green)}
+.toast.error .toast-dot{background:var(--red)}
+
+/* RIPPLE */
+.ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.15);transform:scale(0);animation:rippleA .6s linear;pointer-events:none}
+@keyframes rippleA{to{transform:scale(4);opacity:0}}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--black)}
+::-webkit-scrollbar-thumb{background:var(--accent);border-radius:2px}
+
+/* MANAGER FORMS */
+.manager-form-card{background:var(--dark-2);border:1px solid var(--border);border-radius:6px;padding:1.5rem;margin-bottom:2rem}
+.manager-form-card h3{font-family:var(--font-h);font-size:1rem;font-weight:700;margin-bottom:1.2rem}
+.merch-admin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:2rem}
+.merch-admin-card{background:var(--dark-2);border:1px solid var(--border);border-radius:6px;overflow:hidden;transition:.3s}
+.merch-admin-card:hover{border-color:rgba(162,89,255,.3);transform:translateY(-2px)}
+.merch-admin-img{aspect-ratio:1;background:var(--dark-3);display:flex;align-items:center;justify-content:center;font-size:2rem;overflow:hidden}
+.merch-admin-img img{width:100%;height:100%;object-fit:cover}
+.merch-admin-body{padding:1rem}
+.merch-admin-name{font-family:var(--font-h);font-size:.9rem;font-weight:700;margin-bottom:.25rem}
+.merch-admin-price{color:var(--accent);font-size:.85rem;font-weight:600;margin-bottom:.5rem}
+
+/* CONTACT INBOX */
+.inbox-item{display:grid;grid-template-columns:12px 1fr auto;gap:1rem;align-items:start;padding:1rem 1.5rem;border-bottom:1px solid var(--border);cursor:pointer;transition:background .2s}
+.inbox-item:last-child{border-bottom:none}
+.inbox-item:hover{background:rgba(162,89,255,.04)}
+.inbox-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);margin-top:.35rem;flex-shrink:0}
+.inbox-item.read .inbox-dot{background:transparent;border:1px solid var(--border)}
+.inbox-subject{font-size:.88rem;color:var(--off-white);margin-bottom:.2rem}
+.inbox-item.unread .inbox-subject{font-weight:700;color:var(--white)}
+.inbox-preview{font-size:.78rem;color:var(--muted)}
+.inbox-date{font-size:.75rem;color:var(--muted);white-space:nowrap;margin-top:.15rem}
+.inbox-detail{background:var(--dark-3);border:1px solid var(--border);border-radius:6px;padding:1.5rem;margin:0 1.5rem 1rem;display:none}
+.inbox-detail.open{display:block}
+.inbox-detail-name{font-family:var(--font-h);font-weight:700;margin-bottom:.3rem}
+.inbox-detail-meta{font-size:.8rem;color:var(--muted);margin-bottom:1rem}
+.inbox-detail-msg{font-size:.88rem;color:var(--off-white);line-height:1.7;white-space:pre-wrap}
+</style>
 </head>
 <body>
 
-  <!-- SCROLL PROGRESS -->
-  <div class="scroll-progress" id="scroll-progress"></div>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-f" id="cursor-f"></div>
+<div class="sp" id="sp"></div>
+<div class="toast-wrap" id="toast-wrap"></div>
 
-  <!-- CUSTOM CURSOR -->
-  <div class="cursor" id="cursor"></div>
-  <div class="cursor-follower" id="cursor-follower"></div>
-
-  <!-- NAV -->
-  <nav class="nav" id="nav">
-    <div class="nav-logo">
-      <a href="index.html">
-        <video src="assets/hvx-logo-anim.mp4" autoplay muted loop playsinline class="logo-video" aria-label="HVX Music"></video>
-      </a>
+<!-- LOGIN SCREEN -->
+<div class="login-screen" id="login-screen">
+  <div class="login-logo">HVX<span>.</span> <span style="font-size:.9rem;font-weight:400;color:var(--muted)">Admin</span></div>
+  <div class="login-card">
+    <p class="login-title">Sign In</p>
+    <p class="login-sub">Access the HVX content management panel.</p>
+    <div class="form-group">
+      <label class="form-label">Username</label>
+      <input type="text" class="form-input" id="login-user" placeholder="admin" autocomplete="username"/>
     </div>
-    <ul class="nav-links">
-      <li><a href="#home" class="nav-link">Home</a></li>
-      <li><a href="artists.html" class="nav-link">Artists</a></li>
-      <li><a href="#about" class="nav-link">About</a></li>
-      <li><a href="#services" class="nav-link">Services</a></li>
-      <li><a href="#releases" class="nav-link">Releases</a></li>
-      <li><a href="#merch" class="nav-link">Merch</a></li>
-      <li><a href="#contact" class="nav-link">Contact</a></li>
-    </ul>
-    <div class="nav-cta">
-      <a href="#contact" class="btn btn-primary">Contact</a>
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <input type="password" class="form-input" id="login-pass" placeholder="‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢" autocomplete="current-password"/>
     </div>
-    <button class="nav-hamburger" id="hamburger" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
-  </nav>
-
-  <!-- MOBILE MENU -->
-  <div class="mobile-menu" id="mobile-menu">
-    <ul>
-      <li><a href="#home" class="mobile-link">Home</a></li>
-      <li><a href="artists.html" class="mobile-link">Artists</a></li>
-      <li><a href="#about" class="mobile-link">About</a></li>
-      <li><a href="#services" class="mobile-link">Services</a></li>
-      <li><a href="#releases" class="mobile-link">Releases</a></li>
-      <li><a href="#merch" class="mobile-link">Merch</a></li>
-      <li><a href="#contact" class="mobile-link">Contact</a></li>
-    </ul>
+    <button class="btn btn-primary" id="login-btn">Sign In ‚Üí</button>
+    <p class="login-error" id="login-error">Invalid credentials. Please try again.</p>
   </div>
+</div>
 
-  <!-- HERO -->
-  <section class="hero" id="home">
-    <div class="hero-bg">
-      <div class="hero-grid"></div>
-      <div class="orb orb-1"></div>
-      <div class="orb orb-2"></div>
-      <div class="orb orb-3"></div>
-      <div class="orb orb-4"></div>
+<!-- ADMIN PANEL -->
+<div class="admin-wrap hidden" id="admin-wrap">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-t">HVX<span>.</span></div>
+      <p>Admin Panel</p>
     </div>
 
-    <div class="hero-layout">
-      <!-- LEFT: copy -->
-      <div class="hero-content">
-        <div class="hero-tag">
-          <span class="tag-dot"></span>
-          Electronic Music Label &bull; Artist Development &bull; Creative Vision
-        </div>
-        <h1 class="hero-title">
-          <span class="title-line gradient-text">HVX Music</span>
-        </h1>
-        <p class="hero-subtitle">
-          HVX Music is an independent record label based in New York City dedicated to developing artists across electronic, house, afro house, melodic house, and innovative electronic music.
-          We create opportunities through strategy, branding, creative direction, visual content, music distribution, marketing, and international positioning.
-        </p>
-        <div class="hero-actions">
-          <a href="artists.html" class="btn btn-primary">Our Artists</a>
-          <a href="#merch" class="btn btn-outline">Merch</a>
-          <a href="#contact" class="btn btn-ghost">Contact Us</a>
-        </div>
+    <div class="nav-section">
+      <span class="nav-section-label">Overview</span>
+      <button class="nav-item active" data-page="dashboard">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Dashboard
+      </button>
+    </div>
 
-        <!-- mini stats inline -->
-        <div class="hero-mini-stats">
-          <div class="mini-stat"><span class="mini-num">12+</span><span class="mini-label">Artists</span></div>
-          <div class="mini-divider"></div>
-          <div class="mini-stat"><span class="mini-num">200+</span><span class="mini-label">Shows / yr</span></div>
-          <div class="mini-divider"></div>
-          <div class="mini-stat"><span class="mini-num">30+</span><span class="mini-label">Countries</span></div>
+    <div class="nav-section">
+      <span class="nav-section-label">Content</span>
+      <button class="nav-item" data-page="highlights">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 20M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+        Highlights & Feed
+      </button>
+      <button class="nav-item" data-page="artists">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        Artists
+      </button>
+      <button class="nav-item" data-page="events">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        Events & Shows
+      </button>
+      <button class="nav-item" data-page="artist-manager">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+        Artist Manager
+      </button>
+      <button class="nav-item" data-page="merch-manager">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+        Merch Manager
+      </button>
+      <button class="nav-item" data-page="contact-inbox">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        Contact Inbox
+      </button>
+    </div>
+
+    <div class="nav-section">
+      <span class="nav-section-label">Integrations</span>
+      <button class="nav-item" data-page="api">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+        API Keys & Automations
+      </button>
+    </div>
+
+    <div class="nav-section">
+      <span class="nav-section-label">System</span>
+      <button class="nav-item" data-page="activity">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Activity Log
+      </button>
+      <button class="nav-item" data-page="settings">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        Settings
+      </button>
+    </div>
+
+    <div class="sidebar-bottom">
+      <div class="sidebar-user">
+        <div class="user-avatar">AD</div>
+        <div>
+          <div class="user-name">Admin</div>
+          <div class="user-role">Super Admin</div>
+        </div>
+      </div>
+      <button class="logout-btn" id="logout-btn">Sign Out</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+
+    <!-- DASHBOARD -->
+    <div class="page-section active" id="page-dashboard">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Dashboard</h1>
+          <p class="page-sub">Welcome back. Here's what's happening with HVX Music.</p>
+        </div>
+        <div class="header-actions">
+          <a href="index.html" class="btn btn-outline btn-sm">‚Üê View Site</a>
         </div>
       </div>
 
-      <!-- RIGHT: rotating 3D logo video -->
-      <div class="hero-visual">
-        <div class="hero-img-wrap hero-video-wrap">
-          <video
-            class="hero-video"
-            src="assets/hvx-rotate.mp4"
-            autoplay muted loop playsinline
-            aria-label="HVX Music 3D rotating logo">
-          </video>
-          <div class="chip chip-1"><span class="chip-dot"></span>House / Tech House</div>
-          <div class="chip chip-2">New York City</div>
-          <div class="chip chip-3"><span class="chip-dot chip-dot-orange"></span>Live</div>
-          <div class="chip chip-4">Global Roster</div>
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <p class="kpi-label">Total Artists</p>
+          <p class="kpi-value">6</p>
+          <p class="kpi-trend">‚Üë +1 this month</p>
         </div>
-        <div class="audio-visualizer" id="visualizer">
-          <div class="bar"></div><div class="bar"></div><div class="bar"></div>
-          <div class="bar"></div><div class="bar"></div><div class="bar"></div>
-          <div class="bar"></div><div class="bar"></div><div class="bar"></div>
-          <div class="bar"></div><div class="bar"></div><div class="bar"></div>
-          <div class="bar"></div><div class="bar"></div><div class="bar"></div>
-          <div class="bar"></div><div class="bar"></div><div class="bar"></div>
-          <div class="bar"></div><div class="bar"></div><div class="bar"></div>
-          <div class="bar"></div><div class="bar"></div><div class="bar"></div>
-          <div class="bar"></div><div class="bar"></div>
+        <div class="kpi-card">
+          <p class="kpi-label">Shows This Month</p>
+          <p class="kpi-value">24</p>
+          <p class="kpi-trend">‚Üë +8 vs last month</p>
         </div>
+        <div class="kpi-card">
+          <p class="kpi-label">Total Highlights</p>
+          <p class="kpi-value" id="dash-highlights">0</p>
+          <p class="kpi-trend">Content pieces</p>
+        </div>
+        <div class="kpi-card">
+          <p class="kpi-label">Active Automations</p>
+          <p class="kpi-value" id="dash-automations">3</p>
+          <p class="kpi-trend">‚Üë Running</p>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <div class="table-head">
+          <h3 class="table-title">Artist Roster</h3>
+          <a href="artists.html" class="btn btn-outline btn-sm">View All Artists ‚Üí</a>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Artist</th><th>Genre</th><th>Shows/yr</th><th>Top Market</th><th>Status</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><div class="artist-cell"><div class="artist-avatar av-nexus">NX</div><div><div class="artist-name-cell">NEXUS</div><div class="artist-genre">Berlin, DE</div></div></div></td><td><span class="badge badge-orange">Tech House</span></td><td>80</td><td>Berlin</td><td><span class="badge badge-green">Active</span></td><td><a href="artist-profile.html?id=nexus" class="btn btn-outline btn-sm">Profile</a></td></tr>
+            <tr><td><div class="artist-cell"><div class="artist-avatar av-kara">KA</div><div><div class="artist-name-cell">KARA</div><div class="artist-genre">New York, US</div></div></div></td><td><span class="badge badge-accent">House</span></td><td>65</td><td>New York</td><td><span class="badge badge-green">Active</span></td><td><a href="artist-profile.html?id=kara" class="btn btn-outline btn-sm">Profile</a></td></tr>
+            <tr><td><div class="artist-cell"><div class="artist-avatar av-delvyn">DL</div><div><div class="artist-name-cell">DELVYN</div><div class="artist-genre">London, UK</div></div></div></td><td><span class="badge badge-muted">Dance</span></td><td>90</td><td>London</td><td><span class="badge badge-green">Active</span></td><td><a href="artist-profile.html?id=delvyn" class="btn btn-outline btn-sm">Profile</a></td></tr>
+            <tr><td><div class="artist-cell"><div class="artist-avatar av-solen">SL</div><div><div class="artist-name-cell">SOLEN</div><div class="artist-genre">Barcelona, ES</div></div></div></td><td><span class="badge badge-accent">House</span></td><td>55</td><td>Barcelona</td><td><span class="badge badge-green">Active</span></td><td><a href="artist-profile.html?id=solen" class="btn btn-outline btn-sm">Profile</a></td></tr>
+            <tr><td><div class="artist-cell"><div class="artist-avatar av-mira">MI</div><div><div class="artist-name-cell">MIRA</div><div class="artist-genre">Buenos Aires, AR</div></div></div></td><td><span class="badge badge-orange">Tech House</span></td><td>70</td><td>LATAM</td><td><span class="badge badge-green">Active</span></td><td><a href="artist-profile.html?id=mira" class="btn btn-outline btn-sm">Profile</a></td></tr>
+            <tr><td><div class="artist-cell"><div class="artist-avatar av-axio">AX</div><div><div class="artist-name-cell">AXIO</div><div class="artist-genre">Paris, FR</div></div></div></td><td><span class="badge badge-muted">Dance</span></td><td>75</td><td>Paris</td><td><span class="badge badge-green">Active</span></td><td><a href="artist-profile.html?id=axio" class="btn btn-outline btn-sm">Profile</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-wrap">
+        <div class="table-head"><h3 class="table-title">Recent Activity</h3></div>
+        <div class="log-list" id="dash-activity"></div>
       </div>
     </div>
 
-    <div class="hero-scroll">
-      <span>Scroll</span>
-      <div class="scroll-line"></div>
-    </div>
-  </section>
-
-  <!-- STATS BAND -->
-  <div class="stats-band">
-    <div class="stat-item">
-      <span class="stat-num" data-target="12">0</span>
-      <span class="stat-label">Artists</span>
-    </div>
-    <div class="stat-divider"></div>
-    <div class="stat-item">
-      <span class="stat-num" data-target="200">0</span>
-      <span class="stat-label">Shows / Year</span>
-    </div>
-    <div class="stat-divider"></div>
-    <div class="stat-item">
-      <span class="stat-num" data-target="30">0</span>
-      <span class="stat-label">Countries</span>
-    </div>
-    <div class="stat-divider"></div>
-    <div class="stat-item">
-      <span class="stat-num" data-target="5">0</span>
-      <span class="stat-label">Years in the Scene</span>
-    </div>
-  </div>
-
-  <!-- ARTISTS -->
-  <section class="artists" id="artists">
-    <div class="section-header">
-      <p class="section-tag">Roster</p>
-      <h2 class="section-title">Featured Artists</h2>
-      <p class="section-desc">Artist photos and profiles will appear here. Each artist features a professional photo, biography, and links to their latest releases.</p>
-    </div>
-
-    <!-- Rendered by script.js from hvx-data.js -->
-    <div class="artists-grid" id="artists-grid"></div>
-
-    <div class="artists-filter" id="artists-filter" style="display:none;">
-      <button class="filter-btn active" data-filter="all">All</button>
-    </div>
-
-    <div class="section-cta">
-      <a href="artists.html" class="btn btn-outline">View All Artists</a>
-    </div>
-  </section>
-
-  <!-- ABOUT -->
-  <section class="about" id="about">
-    <div class="about-inner">
-      <div class="about-text">
-        <p class="section-tag">About HVX</p>
-        <h2 class="section-title">Who We Are</h2>
-        <p class="about-desc">
-          HVX Music was born from a vision to combine music, imagery, and strategy to propel artists with global potential.
-          More than just a label, we are a creative platform connecting talent, technology, and culture.
-        </p>
-        <p class="about-desc">
-          Our mission is to help artists build strong identities, reach international audiences, and create sustainable careers through creativity and strategic execution.
-        </p>
-        <ul class="about-services">
-          <li><span class="service-icon">&#10003;</span> Artist Development</li>
-          <li><span class="service-icon">&#10003;</span> Branding &amp; Positioning</li>
-          <li><span class="service-icon">&#10003;</span> Digital Distribution</li>
-          <li><span class="service-icon">&#10003;</span> Music Marketing</li>
-          <li><span class="service-icon">&#10003;</span> Photography &amp; Audiovisual Content</li>
-          <li><span class="service-icon">&#10003;</span> Strategic Industry Relationships</li>
-        </ul>
-      </div>
-      <div class="about-visual">
-        <div class="about-card-stack">
-          <div class="about-card ac-1">
-            <p class="ac-label">Based In</p>
-            <p class="ac-value">New York City</p>
-          </div>
-          <div class="about-card ac-2">
-            <p class="ac-label">Focus</p>
-            <p class="ac-value">Electronic Music</p>
-          </div>
-          <div class="about-card ac-3">
-            <p class="ac-label">Philosophy</p>
-            <p class="ac-value">Culture first, always.</p>
-          </div>
+    <!-- HIGHLIGHTS & FEED -->
+    <div class="page-section" id="page-highlights">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Highlights & Feed</h1>
+          <p class="page-sub">Upload and manage content shown on artist profile pages.</p>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- MARQUEE -->
-  <div class="marquee-section">
-    <div class="marquee-track">
-      <span>HOUSE &nbsp;&mdash;&nbsp; TECH HOUSE &nbsp;&mdash;&nbsp; AFRO HOUSE &nbsp;&mdash;&nbsp; MELODIC HOUSE &nbsp;&mdash;&nbsp; HVX MUSIC &nbsp;&mdash;&nbsp; NEW YORK CITY &nbsp;&mdash;&nbsp; HOUSE &nbsp;&mdash;&nbsp; TECH HOUSE &nbsp;&mdash;&nbsp; AFRO HOUSE &nbsp;&mdash;&nbsp; MELODIC HOUSE &nbsp;&mdash;&nbsp; HVX MUSIC &nbsp;&mdash;&nbsp; NEW YORK CITY &nbsp;&mdash;&nbsp; HOUSE &nbsp;&mdash;&nbsp; TECH HOUSE &nbsp;&mdash;&nbsp; AFRO HOUSE &nbsp;&mdash;&nbsp; MELODIC HOUSE &nbsp;&mdash;&nbsp; HVX MUSIC &nbsp;&mdash;&nbsp; NEW YORK CITY &nbsp;&mdash;&nbsp;</span>
-    </div>
-  </div>
-
-  <!-- SERVICES -->
-  <section class="services" id="services">
-    <div class="section-header">
-      <p class="section-tag">What We Offer</p>
-      <h2 class="section-title">Our Services</h2>
-      <p class="section-desc">Everything you need to build a lasting career in electronic music.</p>
-    </div>
-    <div class="services-grid">
-      <div class="service-card">
-        <div class="service-icon-wrap">
-          <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-        </div>
-        <h3 class="service-title">Artist Development</h3>
-        <p class="service-desc">Building artistic identity and long-term career strategy.</p>
-      </div>
-      <div class="service-card">
-        <div class="service-icon-wrap">
-          <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>
-        </div>
-        <h3 class="service-title">Music Distribution</h3>
-        <p class="service-desc">Worldwide distribution through Spotify, Apple Music, Beatport, Amazon Music, Deezer, YouTube Music, and major streaming platforms.</p>
-      </div>
-      <div class="service-card">
-        <div class="service-icon-wrap">
-          <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
-        </div>
-        <h3 class="service-title">Creative Content</h3>
-        <p class="service-desc">Photography, music videos, visualizers, artwork, branding, and social media content.</p>
-      </div>
-      <div class="service-card">
-        <div class="service-icon-wrap">
-          <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-        </div>
-        <h3 class="service-title">Marketing &amp; Promotion</h3>
-        <p class="service-desc">Digital campaigns, advertising, playlist pitching, audience growth, and release strategy.</p>
-      </div>
-      <div class="service-card">
-        <div class="service-icon-wrap">
-          <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M17 20h5v-2a4 4 0 00-4-4M9 20H4v-2a4 4 0 014-4m4 6v-2m0-4a4 4 0 100-8 4 4 0 000 8z"/></svg>
-        </div>
-        <h3 class="service-title">Strategic Partnerships</h3>
-        <p class="service-desc">Connecting artists with festivals, promoters, venues, agencies, and brands.</p>
-      </div>
-      <div class="service-card">
-        <div class="service-icon-wrap">
-          <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M3 6h18M3 12h18M3 18h18"/><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
-        </div>
-        <h3 class="service-title">Entertainment Law Support</h3>
-        <ul class="service-list">
-          <li>Contract Review &amp; Negotiation</li>
-          <li>Royalty Structuring &amp; Management</li>
-          <li>Licensing Agreements</li>
-          <li>Label Deal Analysis</li>
-          <li>Copyright &amp; Publishing Guidance</li>
-        </ul>
-        <p class="service-price">Starting at $499</p>
-        <p class="service-quote">Need something specific? <a href="#contact">Request a custom quote.</a></p>
-      </div>
-      <div class="service-card">
-        <div class="service-icon-wrap">
-          <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        </div>
-        <h3 class="service-title">Artist Benefits</h3>
-        <ul class="service-list">
-          <li>Global music distribution</li>
-          <li>Professional branding and identity</li>
-          <li>Marketing campaigns and promotion</li>
-          <li>Creative direction and content</li>
-          <li>Industry network access</li>
-          <li>Strategic career guidance</li>
-          <li>Full label support and development</li>
-        </ul>
-      </div>
-      <div class="service-card">
-        <div class="service-icon-wrap">
-          <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        </div>
-        <h3 class="service-title">Music Legal Support</h3>
-        <ul class="service-list">
-          <li>Contract Review</li>
-          <li>Copyright &amp; Publishing Guidance</li>
-          <li>Copyright Registration &amp; Split Sheets</li>
-          <li>Distribution &amp; Licensing Agreements</li>
-          <li>Collaboration &amp; Remix Agreements</li>
-          <li>Trademark &amp; IP Guidance</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- RELEASES -->
-  <section class="releases" id="releases">
-    <div class="section-header">
-      <p class="section-tag">Catalog</p>
-      <h2 class="section-title">Latest Releases</h2>
-    </div>
-    <!-- Rendered by script.js from hvx-data.js -->
-    <div class="releases-list" id="releases-list"></div>
-    <div class="section-cta">
-      <a href="#" class="btn btn-outline">View All Releases</a>
-    </div>
-  </section>
-
-  <!-- TRACKSTACK DEMO SUBMISSION -->
-  <section class="trackstack" id="demo">
-    <div class="trackstack-inner reveal">
-      <p class="section-tag">Open Call</p>
-      <h2 class="section-title">Send Your<br/>Music</h2>
-      <p class="trackstack-desc">
-        Think your music fits with HVX Music? We are always looking for original artists pushing the boundaries of electronic music.
-        Demo submissions are managed through TrackStack.
-      </p>
-      <div class="trackstack-cta">
-        <a href="#" class="btn btn-primary" id="trackstack-link">Submit via TrackStack</a>
-        <p class="trackstack-note">TrackStack integration coming soon.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section class="contact" id="contact">
-    <div class="contact-inner">
-      <div class="contact-text">
-        <p class="section-tag">Get in Touch</p>
-        <h2 class="section-title">Let's Build<br/>Something Together.</h2>
-        <p class="contact-desc">
-          Whether you are an artist looking for representation, a promoter with a booking inquiry,
-          or a brand seeking partnership, we would love to hear from you.
-        </p>
-        <div class="contact-channels">
-          <a href="mailto:info@hvxmusic.com" class="channel-link">
-            <span class="channel-type">Email</span>
-            <span>info@hvxmusic.com</span>
-          </a>
-          <a href="https://instagram.com/hvxmusic" target="_blank" rel="noopener" class="channel-link">
-            <span class="channel-type">Instagram</span>
-            <span>@hvxmusic</span>
-          </a>
-          <div class="channel-link">
-            <span class="channel-type">Location</span>
-            <span>New York, USA</span>
-          </div>
-        </div>
-      </div>
-      <form class="contact-form" id="contact-form">
-        <div class="form-group">
-          <input type="text" class="form-input" placeholder="Your Name" required />
-        </div>
-        <div class="form-group">
-          <input type="email" class="form-input" placeholder="Email Address" required />
-        </div>
-        <div class="form-group">
-          <select class="form-input form-select">
-            <option value="" disabled selected>Inquiry Type</option>
-            <option>Artist Representation</option>
-            <option>Booking Request</option>
-            <option>Brand Partnership</option>
-            <option>Press and Media</option>
-            <option>Other</option>
+        <div class="header-actions">
+          <select class="form-input" id="artist-select" style="width:180px;padding:.5rem .8rem;font-size:.82rem">
+            <option value="all">All Artists</option>
+            <option value="nexus">NEXUS</option>
+            <option value="kara">KARA</option>
+            <option value="delvyn">DELVYN</option>
+            <option value="solen">SOLEN</option>
+            <option value="mira">MIRA</option>
+            <option value="axio">AXIO</option>
           </select>
         </div>
+      </div>
+
+      <div class="highlight-form">
+        <h3>Upload New Highlight</h3>
+        <div class="upload-zone" id="upload-zone">
+          <div class="upload-icon">üì∏</div>
+          <p class="upload-title">Drop image or video here</p>
+          <p class="upload-sub">Supports JPG, PNG, MP4 ‚Äî max 20MB</p>
+          <button class="btn btn-outline" onclick="document.getElementById('file-input').click()">Choose File</button>
+          <input type="file" id="file-input" accept="image/*,video/mp4"/>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Artist</label>
+            <select class="form-input" id="upload-artist">
+              <option value="nexus">NEXUS</option>
+              <option value="kara">KARA</option>
+              <option value="delvyn">DELVYN</option>
+              <option value="solen">SOLEN</option>
+              <option value="mira">MIRA</option>
+              <option value="axio">AXIO</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Source / Platform</label>
+            <select class="form-input" id="upload-source">
+              <option value="Instagram">Instagram</option>
+              <option value="Photo">Photo</option>
+              <option value="Video">Video</option>
+              <option value="Backstage">Backstage</option>
+              <option value="Press">Press</option>
+            </select>
+          </div>
+        </div>
         <div class="form-group">
-          <textarea class="form-input form-textarea" placeholder="Your message..." rows="4"></textarea>
+          <label class="form-label">Caption</label>
+          <textarea class="form-input form-textarea" id="upload-caption" placeholder="Write a caption..." maxlength="220"></textarea>
+          <p class="char-count"><span id="cap-count">0</span>/220</p>
         </div>
-        <button type="submit" class="btn btn-primary btn-full">Send Message</button>
-      </form>
-    </div>
-  </section>
-
-  <!-- MERCH -->
-  <section class="merch" id="merch">
-    <div class="section-header">
-      <p class="section-tag">HVX Store</p>
-      <h2 class="section-title">Merch</h2>
-      <p class="section-desc">Official HVX Music merchandise. New drops coming soon.</p>
-    </div>
-    <!-- Rendered by script.js from localStorage (admin-managed) -->
-    <div class="merch-grid" id="merch-grid"></div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <img src="assets/hvx-logo-transparent.png" alt="HVX Music" class="logo-img footer-logo-img"/>
-        <p class="footer-tagline">Discover Your Energy.<br/>Project Your Flow.</p>
-        <p>Artist Management and Label for the Electronic Music Scene.</p>
+        <button class="btn btn-primary" id="upload-btn" style="width:auto;padding:.7rem 2rem">Publish to Feed</button>
       </div>
-      <div class="footer-links">
-        <div class="footer-col">
-          <p class="footer-col-title">Navigation</p>
-          <a href="#home">Home</a>
-          <a href="artists.html">Artists</a>
-          <a href="#about">About</a>
-          <a href="#services">Services</a>
-          <a href="#releases">Releases</a>
-          <a href="#merch">Merch</a>
-          <a href="#contact">Contact</a>
-        </div>
-        <div class="footer-col">
-          <p class="footer-col-title">Follow</p>
-          <a href="#" data-social="instagram" target="_blank" rel="noopener noreferrer">Instagram</a>
-          <a href="#" data-social="soundcloud" target="_blank" rel="noopener noreferrer">SoundCloud</a>
-          <a href="#" data-social="spotify"    target="_blank" rel="noopener noreferrer">Spotify</a>
-          <a href="#" data-social="beatport"   target="_blank" rel="noopener noreferrer">Beatport</a>
-          <a href="#" data-social="youtube"   target="_blank" rel="noopener noreferrer">YouTube</a>
-        </div>
-        <div class="footer-col">
-          <p class="footer-col-title">Legal</p>
-          <a href="privacy.html">Privacy Policy</a>
-          <a href="terms.html">Terms of Use</a>
-        </div>
+
+      <div class="feed-grid" id="feed-grid">
+        <p style="color:var(--muted);font-size:.85rem;grid-column:1/-1">No highlights published yet. Upload content above.</p>
       </div>
     </div>
-    <div class="footer-bottom">
-      <p>&#169; 2026 HVX Music. All Rights Reserved.</p>
-      <div class="footer-bottom-right">
-        <p>New York City. Built for the music.</p>
-        <a href="#home" class="back-to-top" aria-label="Back to top">&#8593; Back to Top</a>
-        <a href="admin.html" class="admin-link">Admin</a>
+
+    <!-- ARTISTS PAGE (admin view) -->
+    <div class="page-section" id="page-artists">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Artists</h1>
+          <p class="page-sub">Manage roster, bios, and artist data.</p>
+        </div>
+        <div class="header-actions">
+          <a href="artists.html" target="_blank" class="btn btn-outline btn-sm">View Public Page ‚Üí</a>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Artist</th><th>Genre</th><th>City</th><th>Shows/yr</th><th>Avg Reach</th><th>Profile</th></tr></thead>
+          <tbody>
+            <tr><td><div class="artist-cell"><div class="artist-avatar av-nexus">NX</div><div><div class="artist-name-cell">NEXUS</div></div></div></td><td><span class="badge badge-orange">Tech House</span></td><td>Berlin, DE</td><td>80</td><td>3,200</td><td><a href="artist-profile.html?id=nexus" target="_blank" class="btn btn-outline btn-sm">Open</a></td></tr>
+            <tr><td><div class="artist-cell"><div class="artist-avatar av-kara">KA</div><div><div class="artist-name-cell">KARA</div></div></div></td><td><span class="badge badge-accent">House</span></td><td>New York, US</td><td>65</td><td>2,800</td><td><a href="artist-profile.html?id=kara" target="_blank" class="btn btn-outline btn-sm">Open</a></td></tr>
+            <tr><td><div class="artist-cell"><div class="artist-avatar av-delvyn">DL</div><div><div class="artist-name-cell">DELVYN</div></div></div></td><td><span class="badge badge-muted">Dance</span></td><td>London, UK</td><td>90</td><td>4,100</td><td><a href="artist-profile.html?id=delvyn" target="_blank" class="btn btn-outline btn-sm">Open</a></td></tr>
+            <tr><td><div class="artist-cell"><div class="artist-avatar av-solen">SL</div><div><div class="artist-name-cell">SOLEN</div></div></div></td><td><span class="badge badge-accent">House</span></td><td>Barcelona, ES</td><td>55</td><td>2,400</td><td><a href="artist-profile.html?id=solen" target="_blank" class="btn btn-outline btn-sm">Open</a></td></tr>
+            <tr><td><div class="artist-cell"><div class="artist-avatar av-mira">MI</div><div><div class="artist-name-cell">MIRA</div></div></div></td><td><span class="badge badge-orange">Tech House</span></td><td>Buenos Aires, AR</td><td>70</td><td>3,600</td><td><a href="artist-profile.html?id=mira" target="_blank" class="btn btn-outline btn-sm">Open</a></td></tr>
+            <tr><td><div class="artist-cell"><div class="artist-avatar av-axio">AX</div><div><div class="artist-name-cell">AXIO</div></div></div></td><td><span class="badge badge-muted">Dance</span></td><td>Paris, FR</td><td>75</td><td>3,900</td><td><a href="artist-profile.html?id=axio" target="_blank" class="btn btn-outline btn-sm">Open</a></td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
-  </footer>
 
-  <script src="hvx-config.js"></script>
-  <script src="hvx-data.js"></script>
-  <script src="script.js"></script>
+    <!-- EVENTS -->
+    <div class="page-section" id="page-events">
+      <div class="page-header">
+        <div><h1 class="page-title">Events & Shows</h1><p class="page-sub">Upcoming confirmed bookings across all artists.</p></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Date</th><th>Artist</th><th>Venue</th><th>City</th><th>Capacity</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Aug 02, 2026</td><td><span class="badge badge-orange">NEXUS</span></td><td>Tresor</td><td>Berlin, DE</td><td>1,200</td><td><span class="badge badge-green">Confirmed</span></td></tr>
+            <tr><td>Aug 09, 2026</td><td><span class="badge badge-accent">KARA</span></td><td>Output</td><td>New York, US</td><td>800</td><td><span class="badge badge-green">Confirmed</span></td></tr>
+            <tr><td>Aug 14, 2026</td><td><span class="badge badge-muted">DELVYN</span></td><td>Fabric</td><td>London, UK</td><td>1,500</td><td><span class="badge badge-green">Confirmed</span></td></tr>
+            <tr><td>Sep 06, 2026</td><td><span class="badge badge-accent">SOLEN</span></td><td>Razzmatazz</td><td>Barcelona, ES</td><td>2,000</td><td><span class="badge badge-accent">Pending</span></td></tr>
+            <tr><td>Sep 19, 2026</td><td><span class="badge badge-orange">MIRA</span></td><td>Crobar</td><td>Buenos Aires, AR</td><td>3,200</td><td><span class="badge badge-green">Confirmed</span></td></tr>
+            <tr><td>Oct 03, 2026</td><td><span class="badge badge-muted">AXIO</span></td><td>Rex Club</td><td>Paris, FR</td><td>600</td><td><span class="badge badge-accent">Pending</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- API KEYS & AUTOMATIONS -->
+    <div class="page-section" id="page-api">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">API Keys & Automations</h1>
+          <p class="page-sub">Connect external platforms and configure automated content updates.</p>
+        </div>
+      </div>
+
+      <div style="background:rgba(162,89,255,.08);border:1px solid rgba(162,89,255,.25);border-radius:6px;padding:1rem 1.5rem;margin-bottom:2rem;font-size:.83rem;color:var(--off-white);line-height:1.6">
+        ‚ö†Ô∏è <strong style="color:var(--accent)">Security note:</strong> API keys are stored locally in your browser (localStorage) for this prototype. In production, keys must be stored server-side and never exposed in client code. Use environment variables or a secrets manager.
+      </div>
+
+      <!-- INSTAGRAM -->
+      <div class="api-section">
+        <div class="api-section-head" onclick="toggleApi('ig')">
+          <div class="api-section-title">
+            <div class="api-icon ig">üì∑</div>
+            Instagram Graph API
+            <span class="api-status"><span class="status-dot pending"></span> Not connected</span>
+          </div>
+          <span style="color:var(--muted);font-size:.8rem">Expand ‚ñæ</span>
+        </div>
+        <div class="api-body" id="api-ig">
+          <p class="api-desc">Connect the Instagram Graph API to automatically pull posts, stories and reels from your artists' accounts into the Highlights feed. Requires a Meta Business App with <code>instagram_basic</code> and <code>instagram_content_publish</code> permissions.</p>
+          <div class="form-group">
+            <label class="form-label">App ID</label>
+            <div class="api-key-row">
+              <input type="text" class="api-key-input" id="ig-app-id" placeholder="Enter Instagram App ID‚Ä¶"/>
+              <button class="save-btn" onclick="saveKey('ig-app-id','ig_app_id')">Save</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">App Secret</label>
+            <div class="api-key-row">
+              <input type="password" class="api-key-input" id="ig-secret" placeholder="‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢"/>
+              <button class="save-btn" onclick="saveKey('ig-secret','ig_secret')">Save</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Long-Lived Access Token</label>
+            <div class="api-key-row">
+              <input type="text" class="api-key-input" id="ig-token" placeholder="EAABwzLixnjYBO‚Ä¶"/>
+              <button class="copy-btn" onclick="copyField('ig-token')">Copy</button>
+              <button class="save-btn" onclick="saveKey('ig-token','ig_token')">Save</button>
+            </div>
+          </div>
+          <div class="automation-card">
+            <div class="automation-info">
+              <p class="automation-name">Auto-sync Instagram posts ‚Üí Highlights</p>
+              <p class="automation-desc">Every 6 hours, fetch latest posts from connected artist accounts and add to the Highlights feed.</p>
+            </div>
+            <div class="toggle-wrap">
+              <div class="toggle" id="toggle-ig-sync" onclick="toggleSwitch(this)"></div>
+              <span class="toggle-label">Off</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SPOTIFY -->
+      <div class="api-section">
+        <div class="api-section-head" onclick="toggleApi('spotify')">
+          <div class="api-section-title">
+            <div class="api-icon spotify" style="color:#fff;font-weight:900;font-size:.65rem;font-family:var(--font-h)">SP</div>
+            Spotify for Artists API
+            <span class="api-status"><span class="status-dot pending"></span> Not connected</span>
+          </div>
+          <span style="color:var(--muted);font-size:.8rem">Expand ‚ñæ</span>
+        </div>
+        <div class="api-body" id="api-spotify">
+          <p class="api-desc">Connect Spotify to automatically update monthly listener counts, stream totals, and top tracks shown in each artist's Analytics tab.</p>
+          <div class="form-group">
+            <label class="form-label">Client ID</label>
+            <div class="api-key-row">
+              <input type="text" class="api-key-input" id="sp-id" placeholder="Enter Spotify Client ID‚Ä¶"/>
+              <button class="save-btn" onclick="saveKey('sp-id','spotify_client_id')">Save</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Client Secret</label>
+            <div class="api-key-row">
+              <input type="password" class="api-key-input" id="sp-secret" placeholder="‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢"/>
+              <button class="save-btn" onclick="saveKey('sp-secret','spotify_secret')">Save</button>
+            </div>
+          </div>
+          <div class="automation-card">
+            <div class="automation-info">
+              <p class="automation-name">Sync monthly listeners to Analytics</p>
+              <p class="automation-desc">Update stream counts and listener data on the artist profile automatically.</p>
+            </div>
+            <div class="toggle-wrap">
+              <div class="toggle" id="toggle-sp-sync" onclick="toggleSwitch(this)"></div>
+              <span class="toggle-label">Off</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESIDENT ADVISOR -->
+      <div class="api-section">
+        <div class="api-section-head" onclick="toggleApi('ra')">
+          <div class="api-section-title">
+            <div class="api-icon ra" style="color:#fff;font-size:.65rem;font-weight:900;font-family:var(--font-h)">RA</div>
+            Resident Advisor
+            <span class="api-status"><span class="status-dot pending"></span> Not connected</span>
+          </div>
+          <span style="color:var(--muted);font-size:.8rem">Expand ‚ñæ</span>
+        </div>
+        <div class="api-body" id="api-ra">
+          <p class="api-desc">Connect to RA's unofficial API or scraper endpoint to pull event listings, RA Watchlist numbers, and ratings directly into artist profiles.</p>
+          <div class="form-group">
+            <label class="form-label">RA API Endpoint</label>
+            <div class="api-key-row">
+              <input type="text" class="api-key-input" id="ra-endpoint" placeholder="https://ra.co/api/‚Ä¶"/>
+              <button class="save-btn" onclick="saveKey('ra-endpoint','ra_endpoint')">Save</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Bearer Token</label>
+            <div class="api-key-row">
+              <input type="password" class="api-key-input" id="ra-token" placeholder="Bearer token‚Ä¶"/>
+              <button class="save-btn" onclick="saveKey('ra-token','ra_token')">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SOUNDCLOUD -->
+      <div class="api-section">
+        <div class="api-section-head" onclick="toggleApi('sc')">
+          <div class="api-section-title">
+            <div class="api-icon sc" style="color:#fff;font-size:.65rem;font-weight:900;font-family:var(--font-h)">SC</div>
+            SoundCloud API
+            <span class="api-status"><span class="status-dot pending"></span> Not connected</span>
+          </div>
+          <span style="color:var(--muted);font-size:.8rem">Expand ‚ñæ</span>
+        </div>
+        <div class="api-body" id="api-sc">
+          <p class="api-desc">Pull play counts, follower numbers, and latest tracks from SoundCloud to auto-update the Music and Sets tabs on artist profiles.</p>
+          <div class="form-group">
+            <label class="form-label">Client ID</label>
+            <div class="api-key-row">
+              <input type="text" class="api-key-input" id="sc-id" placeholder="SoundCloud Client ID‚Ä¶"/>
+              <button class="save-btn" onclick="saveKey('sc-id','sc_client_id')">Save</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">OAuth Token</label>
+            <div class="api-key-row">
+              <input type="text" class="api-key-input" id="sc-token" placeholder="OAuth 2.0 token‚Ä¶"/>
+              <button class="copy-btn" onclick="copyField('sc-token')">Copy</button>
+              <button class="save-btn" onclick="saveKey('sc-token','sc_token')">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WEBHOOK -->
+      <div class="api-section">
+        <div class="api-section-head" onclick="toggleApi('webhook')">
+          <div class="api-section-title">
+            <div class="api-icon webhook">üîó</div>
+            Custom Webhooks
+            <span class="api-status"><span class="status-dot disconnected"></span> Inactive</span>
+          </div>
+          <span style="color:var(--muted);font-size:.8rem">Expand ‚ñæ</span>
+        </div>
+        <div class="api-body" id="api-webhook">
+          <p class="api-desc">Configure outgoing webhooks to notify external systems (Make, Zapier, n8n, custom backend) when content is uploaded, a show is confirmed, or an artist profile is updated.</p>
+          <div class="form-group">
+            <label class="form-label">Webhook URL (on highlight upload)</label>
+            <div class="api-key-row">
+              <input type="text" class="api-key-input" id="wh-upload" placeholder="https://hooks.zapier.com/hooks/catch/‚Ä¶"/>
+              <button class="save-btn" onclick="saveKey('wh-upload','webhook_upload')">Save</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Webhook URL (on show confirmed)</label>
+            <div class="api-key-row">
+              <input type="text" class="api-key-input" id="wh-show" placeholder="https://hooks.make.com/‚Ä¶"/>
+              <button class="save-btn" onclick="saveKey('wh-show','webhook_show')">Save</button>
+            </div>
+          </div>
+          <div class="automation-card">
+            <div class="automation-info">
+              <p class="automation-name">Post to social on new highlight</p>
+              <p class="automation-desc">Trigger a Make/Zapier scenario when a new highlight is published to auto-share to Instagram Stories or Twitter.</p>
+            </div>
+            <div class="toggle-wrap">
+              <div class="toggle on" id="toggle-wh-share" onclick="toggleSwitch(this)"></div>
+              <span class="toggle-label">On</span>
+            </div>
+          </div>
+          <div class="automation-card">
+            <div class="automation-info">
+              <p class="automation-name">Notify booking team on inquiry</p>
+              <p class="automation-desc">When contact form is submitted with type "Booking Request", fire webhook to Slack #bookings channel.</p>
+            </div>
+            <div class="toggle-wrap">
+              <div class="toggle on" id="toggle-wh-booking" onclick="toggleSwitch(this)"></div>
+              <span class="toggle-label">On</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACTIVITY LOG -->
+    <div class="page-section" id="page-activity">
+      <div class="page-header">
+        <div><h1 class="page-title">Activity Log</h1><p class="page-sub">Recent admin actions and system events.</p></div>
+        <button class="btn btn-outline btn-sm" onclick="clearActivity()">Clear Log</button>
+      </div>
+      <div class="table-wrap">
+        <div class="log-list" id="activity-log"></div>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="page-section" id="page-settings">
+      <div class="page-header">
+        <div><h1 class="page-title">Settings</h1><p class="page-sub">Site preferences and admin configuration.</p></div>
+      </div>
+      <div class="settings-grid">
+        <div class="settings-card">
+          <h3 class="settings-card-title">Site Info</h3>
+          <div class="form-group">
+            <label class="form-label">Agency Name</label>
+            <input type="text" class="form-input" value="HVX Music"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Booking Email</label>
+            <input type="email" class="form-input" value="booking@hvxmusic.com"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">General Email</label>
+            <input type="email" class="form-input" value="info@hvxmusic.com"/>
+          </div>
+          <button class="btn btn-primary" style="width:auto" onclick="toast('Settings saved','success')">Save Changes</button>
+        </div>
+        <div class="settings-card">
+          <h3 class="settings-card-title">Admin Password</h3>
+          <div class="form-group">
+            <label class="form-label">Current Password</label>
+            <input type="password" class="form-input" placeholder="‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">New Password</label>
+            <input type="password" class="form-input" placeholder="‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Confirm New Password</label>
+            <input type="password" class="form-input" placeholder="‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢"/>
+          </div>
+          <button class="btn btn-primary" style="width:auto" onclick="toast('Password updated','success')">Update Password</button>
+        </div>
+      </div>
+      <div class="danger-zone">
+        <h3 class="danger-title">Danger Zone</h3>
+        <p class="danger-desc">These actions are irreversible. Please be certain before proceeding.</p>
+        <button class="btn btn-danger" onclick="if(confirm('Clear all highlights from localStorage?')){localStorage.clear();toast('All data cleared','error');logActivity('All localStorage data cleared','orange')}">Clear All Highlights Data</button>
+      </div>
+    </div>
+
+    <!-- ARTIST MANAGER -->
+    <div class="page-section" id="page-artist-manager">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Artist Manager</h1>
+          <p class="page-sub">Add and manage artists shown on the public roster.</p>
+        </div>
+        <div class="header-actions">
+          <a href="artists.html" target="_blank" class="btn btn-outline btn-sm">View Public Roster</a>
+        </div>
+      </div>
+
+      <div class="manager-form-card" id="artist-form-card">
+        <h3 id="artist-form-title">Add New Artist</h3>
+        <input type="hidden" id="edit-artist-id"/>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Name</label><input type="text" class="form-input" id="af-name" placeholder="Artist Name"/></div>
+          <div class="form-group"><label class="form-label">Genre</label><input type="text" class="form-input" id="af-genre" placeholder="House, Tech House..."/></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">City</label><input type="text" class="form-input" id="af-city" placeholder="New York, US"/></div>
+          <div class="form-group"><label class="form-label">Photo URL</label><input type="text" class="form-input" id="af-photo" placeholder="https://..."/></div>
+        </div>
+        <div class="form-group"><label class="form-label">Biography</label><textarea class="form-input form-textarea" id="af-bio" placeholder="Artist biography..."></textarea></div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Instagram URL</label><input type="text" class="form-input" id="af-ig" placeholder="https://instagram.com/..."/></div>
+          <div class="form-group"><label class="form-label">SoundCloud URL</label><input type="text" class="form-input" id="af-sc" placeholder="https://soundcloud.com/..."/></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Spotify URL</label><input type="text" class="form-input" id="af-sp" placeholder="https://open.spotify.com/..."/></div>
+          <div class="form-group" style="display:flex;align-items:flex-end;gap:.5rem">
+            <button class="btn btn-primary" onclick="saveArtist()" style="width:auto">Save Artist</button>
+            <button class="btn btn-outline btn-sm" id="cancel-artist-btn" style="display:none" onclick="cancelArtistEdit()">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <div class="table-head"><h3 class="table-title">Current Roster</h3></div>
+        <table>
+          <thead><tr><th>Artist</th><th>Genre</th><th>City</th><th>Actions</th></tr></thead>
+          <tbody id="artist-manager-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- MERCH MANAGER -->
+    <div class="page-section" id="page-merch-manager">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Merch Manager</h1>
+          <p class="page-sub">Add and manage products shown in the Merch section.</p>
+        </div>
+        <div class="header-actions">
+          <a href="index.html#merch" target="_blank" class="btn btn-outline btn-sm">View Store</a>
+        </div>
+      </div>
+
+      <div class="manager-form-card">
+        <h3 id="merch-form-title">Add New Product</h3>
+        <input type="hidden" id="edit-merch-id"/>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Product Name</label><input type="text" class="form-input" id="mf-name" placeholder="HVX Logo Tee"/></div>
+          <div class="form-group"><label class="form-label">Price (USD)</label><input type="text" class="form-input" id="mf-price" placeholder="35"/></div>
+        </div>
+        <div class="form-group"><label class="form-label">Description</label><input type="text" class="form-input" id="mf-desc" placeholder="Short product description"/></div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Image URL</label><input type="text" class="form-input" id="mf-img" placeholder="https://..."/></div>
+          <div class="form-group"><label class="form-label">Status</label><select class="form-input" id="mf-status"><option value="available">Available</option><option value="soldout">Sold Out</option><option value="coming">Coming Soon</option></select></div>
+        </div>
+        <div style="display:flex;gap:.5rem">
+          <button class="btn btn-primary" onclick="saveMerchProduct()" style="width:auto">Save Product</button>
+          <button class="btn btn-outline btn-sm" id="cancel-merch-btn" style="display:none" onclick="cancelMerchEdit()">Cancel</button>
+        </div>
+      </div>
+
+      <div class="merch-admin-grid" id="merch-admin-grid">
+        <p style="color:var(--muted);font-size:.85rem;grid-column:1/-1">No products yet. Add one above.</p>
+      </div>
+    </div>
+
+    <!-- CONTACT INBOX -->
+    <div class="page-section" id="page-contact-inbox">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Contact Inbox</h1>
+          <p class="page-sub">Messages submitted through the contact form on the site.</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-outline btn-sm" onclick="markAllRead()">Mark All Read</button>
+          <button class="btn btn-green btn-sm" onclick="exportContactsExcel()">Export to Excel</button>
+        </div>
+      </div>
+
+      <div class="kpi-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:2rem">
+        <div class="kpi-card"><p class="kpi-label">Total Messages</p><p class="kpi-value" id="inbox-total">0</p></div>
+        <div class="kpi-card"><p class="kpi-label">Unread</p><p class="kpi-value" id="inbox-unread">0</p></div>
+        <div class="kpi-card"><p class="kpi-label">This Week</p><p class="kpi-value" id="inbox-week">0</p></div>
+      </div>
+
+      <div class="table-wrap">
+        <div class="table-head"><h3 class="table-title">Messages</h3></div>
+        <div id="inbox-list"><p style="padding:1.5rem;color:var(--muted);font-size:.85rem">No messages yet.</p></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// ‚îÄ‚îÄ CURSOR ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+const cur=document.getElementById('cursor'),curf=document.getElementById('cursor-f');
+let mx=0,my=0,fx=0,fy=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
+(function af(){fx+=(mx-fx)*.12;fy+=(my-fy)*.12;curf.style.left=fx+'px';curf.style.top=fy+'px';requestAnimationFrame(af)})();
+
+// ‚îÄ‚îÄ SCROLL PROGRESS ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+const sp=document.getElementById('sp');
+window.addEventListener('scroll',()=>{const d=document.documentElement;sp.style.width=(d.scrollTop/(d.scrollHeight-d.clientHeight)*100)+'%'},{passive:true});
+
+// ‚îÄ‚îÄ RIPPLE ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+document.addEventListener('click',e=>{const btn=e.target.closest('.btn');if(!btn)return;const r=btn.getBoundingClientRect();const rip=document.createElement('span');const s=Math.max(r.width,r.height);rip.className='ripple';rip.style.cssText=`width:${s}px;height:${s}px;left:${e.clientX-r.left-s/2}px;top:${e.clientY-r.top-s/2}px`;btn.appendChild(rip);rip.addEventListener('animationend',()=>rip.remove())});
+
+// ‚îÄ‚îÄ TOAST ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+function toast(msg,type='success'){const w=document.getElementById('toast-wrap');const t=document.createElement('div');t.className=`toast ${type}`;t.innerHTML=`<span class="toast-dot"></span>${msg}`;w.appendChild(t);setTimeout(()=>t.classList.add('show'),10);setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),400)},3200)}
+
+// ‚îÄ‚îÄ AUTH ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+const CREDS={user:'hvxmusic2026',pass:'adminhvx'};
+
+function checkSession(){if(localStorage.getItem('hvx_admin')==='true'){showAdmin()}}
+function showAdmin(){document.getElementById('login-screen').classList.add('hidden');document.getElementById('admin-wrap').classList.remove('hidden');localStorage.setItem('hvx_admin','true');renderFeed();updateDashStats();renderActivity()}
+
+document.getElementById('login-btn').addEventListener('click',()=>{
+  const u=document.getElementById('login-user').value;
+  const p=document.getElementById('login-pass').value;
+  const err=document.getElementById('login-error');
+  if(u===CREDS.user&&p===CREDS.pass){err.style.display='none';showAdmin();logActivity('Admin signed in','green')}
+  else{err.style.display='block'}
+});
+document.getElementById('login-pass').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('login-btn').click()});
+document.getElementById('logout-btn').addEventListener('click',()=>{localStorage.removeItem('hvx_admin');location.reload()});
+
+// ‚îÄ‚îÄ NAVIGATION ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+document.querySelectorAll('.nav-item[data-page]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.page-section').forEach(s=>s.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('page-'+btn.dataset.page).classList.add('active');
+    if(btn.dataset.page==='highlights')renderFeed();
+    if(btn.dataset.page==='activity')renderActivity();
+    if(btn.dataset.page==='artist-manager')renderArtistManager();
+    if(btn.dataset.page==='merch-manager')renderMerchAdmin();
+    if(btn.dataset.page==='contact-inbox')renderInbox();
+  });
+});
+
+// ‚îÄ‚îÄ ACTIVITY LOG ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+function logActivity(text,color='purple'){
+  const logs=JSON.parse(localStorage.getItem('hvx_activity')||'[]');
+  logs.unshift({text,color,time:new Date().toLocaleTimeString()});
+  if(logs.length>50)logs.pop();
+  localStorage.setItem('hvx_activity',JSON.stringify(logs));
+  renderActivity();updateDashActivity();
+}
+function renderActivity(){
+  const logs=JSON.parse(localStorage.getItem('hvx_activity')||'[]');
+  const el=document.getElementById('activity-log');
+  const dash=document.getElementById('dash-activity');
+  const html=logs.length?logs.map(l=>`<div class="log-item"><span class="log-dot ${l.color}"></span><span class="log-text">${l.text}</span><span class="log-time">${l.time}</span></div>`).join(''):'<p style="padding:1.5rem;color:var(--muted);font-size:.85rem">No activity yet.</p>';
+  if(el)el.innerHTML=html;
+  if(dash)dash.innerHTML=html;
+}
+function clearActivity(){localStorage.removeItem('hvx_activity');renderActivity();toast('Activity log cleared','success')}
+function updateDashActivity(){renderActivity()}
+
+// ‚îÄ‚îÄ HIGHLIGHTS FEED ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+function getHighlights(){return JSON.parse(localStorage.getItem('hvx_highlights')||'[]')}
+function saveHighlights(h){localStorage.setItem('hvx_highlights',JSON.stringify(h))}
+
+function renderFeed(){
+  const all=getHighlights();
+  const filter=document.getElementById('artist-select')?.value||'all';
+  const items=filter==='all'?all:all.filter(h=>h.artist===filter);
+  const grid=document.getElementById('feed-grid');
+  if(!grid)return;
+  if(!items.length){grid.innerHTML='<p style="color:var(--muted);font-size:.85rem;grid-column:1/-1">No highlights yet. Upload content above.</p>';return}
+  grid.innerHTML=items.map((h,i)=>`
+    <div class="feed-card">
+      <div class="feed-img">
+        ${h.dataUrl?`<img class="feed-img-preview" src="${h.dataUrl}" alt=""/>`:'<span class="feed-img-placeholder">No Preview</span>'}
+        <span class="feed-source-badge">${h.source}</span>
+      </div>
+      <div class="feed-body">
+        <div class="feed-meta">
+          <span class="feed-artist">${h.artist.toUpperCase()}</span>
+          <span class="feed-date">${h.date}</span>
+        </div>
+        <p class="feed-caption">${h.caption||'‚Äî'}</p>
+        <div class="feed-actions">
+          <button class="btn btn-danger btn-sm" onclick="deleteHighlight(${h.id})">Delete</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+document.getElementById('artist-select')?.addEventListener('change',renderFeed);
+
+document.getElementById('upload-caption')?.addEventListener('input',function(){
+  document.getElementById('cap-count').textContent=this.value.length;
+});
+
+let uploadedFile=null;
+document.getElementById('file-input')?.addEventListener('change',e=>{
+  uploadedFile=e.target.files[0];
+  if(uploadedFile){document.querySelector('.upload-title').textContent=uploadedFile.name;document.querySelector('.upload-icon').textContent='‚úÖ'}
+});
+
+const zone=document.getElementById('upload-zone');
+zone?.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('dragover')});
+zone?.addEventListener('dragleave',()=>zone.classList.remove('dragover'));
+zone?.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('dragover');uploadedFile=e.dataTransfer.files[0];if(uploadedFile){document.querySelector('.upload-title').textContent=uploadedFile.name;document.querySelector('.upload-icon').textContent='‚úÖ'}});
+
+document.getElementById('upload-btn')?.addEventListener('click',()=>{
+  const artist=document.getElementById('upload-artist').value;
+  const source=document.getElementById('upload-source').value;
+  const caption=document.getElementById('upload-caption').value.trim();
+  const highlights=getHighlights();
+  const id=Date.now();
+
+  function doSave(dataUrl){
+    highlights.unshift({id,artist,source,caption,date:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}),dataUrl:dataUrl||null});
+    saveHighlights(highlights);
+    renderFeed();
+    updateDashStats();
+    logActivity(`New highlight uploaded for ${artist.toUpperCase()} (${source})`,'purple');
+    toast('Highlight published to feed!','success');
+    document.getElementById('upload-caption').value='';
+    document.getElementById('cap-count').textContent='0';
+    uploadedFile=null;
+    document.querySelector('.upload-title').textContent='Drop image or video here';
+    document.querySelector('.upload-icon').textContent='üì∏';
+    // Fire webhook if configured
+    const wh=localStorage.getItem('webhook_upload');
+    if(wh)fetch(wh,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({event:'highlight_uploaded',artist,source,caption})}).catch(()=>{});
+  }
+
+  if(uploadedFile&&uploadedFile.type.startsWith('image')){
+    const reader=new FileReader();
+    reader.onload=e=>doSave(e.target.result);
+    reader.readAsDataURL(uploadedFile);
+  } else {
+    doSave(null);
+  }
+});
+
+function deleteHighlight(id){
+  if(!confirm('Delete this highlight?'))return;
+  saveHighlights(getHighlights().filter(h=>h.id!==id));
+  renderFeed();updateDashStats();
+  logActivity(`Highlight #${id} deleted`,'orange');
+  toast('Highlight deleted','error');
+}
+
+function updateDashStats(){
+  const el=document.getElementById('dash-highlights');
+  if(el)el.textContent=getHighlights().length;
+}
+
+// ‚îÄ‚îÄ API KEYS ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+function toggleApi(id){const body=document.getElementById('api-'+id);body.classList.toggle('open')}
+
+function saveKey(inputId,storageKey){
+  const val=document.getElementById(inputId).value.trim();
+  if(!val){toast('Enter a value first','error');return}
+  localStorage.setItem('hvx_api_'+storageKey,val);
+  toast('Key saved!','success');
+  logActivity(`API key saved: ${storageKey}`,'purple');
+}
+
+function copyField(inputId){
+  const val=document.getElementById(inputId).value;
+  if(!val){toast('Nothing to copy','error');return}
+  navigator.clipboard.writeText(val).then(()=>toast('Copied to clipboard','success'));
+}
+
+// Load saved keys on page load
+function loadKeys(){
+  const map={
+    'ig-app-id':'ig_app_id','ig-secret':'ig_secret','ig-token':'ig_token',
+    'sp-id':'spotify_client_id','sp-secret':'spotify_secret',
+    'ra-endpoint':'ra_endpoint','ra-token':'ra_token',
+    'sc-id':'sc_client_id','sc-token':'sc_token',
+    'wh-upload':'webhook_upload','wh-show':'webhook_show'
+  };
+  Object.entries(map).forEach(([inputId,key])=>{
+    const el=document.getElementById(inputId);
+    const val=localStorage.getItem('hvx_api_'+key);
+    if(el&&val)el.value=val;
+  });
+}
+
+// ‚îÄ‚îÄ TOGGLE SWITCH ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+function toggleSwitch(el){
+  el.classList.toggle('on');
+  const label=el.nextElementSibling;
+  label.textContent=el.classList.contains('on')?'On':'Off';
+  const count=document.querySelectorAll('.toggle.on').length;
+  document.getElementById('dash-automations').textContent=count;
+  logActivity(`Automation ${el.classList.contains('on')?'enabled':'disabled'}: ${el.id.replace('toggle-','')}`,'green');
+}
+
+// ‚îÄ‚îÄ INIT ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+checkSession();
+loadKeys();
+
+// ‚îÄ‚îÄ ARTIST MANAGER ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+function getAdminArtists(){return JSON.parse(localStorage.getItem('hvx_artists')||'null')||[]}
+function saveAdminArtists(list){localStorage.setItem('hvx_artists',JSON.stringify(list))}
+
+function renderArtistManager(){
+  const tbody=document.getElementById('artist-manager-tbody');
+  if(!tbody)return;
+  const artists=getAdminArtists();
+  if(!artists.length){
+    tbody.innerHTML='<tr><td colspan="4" style="padding:1.5rem;color:var(--muted);text-align:center;font-size:.85rem">No artists yet. Add one above.</td></tr>';
+    return;
+  }
+  tbody.innerHTML=artists.map((a,i)=>`
+    <tr>
+      <td><div class="artist-cell"><div class="artist-avatar" style="background:linear-gradient(135deg,var(--accent),#6b21d4)">${(a.name||'?').slice(0,2).toUpperCase()}</div><div><div class="artist-name-cell">${a.name||'Artist Name'}</div></div></div></td>
+      <td><span class="badge badge-accent">${a.genre||'--'}</span></td>
+      <td>${a.city||'--'}</td>
+      <td style="display:flex;gap:.5rem;flex-wrap:wrap">
+        <button class="btn btn-outline btn-sm" onclick="editArtist(${i})">Edit</button>
+        <button class="btn btn-danger" onclick="deleteArtist(${i})">Delete</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function saveArtist(){
+  const name=document.getElementById('af-name').value.trim();
+  if(!name){toast('Artist name is required','error');return}
+  const artists=getAdminArtists();
+  const idxRaw=document.getElementById('edit-artist-id').value;
+  const idx=idxRaw!==''?+idxRaw:null;
+  const artist={
+    id:idx!==null?artists[idx].id:'artist-'+Date.now(),
+    name,
+    genre:document.getElementById('af-genre').value.trim()||'House',
+    city:document.getElementById('af-city').value.trim()||'TBA',
+    bio:document.getElementById('af-bio').value.trim()||'Biography coming soon.',
+    photo:document.getElementById('af-photo').value.trim()||null,
+    placeholder:false,
+    social:{
+      instagram:document.getElementById('af-ig').value.trim()||'#',
+      soundcloud:document.getElementById('af-sc').value.trim()||'#',
+      spotify:document.getElementById('af-sp').value.trim()||'#'
+    }
+  };
+  if(idx!==null){artists[idx]=artist}else{artists.push(artist)}
+  saveAdminArtists(artists);
+  toast(idx!==null?'Artist updated!':'Artist added!','success');
+  logActivity('Artist '+(idx!==null?'updated':'added')+': '+name,'purple');
+  cancelArtistEdit();
+  renderArtistManager();
+}
+
+function editArtist(i){
+  const a=getAdminArtists()[i];
+  document.getElementById('edit-artist-id').value=i;
+  document.getElementById('af-name').value=a.name||'';
+  document.getElementById('af-genre').value=a.genre||'';
+  document.getElementById('af-city').value=a.city||'';
+  document.getElementById('af-bio').value=a.bio||'';
+  document.getElementById('af-photo').value=a.photo||'';
+  document.getElementById('af-ig').value=(a.social&&a.social.instagram)||'';
+  document.getElementById('af-sc').value=(a.social&&a.social.soundcloud)||'';
+  document.getElementById('af-sp').value=(a.social&&a.social.spotify)||'';
+  document.getElementById('artist-form-title').textContent='Edit Artist';
+  document.getElementById('cancel-artist-btn').style.display='';
+  document.getElementById('artist-form-card').scrollIntoView({behavior:'smooth'});
+}
+
+function deleteArtist(i){
+  if(!confirm('Delete this artist from the roster?'))return;
+  const artists=getAdminArtists();
+  const name=artists[i].name;
+  artists.splice(i,1);
+  saveAdminArtists(artists);
+  renderArtistManager();
+  logActivity('Artist deleted: '+name,'orange');
+  toast('Artist deleted','error');
+}
+
+function cancelArtistEdit(){
+  ['af-name','af-genre','af-city','af-bio','af-photo','af-ig','af-sc','af-sp'].forEach(function(id){
+    var el=document.getElementById(id);if(el)el.value='';
+  });
+  document.getElementById('edit-artist-id').value='';
+  document.getElementById('artist-form-title').textContent='Add New Artist';
+  document.getElementById('cancel-artist-btn').style.display='none';
+}
+
+// ‚îÄ‚îÄ MERCH MANAGER ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+function getAdminMerch(){return JSON.parse(localStorage.getItem('hvx_merch')||'[]')}
+function saveAdminMerch(list){localStorage.setItem('hvx_merch',JSON.stringify(list))}
+
+function renderMerchAdmin(){
+  const grid=document.getElementById('merch-admin-grid');
+  if(!grid)return;
+  const products=getAdminMerch();
+  if(!products.length){
+    grid.innerHTML='<p style="color:var(--muted);font-size:.85rem;grid-column:1/-1">No products yet. Add one above.</p>';
+    return;
+  }
+  grid.innerHTML=products.map((p,i)=>`
+    <div class="merch-admin-card">
+      <div class="merch-admin-img">${p.img?('<img src="'+p.img+'" alt="'+p.name+'">'):'<span style="font-size:2rem">&#128717;</span>'}</div>
+      <div class="merch-admin-body">
+        <div class="merch-admin-name">${p.name}</div>
+        <div class="merch-admin-price">$${p.price}</div>
+        <p style="font-size:.75rem;color:var(--muted);margin:.3rem 0 .8rem">${p.desc||''}</p>
+        <span class="badge ${p.status==='available'?'badge-green':p.status==='soldout'?'badge-muted':'badge-orange'}" style="margin-bottom:.7rem">${p.status==='available'?'Available':p.status==='soldout'?'Sold Out':'Coming Soon'}</span>
+        <div style="display:flex;gap:.5rem;margin-top:.5rem">
+          <button class="btn btn-outline btn-sm" onclick="editMerch(${i})">Edit</button>
+          <button class="btn btn-danger" onclick="deleteMerch(${i})">Delete</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function saveMerchProduct(){
+  const name=document.getElementById('mf-name').value.trim();
+  if(!name){toast('Product name is required','error');return}
+  const products=getAdminMerch();
+  const idxRaw=document.getElementById('edit-merch-id').value;
+  const idx=idxRaw!==''?+idxRaw:null;
+  const product={
+    id:idx!==null?products[idx].id:'merch-'+Date.now(),
+    name,
+    price:document.getElementById('mf-price').value.trim()||'0',
+    desc:document.getElementById('mf-desc').value.trim(),
+    img:document.getElementById('mf-img').value.trim()||null,
+    status:document.getElementById('mf-status').value
+  };
+  if(idx!==null){products[idx]=product}else{products.push(product)}
+  saveAdminMerch(products);
+  toast(idx!==null?'Product updated!':'Product added!','success');
+  logActivity('Merch '+(idx!==null?'updated':'added')+': '+name,'purple');
+  cancelMerchEdit();
+  renderMerchAdmin();
+}
+
+function editMerch(i){
+  const p=getAdminMerch()[i];
+  document.getElementById('edit-merch-id').value=i;
+  document.getElementById('mf-name').value=p.name||'';
+  document.getElementById('mf-price').value=p.price||'';
+  document.getElementById('mf-desc').value=p.desc||'';
+  document.getElementById('mf-img').value=p.img||'';
+  document.getElementById('mf-status').value=p.status||'available';
+  document.getElementById('merch-form-title').textContent='Edit Product';
+  document.getElementById('cancel-merch-btn').style.display='';
+}
+
+function deleteMerch(i){
+  if(!confirm('Delete this product?'))return;
+  const products=getAdminMerch();
+  const name=products[i].name;
+  products.splice(i,1);
+  saveAdminMerch(products);
+  renderMerchAdmin();
+  logActivity('Merch deleted: '+name,'orange');
+  toast('Product deleted','error');
+}
+
+function cancelMerchEdit(){
+  ['mf-name','mf-price','mf-desc','mf-img'].forEach(function(id){
+    var el=document.getElementById(id);if(el)el.value='';
+  });
+  document.getElementById('edit-merch-id').value='';
+  var st=document.getElementById('mf-status');if(st)st.value='available';
+  document.getElementById('merch-form-title').textContent='Add New Product';
+  document.getElementById('cancel-merch-btn').style.display='none';
+}
+
+// ‚îÄ‚îÄ CONTACT INBOX ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+function getContacts(){return JSON.parse(localStorage.getItem('hvx_contacts')||'[]')}
+function saveContacts(list){localStorage.setItem('hvx_contacts',JSON.stringify(list))}
+
+function renderInbox(){
+  const contacts=getContacts();
+  const el=document.getElementById('inbox-list');
+  if(!el)return;
+  const now=new Date();
+  const weekAgo=now-7*24*60*60*1000;
+  const unread=contacts.filter(function(c){return!c.read}).length;
+  const thisWeek=contacts.filter(function(c){return new Date(c.date)>weekAgo}).length;
+  var tot=document.getElementById('inbox-total');
+  var unr=document.getElementById('inbox-unread');
+  var wk=document.getElementById('inbox-week');
+  if(tot)tot.textContent=contacts.length;
+  if(unr)unr.textContent=unread;
+  if(wk)wk.textContent=thisWeek;
+  if(!contacts.length){el.innerHTML='<p style="padding:1.5rem;color:var(--muted);font-size:.85rem">No messages yet.</p>';return}
+  el.innerHTML=contacts.map(function(c,i){
+    return '<div class="inbox-item '+(c.read?'read':'unread')+'" onclick="openInboxItem('+i+')">'+
+      '<span class="inbox-dot"></span>'+
+      '<div>'+
+        '<div class="inbox-subject">'+(c.name||'Anonymous')+' - '+(c.type||'Inquiry')+'</div>'+
+        '<div class="inbox-preview">'+((c.message||'').slice(0,80))+'</div>'+
+        '<div class="inbox-detail" id="inbox-detail-'+i+'">'+
+          '<div class="inbox-detail-name">'+(c.name||'Anonymous')+'</div>'+
+          '<div class="inbox-detail-meta">'+(c.email||'')+' | '+(c.type||'Inquiry')+' | '+new Date(c.date).toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})+'</div>'+
+          '<div class="inbox-detail-msg">'+(c.message||'(no message)')+'</div>'+
+          '<div style="margin-top:.75rem;display:flex;gap:.5rem">'+
+            '<button class="btn btn-outline btn-sm" onclick="event.stopPropagation();toggleRead('+i+')">'+(c.read?'Mark Unread':'Mark Read')+'</button>'+
+            '<button class="btn btn-danger" onclick="event.stopPropagation();deleteContact('+i+')">Delete</button>'+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+      '<span class="inbox-date">'+new Date(c.date).toLocaleDateString('en-GB',{day:'2-digit',month:'short'})+'</span>'+
+    '</div>';
+  }).join('');
+}
+
+function openInboxItem(i){
+  var contacts=getContacts();
+  if(!contacts[i].read){contacts[i].read=true;saveContacts(contacts)}
+  document.querySelectorAll('.inbox-detail').forEach(function(d,j){
+    if(j===i){d.classList.toggle('open')}else{d.classList.remove('open')}
+  });
+  renderInbox();
+}
+
+function toggleRead(i){
+  var contacts=getContacts();
+  contacts[i].read=!contacts[i].read;
+  saveContacts(contacts);
+  renderInbox();
+}
+
+function deleteContact(i){
+  if(!confirm('Delete this message?'))return;
+  var contacts=getContacts();
+  contacts.splice(i,1);
+  saveContacts(contacts);
+  renderInbox();
+  toast('Message deleted','error');
+}
+
+function markAllRead(){
+  var contacts=getContacts().map(function(c){return Object.assign({},c,{read:true})});
+  saveContacts(contacts);
+  renderInbox();
+  toast('All messages marked as read','success');
+}
+
+function exportContactsExcel(){
+  var contacts=getContacts();
+  if(!contacts.length){toast('No messages to export','error');return}
+  if(typeof XLSX==='undefined'){toast('Export library not loaded','error');return}
+  var rows=contacts.map(function(c){return{
+    Name:c.name||'',Email:c.email||'',Type:c.type||'',
+    Message:c.message||'',Date:new Date(c.date).toLocaleString(),
+    Status:c.read?'Read':'Unread'
+  }});
+  var ws=XLSX.utils.json_to_sheet(rows);
+  var wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,'Contacts',ws);
+  XLSX.writeFile(wb,'hvx-contacts.xlsx');
+  toast('Contacts exported to Excel!','success');
+  logActivity('Contact inbox exported to Excel','green');
+}
+</script>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 </body>
 </html>
