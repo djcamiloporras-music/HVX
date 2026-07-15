@@ -166,7 +166,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
 }
-.nav-logo { margin-right: auto; height: var(--nav-h); display: flex; align-items: center; }
+.nav-logo { margin-right: auto; height: var(--nav-h); display: flex; align-items: center; position: relative; overflow: visible; }
 .logo-img {
   height: 32px;
   width: auto;
@@ -436,6 +436,10 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   display: block;
   object-fit: contain;
   mix-blend-mode: screen;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
 }
 
 .hero-video-wrap {
