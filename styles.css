@@ -1640,6 +1640,8 @@ select:focus-visible {
 .service-quote { font-size: 0.8rem; color: var(--muted); }
 .service-quote a { color: var(--accent); }
 .service-quote a:hover { color: var(--white); }
+.service-how { font-size: 0.8rem; color: var(--muted); margin: 0.6rem 0; line-height: 1.5; }
+.service-disclaimer { font-size: 0.72rem; color: var(--muted); opacity: 0.7; margin: 0.4rem 0; line-height: 1.4; }
 
 /* ‚îÄ‚îÄ TRACKSTACK SECTION ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ */
 .trackstack {
