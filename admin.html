@@ -269,13 +269,13 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
     <p class="login-sub">Access the HVX content management panel.</p>
     <div class="form-group">
       <label class="form-label">Username</label>
-      <input type="text" class="form-input" id="login-user" placeholder="admin" autocomplete="username"/>
+      <input type="text" class="form-input" id="login-user" placeholder="User" autocomplete="username"/>
     </div>
     <div class="form-group">
       <label class="form-label">Password</label>
-      <input type="password" class="form-input" id="login-pass" placeholder="‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢" autocomplete="current-password"/>
+      <input type="password" class="form-input" id="login-pass" placeholder="Password" autocomplete="current-password"/>
     </div>
-    <button class="btn btn-primary" id="login-btn">Sign In ‚Üí</button>
+    <button class="btn btn-primary" id="login-btn">Sign In</button>
     <p class="login-error" id="login-error">Invalid credentials. Please try again.</p>
   </div>
 </div>
@@ -1032,8 +1032,16 @@ document.getElementById('upload-btn')?.addEventListener('click',()=>{
   const id=Date.now();
 
   function doSave(dataUrl){
-    highlights.unshift({id,artist,source,caption,date:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}),dataUrl:dataUrl||null});
+    const dateStr=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+    const entry={id,artist,source,caption,date:dateStr,dataUrl:dataUrl||null};
+    highlights.unshift(entry);
     saveHighlights(highlights);
+    // Sync to per-artist key read by artist-profile.html
+    const artistKey='hvx_highlights_'+artist;
+    const artistHighlights=JSON.parse(localStorage.getItem(artistKey)||'[]');
+    const emojiMap={Instagram:'üì∏',Photo:'üì∑',Video:'üé¨'};
+    artistHighlights.unshift({id,source,date:dateStr,caption,likes:0,emoji:emojiMap[source]||'üì∏',dataUrl:dataUrl||null});
+    localStorage.setItem(artistKey,JSON.stringify(artistHighlights));
     renderFeed();
     updateDashStats();
     logActivity(`New highlight uploaded for ${artist.toUpperCase()} (${source})`,'purple');
