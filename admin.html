@@ -353,9 +353,9 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
       <div class="highlight-form">
         <h3>Upload New Highlight</h3>
         <div class="upload-zone" id="upload-zone">
-          <div class="upload-icon">üì∏</div>
+          <div class="upload-icon"><svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" style="opacity:.5;display:block;margin:0 auto"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/></svg></div>
           <p class="upload-title">Drop image or video here</p>
-          <p class="upload-sub">Supports JPG, PNG, MP4 ‚Äî max 20MB</p>
+          <p class="upload-sub">Supports JPG, PNG, MP4 - max 20MB</p>
           <button class="btn btn-outline" onclick="document.getElementById('file-input').click()">Choose File</button>
           <input type="file" id="file-input" accept="image/*,video/mp4"/>
         </div>
@@ -433,19 +433,6 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
         </table>
       </div>
     </div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Artist</th><th>Genre</th><th>City</th><th>Shows/yr</th><th>Avg Reach</th><th>Profile</th></tr></thead>
-          <tbody>
-            <tr><td><div class="artist-cell"><div class="artist-avatar av-nexus">NX</div><div><div class="artist-name-cell">NEXUS</div></div></div></td><td><span class="badge badge-orange">Tech House</span></td><td>Berlin, DE</td><td>80</td><td>3,200</td><td><a href="artist-profile.html?id=nexus" target="_blank" class="btn btn-outline btn-sm">Open</a></td></tr>
-            <tr><td><div class="artist-cell"><div class="artist-avatar av-kara">KA</div><div><div class="artist-name-cell">KARA</div></div></div></td><td><span class="badge badge-accent">House</span></td><td>New York, US</td><td>65</td><td>2,800</td><td><a href="artist-profile.html?id=kara" target="_blank" class="btn btn-outline btn-sm">Open</a></td></tr>
-            <tr><td><div class="artist-cell"><div class="artist-avatar av-delvyn">DL</div><div><div class="artist-name-cell">DELVYN</div></div></div></td><td><span class="badge badge-muted">Dance</span></td><td>London, UK</td><td>90</td><td>4,100</td><td><a href="artist-profile.html?id=delvyn" target="_blank" class="btn btn-outline btn-sm">Open</a></td></tr>
-            <tr><td><div class="artist-cell"><div class="artist-avatar av-solen">SL</div><div><div class="artist-name-cell">SOLEN</div></div></div></td><td><span class="badge badge-accent">House</span></td><td>Barcelona, ES</td><td>55</td><td>2,400</td><td><a href="artist-profile.html?id=solen" target="_blank" class="btn btn-outline btn-sm">Open</a></td></tr>
-            <tr><td><div class="artist-cell"><div class="artist-avatar av-mira">MI</div><div><div class="artist-name-cell">MIRA</div></div></div></td><td><span class="badge badge-orange">Tech House</span></td><td>Buenos Aires, AR</td><td>70</td><td>3,600</td><td><a href="artist-profile.html?id=mira" target="_blank" class="btn btn-outline btn-sm">Open</a></td></tr>
-            <tr><td><div class="artist-cell"><div class="artist-avatar av-axio">AX</div><div><div class="artist-name-cell">AXIO</div></div></div></td><td><span class="badge badge-muted">Dance</span></td><td>Paris, FR</td><td>75</td><td>3,900</td><td><a href="artist-profile.html?id=axio" target="_blank" class="btn btn-outline btn-sm">Open</a></td></tr>
-          </tbody>
-        </table>
-      </div>
     </div>
 
     <!-- EVENTS -->
@@ -926,13 +913,13 @@ document.getElementById('upload-caption')?.addEventListener('input',function(){
 let uploadedFile=null;
 document.getElementById('file-input')?.addEventListener('change',e=>{
   uploadedFile=e.target.files[0];
-  if(uploadedFile){document.querySelector('.upload-title').textContent=uploadedFile.name;document.querySelector('.upload-icon').textContent='‚úÖ'}
+  if(uploadedFile){document.querySelector('.upload-title').textContent=uploadedFile.name;document.querySelector('.upload-icon').innerHTML='<div class="upload-icon"><svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" style="opacity:.5;display:block;margin:0 auto"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/></svg></div>'}
 });
 
 const zone=document.getElementById('upload-zone');
 zone?.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('dragover')});
 zone?.addEventListener('dragleave',()=>zone.classList.remove('dragover'));
-zone?.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('dragover');uploadedFile=e.dataTransfer.files[0];if(uploadedFile){document.querySelector('.upload-title').textContent=uploadedFile.name;document.querySelector('.upload-icon').textContent='‚úÖ'}});
+zone?.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('dragover');uploadedFile=e.dataTransfer.files[0];if(uploadedFile){document.querySelector('.upload-title').textContent=uploadedFile.name;document.querySelector('.upload-icon').innerHTML='<div class="upload-icon"><svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" style="opacity:.5;display:block;margin:0 auto"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/></svg></div>'}});
 
 document.getElementById('upload-btn')?.addEventListener('click',()=>{
   const artist=document.getElementById('upload-artist').value;
@@ -949,7 +936,7 @@ document.getElementById('upload-btn')?.addEventListener('click',()=>{
     // Sync to per-artist key read by artist-profile.html
     const artistKey='hvx_highlights_'+artist;
     const artistHighlights=JSON.parse(localStorage.getItem(artistKey)||'[]');
-    const emojiMap={Instagram:'üì∏',Photo:'üì∑',Video:'üé¨'};
+    const emojiMap={Instagram:'[IG]',Photo:'[PHOTO]',Video:'[VIDEO]'};
     artistHighlights.unshift({id,source,date:dateStr,caption,likes:0,emoji:emojiMap[source]||'üì∏',dataUrl:dataUrl||null});
     localStorage.setItem(artistKey,JSON.stringify(artistHighlights));
     renderFeed();
@@ -960,7 +947,7 @@ document.getElementById('upload-btn')?.addEventListener('click',()=>{
     document.getElementById('cap-count').textContent='0';
     uploadedFile=null;
     document.querySelector('.upload-title').textContent='Drop image or video here';
-    document.querySelector('.upload-icon').textContent='üì∏';
+    document.querySelector('.upload-icon').innerHTML='<svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" style="opacity:.5;display:block;margin:0 auto"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/></svg>';
     // Fire webhook if configured
     const wh=localStorage.getItem('webhook_upload');
     if(wh)fetch(wh,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({event:'highlight_uploaded',artist,source,caption})}).catch(()=>{});
