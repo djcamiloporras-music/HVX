@@ -433,7 +433,6 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
         </table>
       </div>
     </div>
-    </div>
 
     <!-- EVENTS -->
     <div class="page-section" id="page-events">
@@ -662,7 +661,6 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
         </div>
       </div>
     </div>
-    </div>
 
     <!-- SETTINGS -->
     <div class="page-section" id="page-settings">
@@ -707,40 +705,6 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
         <h3 class="danger-title">Danger Zone</h3>
         <p class="danger-desc">These actions are irreversible. Please be certain before proceeding.</p>
         <button class="btn btn-danger" onclick="if(confirm('Clear all highlights from localStorage?')){localStorage.clear();toast('All data cleared','error');logActivity('All localStorage data cleared','orange')}">Clear All Highlights Data</button>
-      </div>
-    </div>
-
-      <div class="manager-form-card" id="artist-form-card">
-        <h3 id="artist-form-title">Add New Artist</h3>
-        <input type="hidden" id="edit-artist-id"/>
-        <div class="form-row">
-          <div class="form-group"><label class="form-label">Name</label><input type="text" class="form-input" id="af-name" placeholder="Artist Name"/></div>
-          <div class="form-group"><label class="form-label">Genre</label><input type="text" class="form-input" id="af-genre" placeholder="House, Tech House..."/></div>
-        </div>
-        <div class="form-row">
-          <div class="form-group"><label class="form-label">City</label><input type="text" class="form-input" id="af-city" placeholder="New York, US"/></div>
-          <div class="form-group"><label class="form-label">Photo URL</label><input type="text" class="form-input" id="af-photo" placeholder="https://..."/></div>
-        </div>
-        <div class="form-group"><label class="form-label">Biography</label><textarea class="form-input form-textarea" id="af-bio" placeholder="Artist biography..."></textarea></div>
-        <div class="form-row">
-          <div class="form-group"><label class="form-label">Instagram URL</label><input type="text" class="form-input" id="af-ig" placeholder="https://instagram.com/..."/></div>
-          <div class="form-group"><label class="form-label">SoundCloud URL</label><input type="text" class="form-input" id="af-sc" placeholder="https://soundcloud.com/..."/></div>
-        </div>
-        <div class="form-row">
-          <div class="form-group"><label class="form-label">Spotify URL</label><input type="text" class="form-input" id="af-sp" placeholder="https://open.spotify.com/..."/></div>
-          <div class="form-group" style="display:flex;align-items:flex-end;gap:.5rem">
-            <button class="btn btn-primary" onclick="saveArtist()" style="width:auto">Save Artist</button>
-            <button class="btn btn-outline btn-sm" id="cancel-artist-btn" style="display:none" onclick="cancelArtistEdit()">Cancel</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="table-wrap">
-        <div class="table-head"><h3 class="table-title">Current Roster</h3></div>
-        <table>
-          <thead><tr><th>Artist</th><th>Genre</th><th>City</th><th>Actions</th></tr></thead>
-          <tbody id="artist-manager-tbody"></tbody>
-        </table>
       </div>
     </div>
 
