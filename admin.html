@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>HVX Admin ‚Äî Content Management</title>
+<title>HVX Admin &mdash; Content Management</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
 :root {
@@ -437,19 +437,33 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
     <!-- EVENTS -->
     <div class="page-section" id="page-events">
       <div class="page-header">
-        <div><h1 class="page-title">Events & Shows</h1><p class="page-sub">Upcoming confirmed bookings across all artists.</p></div>
+        <div><h1 class="page-title">Events &amp; Shows</h1><p class="page-sub">Add and manage upcoming bookings across all artists.</p></div>
+      </div>
+      <div class="manager-form-card" id="event-form-card">
+        <h3 id="event-form-title">Add New Event</h3>
+        <input type="hidden" id="edit-event-id"/>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Date</label><input type="date" class="form-input" id="ef-date"/></div>
+          <div class="form-group"><label class="form-label">Artist</label><select class="form-input" id="ef-artist"><option value="">Select artist...</option></select></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Venue</label><input type="text" class="form-input" id="ef-venue" placeholder="Venue name"/></div>
+          <div class="form-group"><label class="form-label">City</label><input type="text" class="form-input" id="ef-city" placeholder="City, Country"/></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Capacity</label><input type="text" class="form-input" id="ef-capacity" placeholder="1200"/></div>
+          <div class="form-group"><label class="form-label">Status</label><select class="form-input" id="ef-status"><option value="Confirmed">Confirmed</option><option value="Pending">Pending</option></select></div>
+        </div>
+        <div style="display:flex;gap:.5rem">
+          <button class="btn btn-primary" onclick="saveEvent()" style="width:auto">Save Event</button>
+          <button class="btn btn-outline btn-sm" id="cancel-event-btn" style="display:none" onclick="cancelEventEdit()">Cancel</button>
+        </div>
       </div>
       <div class="table-wrap">
+        <div class="table-head"><h3 class="table-title">Upcoming Events</h3></div>
         <table>
-          <thead><tr><th>Date</th><th>Artist</th><th>Venue</th><th>City</th><th>Capacity</th><th>Status</th></tr></thead>
-          <tbody>
-            <tr><td>Aug 02, 2026</td><td><span class="badge badge-orange">NEXUS</span></td><td>Tresor</td><td>Berlin, DE</td><td>1,200</td><td><span class="badge badge-green">Confirmed</span></td></tr>
-            <tr><td>Aug 09, 2026</td><td><span class="badge badge-accent">KARA</span></td><td>Output</td><td>New York, US</td><td>800</td><td><span class="badge badge-green">Confirmed</span></td></tr>
-            <tr><td>Aug 14, 2026</td><td><span class="badge badge-muted">DELVYN</span></td><td>Fabric</td><td>London, UK</td><td>1,500</td><td><span class="badge badge-green">Confirmed</span></td></tr>
-            <tr><td>Sep 06, 2026</td><td><span class="badge badge-accent">SOLEN</span></td><td>Razzmatazz</td><td>Barcelona, ES</td><td>2,000</td><td><span class="badge badge-accent">Pending</span></td></tr>
-            <tr><td>Sep 19, 2026</td><td><span class="badge badge-orange">MIRA</span></td><td>Crobar</td><td>Buenos Aires, AR</td><td>3,200</td><td><span class="badge badge-green">Confirmed</span></td></tr>
-            <tr><td>Oct 03, 2026</td><td><span class="badge badge-muted">AXIO</span></td><td>Rex Club</td><td>Paris, FR</td><td>600</td><td><span class="badge badge-accent">Pending</span></td></tr>
-          </tbody>
+          <thead><tr><th>Date</th><th>Artist</th><th>Venue</th><th>City</th><th>Capacity</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="events-tbody"></tbody>
         </table>
       </div>
     </div>
@@ -464,46 +478,46 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
       </div>
 
       <div style="background:rgba(162,89,255,.08);border:1px solid rgba(162,89,255,.25);border-radius:6px;padding:1rem 1.5rem;margin-bottom:2rem;font-size:.83rem;color:var(--off-white);line-height:1.6">
-        ‚ö†Ô∏è <strong style="color:var(--accent)">Security note:</strong> API keys are stored locally in your browser (localStorage) for this prototype. In production, keys must be stored server-side and never exposed in client code. Use environment variables or a secrets manager.
+        <strong style="color:var(--accent)">Security note:</strong> API keys are stored locally in your browser (localStorage) for this prototype. In production, keys must be stored server-side and never exposed in client code. Use environment variables or a secrets manager.
       </div>
 
       <!-- INSTAGRAM -->
       <div class="api-section">
         <div class="api-section-head" onclick="toggleApi('ig')">
           <div class="api-section-title">
-            <div class="api-icon ig">üì∑</div>
+            <div class="api-icon ig">IG</div>
             Instagram Graph API
             <span class="api-status"><span class="status-dot pending"></span> Not connected</span>
           </div>
-          <span style="color:var(--muted);font-size:.8rem">Expand ‚ñæ</span>
+          <span style="color:var(--muted);font-size:.8rem">Expand</span>
         </div>
         <div class="api-body" id="api-ig">
           <p class="api-desc">Connect the Instagram Graph API to automatically pull posts, stories and reels from your artists' accounts into the Highlights feed. Requires a Meta Business App with <code>instagram_basic</code> and <code>instagram_content_publish</code> permissions.</p>
           <div class="form-group">
             <label class="form-label">App ID</label>
             <div class="api-key-row">
-              <input type="text" class="api-key-input" id="ig-app-id" placeholder="Enter Instagram App ID‚Ä¶"/>
+              <input type="text" class="api-key-input" id="ig-app-id" placeholder="Enter Instagram App ID..."/>
               <button class="save-btn" onclick="saveKey('ig-app-id','ig_app_id')">Save</button>
             </div>
           </div>
           <div class="form-group">
             <label class="form-label">App Secret</label>
             <div class="api-key-row">
-              <input type="password" class="api-key-input" id="ig-secret" placeholder="‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢"/>
+              <input type="password" class="api-key-input" id="ig-secret" placeholder="Secret key"/>
               <button class="save-btn" onclick="saveKey('ig-secret','ig_secret')">Save</button>
             </div>
           </div>
           <div class="form-group">
             <label class="form-label">Long-Lived Access Token</label>
             <div class="api-key-row">
-              <input type="text" class="api-key-input" id="ig-token" placeholder="EAABwzLixnjYBO‚Ä¶"/>
+              <input type="text" class="api-key-input" id="ig-token" placeholder="EAABwzLixnjYBO..."/>
               <button class="copy-btn" onclick="copyField('ig-token')">Copy</button>
               <button class="save-btn" onclick="saveKey('ig-token','ig_token')">Save</button>
             </div>
           </div>
           <div class="automation-card">
             <div class="automation-info">
-              <p class="automation-name">Auto-sync Instagram posts ‚Üí Highlights</p>
+              <p class="automation-name">Auto-sync Instagram posts &rarr; Highlights</p>
               <p class="automation-desc">Every 6 hours, fetch latest posts from connected artist accounts and add to the Highlights feed.</p>
             </div>
             <div class="toggle-wrap">
@@ -522,21 +536,21 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
             Spotify for Artists API
             <span class="api-status"><span class="status-dot pending"></span> Not connected</span>
           </div>
-          <span style="color:var(--muted);font-size:.8rem">Expand ‚ñæ</span>
+          <span style="color:var(--muted);font-size:.8rem">Expand</span>
         </div>
         <div class="api-body" id="api-spotify">
           <p class="api-desc">Connect Spotify to automatically update monthly listener counts, stream totals, and top tracks shown in each artist's Analytics tab.</p>
           <div class="form-group">
             <label class="form-label">Client ID</label>
             <div class="api-key-row">
-              <input type="text" class="api-key-input" id="sp-id" placeholder="Enter Spotify Client ID‚Ä¶"/>
+              <input type="text" class="api-key-input" id="sp-id" placeholder="Enter Spotify Client ID..."/>
               <button class="save-btn" onclick="saveKey('sp-id','spotify_client_id')">Save</button>
             </div>
           </div>
           <div class="form-group">
             <label class="form-label">Client Secret</label>
             <div class="api-key-row">
-              <input type="password" class="api-key-input" id="sp-secret" placeholder="‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢"/>
+              <input type="password" class="api-key-input" id="sp-secret" placeholder="Secret key"/>
               <button class="save-btn" onclick="saveKey('sp-secret','spotify_secret')">Save</button>
             </div>
           </div>
@@ -561,21 +575,21 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
             Resident Advisor
             <span class="api-status"><span class="status-dot pending"></span> Not connected</span>
           </div>
-          <span style="color:var(--muted);font-size:.8rem">Expand ‚ñæ</span>
+          <span style="color:var(--muted);font-size:.8rem">Expand</span>
         </div>
         <div class="api-body" id="api-ra">
           <p class="api-desc">Connect to RA's unofficial API or scraper endpoint to pull event listings, RA Watchlist numbers, and ratings directly into artist profiles.</p>
           <div class="form-group">
             <label class="form-label">RA API Endpoint</label>
             <div class="api-key-row">
-              <input type="text" class="api-key-input" id="ra-endpoint" placeholder="https://ra.co/api/‚Ä¶"/>
+              <input type="text" class="api-key-input" id="ra-endpoint" placeholder="https://ra.co/api/..."/>
               <button class="save-btn" onclick="saveKey('ra-endpoint','ra_endpoint')">Save</button>
             </div>
           </div>
           <div class="form-group">
             <label class="form-label">Bearer Token</label>
             <div class="api-key-row">
-              <input type="password" class="api-key-input" id="ra-token" placeholder="Bearer token‚Ä¶"/>
+              <input type="password" class="api-key-input" id="ra-token" placeholder="Bearer token..."/>
               <button class="save-btn" onclick="saveKey('ra-token','ra_token')">Save</button>
             </div>
           </div>
@@ -590,21 +604,21 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
             SoundCloud API
             <span class="api-status"><span class="status-dot pending"></span> Not connected</span>
           </div>
-          <span style="color:var(--muted);font-size:.8rem">Expand ‚ñæ</span>
+          <span style="color:var(--muted);font-size:.8rem">Expand</span>
         </div>
         <div class="api-body" id="api-sc">
           <p class="api-desc">Pull play counts, follower numbers, and latest tracks from SoundCloud to auto-update the Music and Sets tabs on artist profiles.</p>
           <div class="form-group">
             <label class="form-label">Client ID</label>
             <div class="api-key-row">
-              <input type="text" class="api-key-input" id="sc-id" placeholder="SoundCloud Client ID‚Ä¶"/>
+              <input type="text" class="api-key-input" id="sc-id" placeholder="SoundCloud Client ID..."/>
               <button class="save-btn" onclick="saveKey('sc-id','sc_client_id')">Save</button>
             </div>
           </div>
           <div class="form-group">
             <label class="form-label">OAuth Token</label>
             <div class="api-key-row">
-              <input type="text" class="api-key-input" id="sc-token" placeholder="OAuth 2.0 token‚Ä¶"/>
+              <input type="text" class="api-key-input" id="sc-token" placeholder="OAuth 2.0 token..."/>
               <button class="copy-btn" onclick="copyField('sc-token')">Copy</button>
               <button class="save-btn" onclick="saveKey('sc-token','sc_token')">Save</button>
             </div>
@@ -616,25 +630,25 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
       <div class="api-section">
         <div class="api-section-head" onclick="toggleApi('webhook')">
           <div class="api-section-title">
-            <div class="api-icon webhook">üîó</div>
+            <div class="api-icon webhook">WH</div>
             Custom Webhooks
             <span class="api-status"><span class="status-dot disconnected"></span> Inactive</span>
           </div>
-          <span style="color:var(--muted);font-size:.8rem">Expand ‚ñæ</span>
+          <span style="color:var(--muted);font-size:.8rem">Expand</span>
         </div>
         <div class="api-body" id="api-webhook">
           <p class="api-desc">Configure outgoing webhooks to notify external systems (Make, Zapier, n8n, custom backend) when content is uploaded, a show is confirmed, or an artist profile is updated.</p>
           <div class="form-group">
             <label class="form-label">Webhook URL (on highlight upload)</label>
             <div class="api-key-row">
-              <input type="text" class="api-key-input" id="wh-upload" placeholder="https://hooks.zapier.com/hooks/catch/‚Ä¶"/>
+              <input type="text" class="api-key-input" id="wh-upload" placeholder="https://hooks.zapier.com/hooks/catch/..."/>
               <button class="save-btn" onclick="saveKey('wh-upload','webhook_upload')">Save</button>
             </div>
           </div>
           <div class="form-group">
             <label class="form-label">Webhook URL (on show confirmed)</label>
             <div class="api-key-row">
-              <input type="text" class="api-key-input" id="wh-show" placeholder="https://hooks.make.com/‚Ä¶"/>
+              <input type="text" class="api-key-input" id="wh-show" placeholder="https://hooks.make.com/..."/>
               <button class="save-btn" onclick="saveKey('wh-show','webhook_show')">Save</button>
             </div>
           </div>
@@ -772,23 +786,23 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
 </div>
 
 <script>
-// ‚îÄ‚îÄ CURSOR ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+// CURSOR
 const cur=document.getElementById('cursor'),curf=document.getElementById('cursor-f');
 let mx=0,my=0,fx=0,fy=0;
 document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
 (function af(){fx+=(mx-fx)*.12;fy+=(my-fy)*.12;curf.style.left=fx+'px';curf.style.top=fy+'px';requestAnimationFrame(af)})();
 
-// ‚îÄ‚îÄ SCROLL PROGRESS ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+// SCROLL PROGRESS
 const sp=document.getElementById('sp');
 window.addEventListener('scroll',()=>{const d=document.documentElement;sp.style.width=(d.scrollTop/(d.scrollHeight-d.clientHeight)*100)+'%'},{passive:true});
 
-// ‚îÄ‚îÄ RIPPLE ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+// RIPPLE
 document.addEventListener('click',e=>{const btn=e.target.closest('.btn');if(!btn)return;const r=btn.getBoundingClientRect();const rip=document.createElement('span');const s=Math.max(r.width,r.height);rip.className='ripple';rip.style.cssText=`width:${s}px;height:${s}px;left:${e.clientX-r.left-s/2}px;top:${e.clientY-r.top-s/2}px`;btn.appendChild(rip);rip.addEventListener('animationend',()=>rip.remove())});
 
-// ‚îÄ‚îÄ TOAST ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+// TOAST
 function toast(msg,type='success'){const w=document.getElementById('toast-wrap');const t=document.createElement('div');t.className=`toast ${type}`;t.innerHTML=`<span class="toast-dot"></span>${msg}`;w.appendChild(t);setTimeout(()=>t.classList.add('show'),10);setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),400)},3200)}
 
-// ‚îÄ‚îÄ AUTH ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+// AUTH
 const CREDS={user:'hvxmusic2026',pass:'adminhvx'};
 
 function checkSession(){if(localStorage.getItem('hvx_admin')==='true'){showAdmin()}}
@@ -804,7 +818,7 @@ document.getElementById('login-btn').addEventListener('click',()=>{
 document.getElementById('login-pass').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('login-btn').click()});
 document.getElementById('logout-btn').addEventListener('click',()=>{localStorage.removeItem('hvx_admin');location.reload()});
 
-// ‚îÄ‚îÄ NAVIGATION ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+// NAVIGATION
 document.querySelectorAll('.nav-item[data-page]').forEach(btn=>{
   btn.addEventListener('click',()=>{
     document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
@@ -813,12 +827,13 @@ document.querySelectorAll('.nav-item[data-page]').forEach(btn=>{
     document.getElementById('page-'+btn.dataset.page).classList.add('active');
     if(btn.dataset.page==='highlights')renderFeed();
     if(btn.dataset.page==='artists')renderArtistManager();
+    if(btn.dataset.page==='events'){renderEventsAdmin();refreshUploadArtistSelect()}
     if(btn.dataset.page==='merch-manager')renderMerchAdmin();
     if(btn.dataset.page==='contact-inbox')renderInbox();
   });
 });
 
-// ‚îÄ‚îÄ ACTIVITY LOG ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+// ACTIVITY LOG
 function logActivity(text,color='purple'){
   const logs=JSON.parse(localStorage.getItem('hvx_activity')||'[]');
   logs.unshift({text,color,time:new Date().toLocaleTimeString()});
@@ -837,7 +852,7 @@ function renderActivity(){
 function clearActivity(){localStorage.removeItem('hvx_activity');renderActivity();toast('Activity log cleared','success')}
 function updateDashActivity(){renderActivity()}
 
-// ‚îÄ‚îÄ HIGHLIGHTS FEED ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+// HIGHLIGHTS FEED
 function getHighlights(){return JSON.parse(localStorage.getItem('hvx_highlights')||'[]')}
 function saveHighlights(h){localStorage.setItem('hvx_highlights',JSON.stringify(h))}
 
@@ -859,7 +874,7 @@ function renderFeed(){
           <span class="feed-artist">${h.artist.toUpperCase()}</span>
           <span class="feed-date">${h.date}</span>
         </div>
-        <p class="feed-caption">${h.caption||'‚Äî'}</p>
+        <p class="feed-caption">${h.caption||'-'}</p>
         <div class="feed-actions">
           <button class="btn btn-danger btn-sm" onclick="deleteHighlight(${h.id})">Delete</button>
         </div>
@@ -901,7 +916,7 @@ document.getElementById('upload-btn')?.addEventListener('click',()=>{
     const artistKey='hvx_highlights_'+artist;
     const artistHighlights=JSON.parse(localStorage.getItem(artistKey)||'[]');
     const emojiMap={Instagram:'[IG]',Photo:'[PHOTO]',Video:'[VIDEO]'};
-    artistHighlights.unshift({id,source,date:dateStr,caption,likes:0,emoji:emojiMap[source]||'üì∏',dataUrl:dataUrl||null});
+    artistHighlights.unshift({id,source,date:dateStr,caption,likes:0,emoji:emojiMap[source]||'[IG]',dataUrl:dataUrl||null});
     localStorage.setItem(artistKey,JSON.stringify(artistHighlights));
     renderFeed();
     updateDashStats();
@@ -939,7 +954,7 @@ function updateDashStats(){
   if(el)el.textContent=getHighlights().length;
 }
 
-// ‚îÄ‚îÄ API KEYS ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+// API KEYS
 function toggleApi(id){const body=document.getElementById('api-'+id);body.classList.toggle('open')}
 
 function saveKey(inputId,storageKey){
@@ -972,7 +987,7 @@ function loadKeys(){
   });
 }
 
-// ‚îÄ‚îÄ TOGGLE SWITCH ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+// TOGGLE SWITCH
 function toggleSwitch(el){
   el.classList.toggle('on');
   const label=el.nextElementSibling;
@@ -982,14 +997,14 @@ function toggleSwitch(el){
   logActivity(`Automation ${el.classList.contains('on')?'enabled':'disabled'}: ${el.id.replace('toggle-','')}`,'green');
 }
 
-// ‚îÄ‚îÄ INIT ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+// INIT
 checkSession();
 loadKeys();
 
-// ‚îÄ‚îÄ ARTIST DROPDOWNS ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+// ARTIST DROPDOWNS
 function refreshUploadArtistSelect(){
   const artists=getAdminArtists();
-  ['upload-artist','artist-select'].forEach(function(id){
+  ['upload-artist','artist-select','ef-artist'].forEach(function(id){
     const sel=document.getElementById(id);
     if(!sel)return;
     const current=sel.value;
@@ -1005,7 +1020,7 @@ function refreshUploadArtistSelect(){
   });
 }
 
-// ‚îÄ‚îÄ ARTIST MANAGER ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+// ARTIST MANAGER
 function getAdminArtists(){return JSON.parse(localStorage.getItem('hvx_artists')||'null')||[]}
 function saveAdminArtists(list){localStorage.setItem('hvx_artists',JSON.stringify(list))}
 
@@ -1096,7 +1111,112 @@ function cancelArtistEdit(){
   document.getElementById('cancel-artist-btn').style.display='none';
 }
 
-// ‚îÄ‚îÄ MERCH MANAGER ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+
+// EVENTS MANAGER
+function getAdminEvents(){return JSON.parse(localStorage.getItem('hvx_events')||'[]')}
+function saveAdminEvents(list){localStorage.setItem('hvx_events',JSON.stringify(list))}
+
+function formatEventDate(iso){
+  if(!iso)return '';
+  const d=new Date(iso+'T00:00:00');
+  if(isNaN(d.getTime()))return iso;
+  return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+}
+
+function renderEventsAdmin(){
+  const tbody=document.getElementById('events-tbody');
+  if(!tbody)return;
+  const events=getAdminEvents().slice().sort(function(a,b){return (a.date||'').localeCompare(b.date||'')});
+  if(!events.length){
+    tbody.innerHTML='<tr><td colspan="7" style="padding:1.5rem;color:var(--muted);text-align:center;font-size:.85rem">No events yet. Add one above.</td></tr>';
+    return;
+  }
+  const artists=getAdminArtists();
+  tbody.innerHTML=events.map(function(ev){
+    const artist=artists.find(function(a){return a.id===ev.artistId});
+    const artistName=artist?artist.name.toUpperCase():(ev.artistName||'').toUpperCase();
+    return '<tr>'+
+      '<td>'+formatEventDate(ev.date)+'</td>'+
+      '<td><span class="badge badge-accent">'+artistName+'</span></td>'+
+      '<td>'+ev.venue+'</td>'+
+      '<td>'+(ev.city||'')+'</td>'+
+      '<td>'+(ev.capacity||'-')+'</td>'+
+      '<td><span class="badge '+(ev.status==='Confirmed'?'badge-green':'badge-accent')+'">'+ev.status+'</span></td>'+
+      '<td style="display:flex;gap:.5rem;flex-wrap:wrap"><button class="btn btn-outline btn-sm" onclick="editEvent('+ev.id+')">Edit</button><button class="btn btn-danger" onclick="deleteEvent('+ev.id+')">Delete</button></td>'+
+    '</tr>';
+  }).join('');
+}
+
+function saveEvent(){
+  const date=document.getElementById('ef-date').value;
+  const artistId=document.getElementById('ef-artist').value;
+  const venue=document.getElementById('ef-venue').value.trim();
+  const city=document.getElementById('ef-city').value.trim();
+  if(!date||!venue){toast('Date and venue are required','error');return}
+  const artists=getAdminArtists();
+  const artistObj=artists.find(function(a){return a.id===artistId});
+  const events=getAdminEvents();
+  const idRaw=document.getElementById('edit-event-id').value;
+  const ev={
+    id:idRaw?+idRaw:Date.now(),
+    date:date,
+    artistId:artistId,
+    artistName:artistObj?artistObj.name:'',
+    venue:venue,
+    city:city,
+    capacity:document.getElementById('ef-capacity').value.trim(),
+    status:document.getElementById('ef-status').value
+  };
+  if(idRaw){
+    const i=events.findIndex(function(e){return e.id===+idRaw});
+    if(i>-1)events[i]=ev;
+  }else{
+    events.push(ev);
+  }
+  saveAdminEvents(events);
+  toast(idRaw?'Event updated!':'Event added!','success');
+  logActivity('Event '+(idRaw?'updated':'added')+': '+venue,'purple');
+  cancelEventEdit();
+  renderEventsAdmin();
+}
+
+function editEvent(id){
+  const ev=getAdminEvents().find(function(e){return e.id===id});
+  if(!ev)return;
+  refreshUploadArtistSelect();
+  document.getElementById('edit-event-id').value=ev.id;
+  document.getElementById('ef-date').value=ev.date||'';
+  document.getElementById('ef-artist').value=ev.artistId||'';
+  document.getElementById('ef-venue').value=ev.venue||'';
+  document.getElementById('ef-city').value=ev.city||'';
+  document.getElementById('ef-capacity').value=ev.capacity||'';
+  document.getElementById('ef-status').value=ev.status||'Confirmed';
+  document.getElementById('event-form-title').textContent='Edit Event';
+  document.getElementById('cancel-event-btn').style.display='';
+  document.getElementById('event-form-card').scrollIntoView({behavior:'smooth'});
+}
+
+function deleteEvent(id){
+  if(!confirm('Delete this event?'))return;
+  saveAdminEvents(getAdminEvents().filter(function(e){return e.id!==id}));
+  renderEventsAdmin();
+  logActivity('Event deleted','orange');
+  toast('Event deleted','error');
+}
+
+function cancelEventEdit(){
+  ['ef-date','ef-venue','ef-city','ef-capacity'].forEach(function(id){
+    const el=document.getElementById(id);if(el)el.value='';
+  });
+  document.getElementById('ef-artist').value='';
+  document.getElementById('ef-status').value='Confirmed';
+  document.getElementById('edit-event-id').value='';
+  document.getElementById('event-form-title').textContent='Add New Event';
+  document.getElementById('cancel-event-btn').style.display='none';
+}
+
+
+// MERCH MANAGER
 function getAdminMerch(){return JSON.parse(localStorage.getItem('hvx_merch')||'[]')}
 function saveAdminMerch(list){localStorage.setItem('hvx_merch',JSON.stringify(list))}
 
@@ -1180,7 +1300,7 @@ function cancelMerchEdit(){
   document.getElementById('cancel-merch-btn').style.display='none';
 }
 
-// ‚îÄ‚îÄ CONTACT INBOX ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ‚îÄ
+// CONTACT INBOX
 function getContacts(){return JSON.parse(localStorage.getItem('hvx_contacts')||'[]')}
 function saveContacts(list){localStorage.setItem('hvx_contacts',JSON.stringify(list))}
 
