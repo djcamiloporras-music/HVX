@@ -96,7 +96,7 @@
       font-size: 0.8rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase;
       margin-bottom: 24px; display: flex; align-items: center; gap: 8px;
     }
-    .hero-city::before { content: '‚óâ'; color: var(--accent); font-size: 0.6rem; }
+    .hero-city::before { content: ''; color: var(--accent); font-size: 0.6rem; }
     .hero-bio { font-size: 1rem; color: var(--off-white); line-height: 1.7; max-width: 480px; margin-bottom: 36px; }
     .hero-stats { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 36px; }
     .stat-chip {
@@ -492,8 +492,8 @@
         <div class="hero-img-placeholder" id="hero-img">
           <div class="hero-img-text" id="hero-img-text">NX</div>
         </div>
-        <div class="float-chip" id="float-chip-1">‚ñ∏ Next Show: Loading...</div>
-        <div class="float-chip" id="float-chip-2">‚ú¶ Available for Booking</div>
+        <div class="float-chip" id="float-chip-1">Next Show: Loading...</div>
+        <div class="float-chip" id="float-chip-2">Available for Booking</div>
       </div>
     </div>
   </section>
@@ -513,7 +513,7 @@
 
   <!-- OVERVIEW -->
   <section class="tab-content active" id="tab-overview">
-    <h2 class="section-title">About <span id="ov-name">‚Äî</span></h2>
+    <h2 class="section-title">About <span id="ov-name"></span></h2>
     <div class="about-block"><p id="ov-bio"></p></div>
     <div class="overview-cols">
       <div class="list-block">
@@ -677,7 +677,7 @@
 
     // Float chip
     if (artist.upcomingShows && artist.upcomingShows.length) {
-      document.getElementById('float-chip-1').textContent = '‚ñ∏ Next: ' + artist.upcomingShows[0].date + ' @ ' + artist.upcomingShows[0].venue;
+      document.getElementById('float-chip-1').textContent = 'Next: ' + artist.upcomingShows[0].date + ' @ ' + artist.upcomingShows[0].venue;
     }
 
     // ‚îÄ‚îÄ OVERVIEW ‚îÄ‚îÄ
@@ -830,9 +830,9 @@
     const storageKey = 'hvx_highlights_' + artist.id;
     const isAdmin = localStorage.getItem('hvx_admin') === 'true';
     const defaultHighlights = [
-      { id: 1, source: 'Instagram', date: 'Jun 14, 2026', caption: 'Closing set at Berghain ‚Äî an unforgettable night. Thank you Berlin. üñ§', likes: 1842, emoji: 'üéß' },
-      { id: 2, source: 'Video', date: 'May 31, 2026', caption: 'Exclusive aftermovie from Output, NYC. Full 3-hour set available on our channel.', likes: 962, emoji: 'üé¨' },
-      { id: 3, source: 'Photo', date: 'May 17, 2026', caption: 'Fabric room 1. One of the best crowds of the year.', likes: 1233, emoji: 'üì∑' }
+      { id: 1, source: 'Instagram', date: 'Jun 14, 2026', caption: 'Closing set at Berghain - an unforgettable night. Thank you Berlin.', likes: 1842, emoji: '[audio]' },
+      { id: 2, source: 'Video', date: 'May 31, 2026', caption: 'Exclusive aftermovie from Output, NYC. Full 3-hour set available on our channel.', likes: 962, emoji: '[video]' },
+      { id: 3, source: 'Photo', date: 'May 17, 2026', caption: 'Fabric room 1. One of the best crowds of the year.', likes: 1233, emoji: '[photo]' }
     ];
     let highlights = JSON.parse(localStorage.getItem(storageKey) || 'null') || defaultHighlights;
 
