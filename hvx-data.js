@@ -1,14 +1,9 @@
-/* ============================================================
-   HVX MUSIC — Data Layer
-   Artists and releases live here.
-   To add an artist: copy a placeholder object and fill in.
-   To add a release: copy the schema at the bottom and add.
-   ============================================================ */
+/* CVMILOPORRAS_SERVER */
 
 window.HVX = {
 
   /* ----------------------------------------------------------
-     ARTISTS — 3 official slots
+     ARTISTS - 3 official slots
      Set placeholder: false and fill all fields when ready.
   ---------------------------------------------------------- */
   artists: [
