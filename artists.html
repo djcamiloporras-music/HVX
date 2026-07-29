@@ -582,6 +582,7 @@
   </footer>
 
   <script>
+(async () => {
     // CURSOR
     const dot = document.getElementById('cursor-dot');
     const ring = document.getElementById('cursor-ring');
@@ -606,11 +607,24 @@
       prog.style.width = pct + '%';
     });
 
-    // -- RENDER ARTISTS FROM localStorage --
+    // RENDER ARTISTS - server data first, localStorage as fallback
     const grid = document.getElementById('artists-grid');
     const countEl = document.getElementById('visible-count');
-    const storedArtists = (() => { try { return JSON.parse(localStorage.getItem('hvx_artists') || 'null'); } catch(e) { return null; } })();
-    const artistData = (storedArtists && storedArtists.length) ? storedArtists : [];
+    let artistData = [];
+    try {
+      const res = await Promise.race([
+        fetch('/api/data?key=artists').then(r => r.ok ? r.json() : null),
+        new Promise(res => setTimeout(() => res(null), 2500))
+      ]);
+      if (Array.isArray(res) && res.length) {
+        artistData = res;
+        localStorage.setItem('hvx_artists', JSON.stringify(res));
+      }
+    } catch(e) {}
+    if (!artistData.length) {
+      const storedArtists = (() => { try { return JSON.parse(localStorage.getItem('hvx_artists') || 'null'); } catch(e) { return null; } })();
+      artistData = (storedArtists && storedArtists.length) ? storedArtists : [];
+    }
 
     function genreClass(g) {
       if (!g) return '';
@@ -713,6 +727,7 @@
         setTimeout(() => r.remove(), 600);
       });
     });
-  </script>
+  })();
+</script>
 </body>
 </html>
