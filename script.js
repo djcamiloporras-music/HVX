@@ -1,6 +1,19 @@
 /* CVMILOPORRAS_SERVER */
 
-(() => {
+(async () => {
+
+  // FETCH SHARED DATA FROM SERVER (admin-published content)
+  await Promise.all(
+    [['artists','hvx_artists'],['merch','hvx_merch']].map(([k, sk]) =>
+      Promise.race([
+        fetch('/api/data?key=' + k)
+          .then(r => r.ok ? r.json() : null)
+          .then(d => { if (Array.isArray(d) && d.length) localStorage.setItem(sk, JSON.stringify(d)); }),
+        new Promise(res => setTimeout(res, 2500))
+      ]).catch(() => {})
+    )
+  );
+
 
   // CUSTOM CURSOR
   const cursor   = document.getElementById('cursor');
@@ -318,6 +331,12 @@
         const inbox = JSON.parse(localStorage.getItem('hvx_contacts') || '[]');
         inbox.unshift({ id: Date.now(), name, email: emailEl.value, type, message: msg, date: new Date().toISOString(), read: false });
         localStorage.setItem('hvx_contacts', JSON.stringify(inbox));
+        // Send to server so the admin inbox receives it from any device
+        fetch('/api/data?key=contacts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email: emailEl.value, type, message: msg })
+        }).catch(() => {});
       } catch(_e) {}
       const btn  = contactForm.querySelector('button[type="submit"]');
       const orig = btn.textContent;
