@@ -802,17 +802,48 @@ document.addEventListener('click',e=>{const btn=e.target.closest('.btn');if(!btn
 // TOAST
 function toast(msg,type='success'){const w=document.getElementById('toast-wrap');const t=document.createElement('div');t.className=`toast ${type}`;t.innerHTML=`<span class="toast-dot"></span>${msg}`;w.appendChild(t);setTimeout(()=>t.classList.add('show'),10);setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),400)},3200)}
 
+// SERVER SYNC - shared data via /api/data (Netlify Blobs)
+const HVX_API='/api/data';
+const HVX_KEYMAP={artists:'hvx_artists',events:'hvx_events',merch:'hvx_merch',highlights:'hvx_highlights',contacts:'hvx_contacts'};
+
+function syncPush(key){
+  const storageKey=HVX_KEYMAP[key];
+  const data=JSON.parse(localStorage.getItem(storageKey)||'[]');
+  const t=localStorage.getItem('hvx_token')||'';
+  fetch(HVX_API+'?key='+key,{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+t},
+    body:JSON.stringify(data)
+  }).then(function(r){
+    if(!r.ok)throw new Error('sync failed');
+  }).catch(function(){
+    toast('Server sync failed - change saved locally only','error');
+  });
+}
+
+function syncPull(key){
+  return fetch(HVX_API+'?key='+key)
+    .then(function(r){return r.ok?r.json():null})
+    .then(function(d){
+      if(Array.isArray(d)&&d.length)localStorage.setItem(HVX_KEYMAP[key],JSON.stringify(d));
+    }).catch(function(){});
+}
+
+function syncPullAll(){
+  return Promise.all(Object.keys(HVX_KEYMAP).map(syncPull));
+}
+
 // AUTH
 const CREDS={user:'hvxmusic2026',pass:'adminhvx'};
 
 function checkSession(){if(localStorage.getItem('hvx_admin')==='true'){showAdmin()}}
-function showAdmin(){document.getElementById('login-screen').classList.add('hidden');document.getElementById('admin-wrap').classList.remove('hidden');localStorage.setItem('hvx_admin','true');renderFeed();refreshUploadArtistSelect();}
+function showAdmin(){document.getElementById('login-screen').classList.add('hidden');document.getElementById('admin-wrap').classList.remove('hidden');localStorage.setItem('hvx_admin','true');renderFeed();refreshUploadArtistSelect();syncPullAll().then(function(){renderFeed();refreshUploadArtistSelect();renderArtistManager();renderEventsAdmin();renderMerchAdmin();renderInbox();});}
 
 document.getElementById('login-btn').addEventListener('click',()=>{
   const u=document.getElementById('login-user').value;
   const p=document.getElementById('login-pass').value;
   const err=document.getElementById('login-error');
-  if(u===CREDS.user&&p===CREDS.pass){err.style.display='none';showAdmin();logActivity('Admin signed in','green')}
+  if(u===CREDS.user&&p===CREDS.pass){err.style.display='none';localStorage.setItem('hvx_token',p);showAdmin();logActivity('Admin signed in','green')}
   else{err.style.display='block'}
 });
 document.getElementById('login-pass').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('login-btn').click()});
@@ -854,7 +885,7 @@ function updateDashActivity(){renderActivity()}
 
 // HIGHLIGHTS FEED
 function getHighlights(){return JSON.parse(localStorage.getItem('hvx_highlights')||'[]')}
-function saveHighlights(h){localStorage.setItem('hvx_highlights',JSON.stringify(h))}
+function saveHighlights(h){localStorage.setItem('hvx_highlights',JSON.stringify(h));syncPush('highlights')}
 
 function renderFeed(){
   const all=getHighlights();
@@ -1022,7 +1053,7 @@ function refreshUploadArtistSelect(){
 
 // ARTIST MANAGER
 function getAdminArtists(){return JSON.parse(localStorage.getItem('hvx_artists')||'null')||[]}
-function saveAdminArtists(list){localStorage.setItem('hvx_artists',JSON.stringify(list))}
+function saveAdminArtists(list){localStorage.setItem('hvx_artists',JSON.stringify(list));syncPush('artists')}
 
 function renderArtistManager(){
   const tbody=document.getElementById('artist-manager-tbody');
@@ -1114,7 +1145,7 @@ function cancelArtistEdit(){
 
 // EVENTS MANAGER
 function getAdminEvents(){return JSON.parse(localStorage.getItem('hvx_events')||'[]')}
-function saveAdminEvents(list){localStorage.setItem('hvx_events',JSON.stringify(list))}
+function saveAdminEvents(list){localStorage.setItem('hvx_events',JSON.stringify(list));syncPush('events')}
 
 function formatEventDate(iso){
   if(!iso)return '';
@@ -1218,7 +1249,7 @@ function cancelEventEdit(){
 
 // MERCH MANAGER
 function getAdminMerch(){return JSON.parse(localStorage.getItem('hvx_merch')||'[]')}
-function saveAdminMerch(list){localStorage.setItem('hvx_merch',JSON.stringify(list))}
+function saveAdminMerch(list){localStorage.setItem('hvx_merch',JSON.stringify(list));syncPush('merch')}
 
 function renderMerchAdmin(){
   const grid=document.getElementById('merch-admin-grid');
@@ -1302,7 +1333,7 @@ function cancelMerchEdit(){
 
 // CONTACT INBOX
 function getContacts(){return JSON.parse(localStorage.getItem('hvx_contacts')||'[]')}
-function saveContacts(list){localStorage.setItem('hvx_contacts',JSON.stringify(list))}
+function saveContacts(list){localStorage.setItem('hvx_contacts',JSON.stringify(list));syncPush('contacts')}
 
 function renderInbox(){
   const contacts=getContacts();
