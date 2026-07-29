@@ -602,6 +602,7 @@
 
   <script src="hvx-data.js"></script>
   <script>
+(async () => {
     // CURSOR
     const dot = document.getElementById('cursor-dot');
     const ring = document.getElementById('cursor-ring');
@@ -648,6 +649,18 @@
     });
 
     // READ URL PARAM
+    // Fetch shared data published from the admin panel
+    await Promise.all(
+      [['artists','hvx_artists'],['events','hvx_events'],['highlights','hvx_highlights']].map(([k, sk]) =>
+        Promise.race([
+          fetch('/api/data?key=' + k)
+            .then(r => r.ok ? r.json() : null)
+            .then(d => { if (Array.isArray(d) && d.length) localStorage.setItem(sk, JSON.stringify(d)); }),
+          new Promise(res => setTimeout(res, 2500))
+        ]).catch(() => {})
+      )
+    );
+
     const params = new URLSearchParams(location.search);
     const storedArtists = (() => { try { return JSON.parse(localStorage.getItem('hvx_artists')) || []; } catch(e) { return []; } })();
     const dataArtists = (window.HVX && window.HVX.artists) || [];
@@ -864,14 +877,18 @@
     `;
 
     // HIGHLIGHTS
-    const storageKey = 'hvx_highlights_' + artist.id;
     const isAdmin = localStorage.getItem('hvx_admin') === 'true';
+    const globalFeed = (() => { try { return JSON.parse(localStorage.getItem('hvx_highlights')) || []; } catch(e) { return []; } })();
+    const artistFeed = globalFeed.filter(h => h.artist === artist.id).map(h => ({
+      id: h.id, source: h.source, date: h.date, caption: h.caption || '',
+      likes: h.likes || 0, emoji: h.emoji || '[photo]', dataUrl: h.dataUrl || null
+    }));
     const defaultHighlights = [
       { id: 1, source: 'Instagram', date: 'Jun 14, 2026', caption: 'Closing set at Berghain - an unforgettable night. Thank you Berlin.', likes: 1842, emoji: '[audio]' },
       { id: 2, source: 'Video', date: 'May 31, 2026', caption: 'Exclusive aftermovie from Output, NYC. Full 3-hour set available on our channel.', likes: 962, emoji: '[video]' },
       { id: 3, source: 'Photo', date: 'May 17, 2026', caption: 'Fabric room 1. One of the best crowds of the year.', likes: 1233, emoji: '[photo]' }
     ];
-    let highlights = JSON.parse(localStorage.getItem(storageKey) || 'null') || defaultHighlights;
+    let highlights = artistFeed.length ? artistFeed : defaultHighlights;
 
     function renderHighlights() {
       const grid = document.getElementById('highlights-grid');
@@ -900,7 +917,6 @@
 
     window.deleteHighlight = function(id) {
       highlights = highlights.filter(h => h.id !== id);
-      localStorage.setItem(storageKey, JSON.stringify(highlights));
       renderHighlights();
     };
 
@@ -975,6 +991,7 @@
       el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
       revealObs.observe(el);
     });
-  </script>
+  })();
+</script>
 </body>
 </html>
