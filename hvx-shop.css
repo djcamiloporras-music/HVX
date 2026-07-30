@@ -226,6 +226,8 @@
 .hvx-release-note { font-size: 0.72rem; color: var(--muted); margin-top: 0.4rem; }
 
 @media (max-width: 600px) {
+  /* Icons only, so both controls fit beside the centred logo. */
+  #hvx-account-label { display: none; }
   .hvx-panel { padding: 1.6rem; }
   .hvx-row { grid-template-columns: 1fr; gap: 0; }
   .hvx-icon-btn { padding: 0.5rem 0.7rem; font-size: 0.72rem; }
