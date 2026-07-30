@@ -307,6 +307,10 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
         <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
         Merch Manager
       </button>
+      <button class="nav-item" data-page="orders">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><path d="M3 6h18M16 10a4 4 0 01-8 0"/></svg>
+        Orders
+      </button>
       <button class="nav-item" data-page="contact-inbox">
         <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
         Contact Inbox
@@ -744,7 +748,11 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
         <div class="form-group"><label class="form-label">Description</label><input type="text" class="form-input" id="mf-desc" placeholder="Short product description"/></div>
         <div class="form-row">
           <div class="form-group"><label class="form-label">Image URL</label><input type="text" class="form-input" id="mf-img" placeholder="https://..."/></div>
-          <div class="form-group"><label class="form-label">Status</label><select class="form-input" id="mf-status"><option value="available">Available</option><option value="soldout">Sold Out</option><option value="coming">Coming Soon</option></select></div>
+          <div class="form-group"><label class="form-label">Status</label><select class="form-input" id="mf-status"><option value="available">In Stock</option><option value="preorder">Pre-order</option><option value="soldout">Sold Out</option><option value="coming">Coming Soon</option></select></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Release Date (pre-order only)</label><input type="text" class="form-input" id="mf-release" placeholder="Oct 2026"/></div>
+          <div class="form-group"></div>
         </div>
         <div style="display:flex;gap:.5rem">
           <button class="btn btn-primary" onclick="saveMerchProduct()" style="width:auto">Save Product</button>
@@ -754,6 +762,32 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
 
       <div class="merch-admin-grid" id="merch-admin-grid">
         <p style="color:var(--muted);font-size:.85rem;grid-column:1/-1">No products yet. Add one above.</p>
+      </div>
+    </div>
+
+    <!-- ORDERS -->
+    <div class="page-section" id="page-orders">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Orders</h1>
+          <p class="page-sub">Store orders placed by registered customers.</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-outline btn-sm" onclick="renderOrders()">Refresh</button>
+        </div>
+      </div>
+      <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:2rem">
+        <div class="kpi-card"><p class="kpi-label">Total Orders</p><p class="kpi-value" id="ord-total">0</p></div>
+        <div class="kpi-card"><p class="kpi-label">Paid</p><p class="kpi-value" id="ord-paid">0</p></div>
+        <div class="kpi-card"><p class="kpi-label">Awaiting Payment</p><p class="kpi-value" id="ord-pending">0</p></div>
+        <div class="kpi-card"><p class="kpi-label">Revenue</p><p class="kpi-value" id="ord-revenue">$0</p></div>
+      </div>
+      <div class="table-wrap">
+        <div class="table-head"><h3 class="table-title">All Orders</h3></div>
+        <table>
+          <thead><tr><th>Reference</th><th>Customer</th><th>Items</th><th>Type</th><th>Total</th><th>Payment</th><th>Date</th></tr></thead>
+          <tbody id="orders-tbody"></tbody>
+        </table>
       </div>
     </div>
 
@@ -860,6 +894,7 @@ document.querySelectorAll('.nav-item[data-page]').forEach(btn=>{
     if(btn.dataset.page==='artists')renderArtistManager();
     if(btn.dataset.page==='events'){renderEventsAdmin();refreshUploadArtistSelect()}
     if(btn.dataset.page==='merch-manager')renderMerchAdmin();
+    if(btn.dataset.page==='orders')renderOrders();
     if(btn.dataset.page==='contact-inbox')renderInbox();
   });
 });
@@ -1247,6 +1282,50 @@ function cancelEventEdit(){
 }
 
 
+// ORDERS
+function renderOrders(){
+  var tbody=document.getElementById('orders-tbody');
+  if(!tbody)return;
+  tbody.innerHTML='<tr><td colspan="7" style="padding:1.5rem;color:var(--muted);text-align:center;font-size:.85rem">Loading...</td></tr>';
+  fetch('/api/orders',{headers:{'Authorization':'Bearer '+(localStorage.getItem('hvx_token')||'')}})
+    .then(function(r){return r.ok?r.json():[]})
+    .then(function(orders){
+      if(!Array.isArray(orders)||!orders.length){
+        tbody.innerHTML='<tr><td colspan="7" style="padding:1.5rem;color:var(--muted);text-align:center;font-size:.85rem">No orders yet.</td></tr>';
+        document.getElementById('ord-total').textContent='0';
+        document.getElementById('ord-paid').textContent='0';
+        document.getElementById('ord-pending').textContent='0';
+        document.getElementById('ord-revenue').textContent='$0';
+        return;
+      }
+      var paid=orders.filter(function(o){return o.payment&&o.payment.status==='paid'});
+      document.getElementById('ord-total').textContent=orders.length;
+      document.getElementById('ord-paid').textContent=paid.length;
+      document.getElementById('ord-pending').textContent=orders.length-paid.length;
+      document.getElementById('ord-revenue').textContent='$'+paid.reduce(function(s,o){return s+(o.total||0)},0).toFixed(2);
+
+      tbody.innerHTML=orders.map(function(o){
+        var when=new Date(o.createdAt).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+        var items=(o.items||[]).map(function(i){return i.qty+'x '+i.name}).join(', ');
+        var payStatus=(o.payment&&o.payment.status)||'unpaid';
+        var payBadge=payStatus==='paid'?'badge-green':payStatus==='failed'?'badge-muted':'badge-orange';
+        var typeBadge=o.fulfillment==='preorder'?'badge-accent':o.fulfillment==='mixed'?'badge-orange':'badge-green';
+        return '<tr>'+
+          '<td style="font-weight:600">'+o.reference+'</td>'+
+          '<td>'+o.customer.firstName+' '+o.customer.lastName+'<div style="font-size:.72rem;color:var(--muted)">'+o.customer.email+'</div></td>'+
+          '<td style="font-size:.8rem">'+items+'</td>'+
+          '<td><span class="badge '+typeBadge+'">'+o.fulfillment+'</span></td>'+
+          '<td>$'+(o.total||0).toFixed(2)+'</td>'+
+          '<td><span class="badge '+payBadge+'">'+payStatus.replace('_',' ')+'</span></td>'+
+          '<td>'+when+'</td>'+
+        '</tr>';
+      }).join('');
+    })
+    .catch(function(){
+      tbody.innerHTML='<tr><td colspan="7" style="padding:1.5rem;color:var(--red);text-align:center;font-size:.85rem">Could not load orders.</td></tr>';
+    });
+}
+
 // MERCH MANAGER
 function getAdminMerch(){return JSON.parse(localStorage.getItem('hvx_merch')||'[]')}
 function saveAdminMerch(list){localStorage.setItem('hvx_merch',JSON.stringify(list));syncPush('merch')}
@@ -1266,7 +1345,7 @@ function renderMerchAdmin(){
         <div class="merch-admin-name">${p.name}</div>
         <div class="merch-admin-price">$${p.price}</div>
         <p style="font-size:.75rem;color:var(--muted);margin:.3rem 0 .8rem">${p.desc||''}</p>
-        <span class="badge ${p.status==='available'?'badge-green':p.status==='soldout'?'badge-muted':'badge-orange'}" style="margin-bottom:.7rem">${p.status==='available'?'Available':p.status==='soldout'?'Sold Out':'Coming Soon'}</span>
+        <span class="badge ${p.status==='available'?'badge-green':p.status==='preorder'?'badge-accent':p.status==='soldout'?'badge-muted':'badge-orange'}" style="margin-bottom:.7rem">${p.status==='available'?'In Stock':p.status==='preorder'?'Pre-order':p.status==='soldout'?'Sold Out':'Coming Soon'}</span>${p.status==='preorder'&&p.releaseDate?('<div style="font-size:.7rem;color:var(--muted);margin-bottom:.5rem">Ships '+p.releaseDate+'</div>'):''}
         <div style="display:flex;gap:.5rem;margin-top:.5rem">
           <button class="btn btn-outline btn-sm" onclick="editMerch(${i})">Edit</button>
           <button class="btn btn-danger" onclick="deleteMerch(${i})">Delete</button>
@@ -1288,7 +1367,8 @@ function saveMerchProduct(){
     price:document.getElementById('mf-price').value.trim()||'0',
     desc:document.getElementById('mf-desc').value.trim(),
     img:document.getElementById('mf-img').value.trim()||null,
-    status:document.getElementById('mf-status').value
+    status:document.getElementById('mf-status').value,
+    releaseDate:(document.getElementById('mf-release')||{}).value ? document.getElementById('mf-release').value.trim() : ''
   };
   if(idx!==null){products[idx]=product}else{products.push(product)}
   saveAdminMerch(products);
@@ -1306,6 +1386,7 @@ function editMerch(i){
   document.getElementById('mf-desc').value=p.desc||'';
   document.getElementById('mf-img').value=p.img||'';
   document.getElementById('mf-status').value=p.status||'available';
+  var rel=document.getElementById('mf-release');if(rel)rel.value=p.releaseDate||'';
   document.getElementById('merch-form-title').textContent='Edit Product';
   document.getElementById('cancel-merch-btn').style.display='';
 }
@@ -1322,7 +1403,7 @@ function deleteMerch(i){
 }
 
 function cancelMerchEdit(){
-  ['mf-name','mf-price','mf-desc','mf-img'].forEach(function(id){
+  ['mf-name','mf-price','mf-desc','mf-img','mf-release'].forEach(function(id){
     var el=document.getElementById(id);if(el)el.value='';
   });
   document.getElementById('edit-merch-id').value='';
