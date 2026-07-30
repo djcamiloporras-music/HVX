@@ -17,7 +17,7 @@
   --accent-glow:rgba(162,89,255,0.20);
   --font-main: 'Manrope', sans-serif;
   --font-alt:  'Syne', sans-serif;
-  --nav-h:     72px;
+  --nav-h:     104px;
   --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -159,13 +159,27 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   display: flex; align-items: center;
   padding: 0 4vw;
   z-index: 1000;
-  transition: background 0.4s, backdrop-filter 0.4s;
 }
-.nav.scrolled {
-  background: rgba(8,8,8,0.85);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
+/* Backdrop lives on a pseudo-element so the gradient and blur fade out
+   downward while the logo and links above stay perfectly sharp. */
+.nav::before {
+  content: '';
+  position: absolute; inset: 0;
+  z-index: -1;
+  background: linear-gradient(to bottom,
+    rgba(4,4,7,0.97) 0%,
+    rgba(4,4,7,0.88) 45%,
+    rgba(4,4,7,0.55) 78%,
+    rgba(4,4,7,0) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  mask-image: linear-gradient(to bottom, #000 62%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 62%, transparent 100%);
+  opacity: 0.92;
+  transition: opacity 0.4s;
+  pointer-events: none;
 }
+.nav.scrolled::before { opacity: 1; }
 .nav-logo { margin-right: auto; height: var(--nav-h); display: flex; align-items: center; overflow: hidden; }
 .logo-img {
   height: 32px;
@@ -431,11 +445,16 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
 .hero-img-wrap .chip-4 { bottom: 8%;  right: -6%; }
 
 .logo-video {
-  height: 320px;
+  height: 440px;
   width: auto;
   display: block;
   object-fit: contain;
   mix-blend-mode: screen;
+  /* The clip alone leaves a hard-edged black rectangle, because the video's
+     pure black is darker than the bar behind it. Fading the edges dissolves
+     that seam so the mark reads as emerging from the black gradient. */
+  mask-image: radial-gradient(ellipse 58% 30% at 50% 50%, #000 45%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 58% 30% at 50% 50%, #000 45%, transparent 100%);
 }
 
 .hero-video-wrap {
@@ -999,7 +1018,10 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
 @media (max-width: 900px) {
-  .nav-links, .nav-cta { display: none; }
+  .nav-links { display: none; }
+  /* Account and cart stay reachable on phones - registering and buying
+     must not depend on being on a desktop. */
+  .nav-cta { display: flex; position: absolute; left: 4vw; }
   .nav-hamburger { display: flex; position: absolute; right: 4vw; }
   .nav { position: relative; justify-content: center; }
   .nav-logo { margin-right: 0; justify-content: center; }
@@ -1024,7 +1046,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
 }
 
 @media (max-width: 600px) {
-  .logo-video { height: 200px; }
+  .logo-video { height: 280px; }
   .hero-title { letter-spacing: -0.02em; }
   .artists-grid { grid-template-columns: 1fr 1fr; gap: 1px; }
   .contact-inner { grid-template-columns: 1fr; }
