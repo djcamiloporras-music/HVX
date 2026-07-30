@@ -24,7 +24,7 @@
   var CART_KEY = 'hvx_cart';
   var CATALOG_KEY = 'hvx_merch';
 
-  var state = { user: null, cart: [], busy: false };
+  var state = { user: null, cart: [], busy: false, notice: null };
   var ui = {};
 
   /* ------------------------------------------------------------------ util */
@@ -141,6 +141,7 @@
     if (existing) existing.qty = Math.min(20, existing.qty + 1);
     else state.cart.push({ id: id, qty: 1 });
 
+    state.notice = null;
     saveCart();
     paintCart();
     openCart();
@@ -368,13 +369,19 @@
   function paintCart() {
     if (!ui.cartBody) return;
 
+    /* A notice survives the repaint that follows clearing the cart, so an
+       order confirmation is still visible once the lines are gone. */
+    var notice = state.notice
+      ? '<div class="hvx-msg show ' + state.notice.kind + '">' + esc(state.notice.text) + '</div>'
+      : '';
+
     if (!state.cart.length) {
-      ui.cartBody.innerHTML = '<div class="hvx-empty">Your cart is empty.</div>';
+      ui.cartBody.innerHTML = notice + '<div class="hvx-empty">Your cart is empty.</div>';
       ui.cartFoot.innerHTML = '';
       return;
     }
 
-    ui.cartBody.innerHTML = state.cart.map(function (line) {
+    ui.cartBody.innerHTML = notice + state.cart.map(function (line) {
       var p = findProduct(line.id);
       if (!p) return '';
       var preorder = (p.status || '') === 'preorder';
@@ -449,6 +456,11 @@
 
   function closeCart() {
     ui.drawer.classList.remove('open');
+  }
+
+  function notice(text, kind) {
+    state.notice = text ? { text: text, kind: kind || 'info' } : null;
+    paintCart();
   }
 
   function message(text, kind, hostId) {
@@ -602,9 +614,9 @@
           if (res.status === 501) {
             /* Payments not switched on yet: the order is saved, say so plainly. */
             clearCart();
-            message('Order ' + order.reference + ' received. Online payment is not '
+            notice('Order ' + order.reference + ' received. Online payment is not '
               + 'enabled yet, so we will contact you at ' + state.user.email
-              + ' to arrange it.', 'info', 'hvx-cart-msg');
+              + ' to arrange it.', 'ok');
             return;
           }
 
@@ -627,9 +639,8 @@
       clearCart();
       openAuth('Payment received. Order ' + ref + ' is confirmed - thank you.');
     } else if (params.get('canceled')) {
+      notice('Checkout canceled. Order ' + ref + ' is still awaiting payment.', 'info');
       openCart();
-      message('Checkout canceled. Order ' + ref + ' is still awaiting payment.',
-        'info', 'hvx-cart-msg');
     }
 
     if (window.history.replaceState) {
