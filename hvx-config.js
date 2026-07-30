@@ -18,6 +18,13 @@ window.HVX_CONFIG = {
     youtube:    'https://www.youtube.com/@hvxmusic',
   },
 
+  /* Store behaviour */
+  shop: {
+    /* false: the site stays public and only checkout asks for an account.
+       true:  visitors must sign in before they can see anything.        */
+    requireAuthOnEntry: false,
+  },
+
   /* Future backend endpoints - leave empty until ready */
   forms: {
     demo:    '',   // Google Apps Script URL
