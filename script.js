@@ -533,7 +533,11 @@
     if (!products.length) {
       merchGrid.innerHTML = '<div class="merch-empty"><p class="merch-empty-label">HVX Store</p><p class="merch-empty-msg">Shop coming soon.</p></div>';
     } else {
+      const LABELS = { available: 'In Stock', preorder: 'Pre-order', soldout: 'Sold Out', coming: 'Coming Soon' };
       products.forEach(p => {
+        const status = p.status || 'available';
+        const buyable = status === 'available' || status === 'preorder';
+        const preorder = status === 'preorder';
         const card = document.createElement('div');
         card.className = 'merch-card reveal';
         card.innerHTML =
@@ -542,7 +546,14 @@
              <p class="merch-card-name">${p.name}</p>
              <p class="merch-card-price">$${p.price}</p>
              ${p.desc ? `<p class="merch-card-desc">${p.desc}</p>` : ''}
-             <span class="merch-card-badge ${p.status || 'available'}">${p.status === 'soldout' ? 'Sold Out' : p.status === 'coming' ? 'Coming Soon' : 'Available'}</span>
+             <span class="merch-card-badge ${status}">${LABELS[status] || 'Available'}</span>
+             ${preorder && p.releaseDate ? `<p class="hvx-release-note">Ships from ${p.releaseDate}</p>` : ''}
+             <div class="hvx-card-actions">
+               <button class="hvx-add-btn${preorder ? ' preorder' : ''}"
+                       ${buyable ? `data-hvx-add="${p.id}"` : 'disabled'}>
+                 ${preorder ? 'Pre-order' : buyable ? 'Add to Cart' : LABELS[status]}
+               </button>
+             </div>
            </div>`;
         revealObs.observe(card);
         merchGrid.appendChild(card);
