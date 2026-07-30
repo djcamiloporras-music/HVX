@@ -103,7 +103,7 @@ export default async (req) => {
     }
 
     const userKey = 'user:' + (await sha256Hex(email));
-    if (await store.get(userKey, { type: 'json' })) {
+    if (await store.get(userKey, { type: 'json', consistency: 'strong' })) {
       return json({ error: 'An account with that email already exists' }, 409);
     }
 
@@ -124,7 +124,10 @@ export default async (req) => {
     const password = typeof body.password === 'string' ? body.password : '';
     if (!email || !password) return json({ error: 'Email and password are required' }, 400);
 
-    const user = await store.get('user:' + (await sha256Hex(email)), { type: 'json' });
+    /* Strong read: a freshly registered account must be able to sign in
+       immediately, not after the eventual-consistency window. */
+    const user = await store.get('user:' + (await sha256Hex(email)),
+      { type: 'json', consistency: 'strong' });
     /* Same response for unknown email and wrong password. */
     if (!user || !(await verifyPassword(password, user.salt, user.hash))) {
       return json({ error: 'Invalid email or password' }, 401);
