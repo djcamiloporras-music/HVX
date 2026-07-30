@@ -38,10 +38,14 @@ export async function resolveSession(req) {
   const token = bearer(req);
   if (!token) return null;
   const store = getStore('hvx-auth');
-  const session = await store.get('session:' + (await sha256Hex(token)), { type: 'json' });
+  /* Strong consistency: a session created seconds ago must resolve on the
+     very next request, so eventual reads are not acceptable here. */
+  const session = await store.get('session:' + (await sha256Hex(token)),
+    { type: 'json', consistency: 'strong' });
   if (!session || !session.email) return null;
   if (session.expiresAt && Date.parse(session.expiresAt) < Date.now()) return null;
-  const user = await store.get('user:' + (await sha256Hex(session.email)), { type: 'json' });
+  const user = await store.get('user:' + (await sha256Hex(session.email)),
+    { type: 'json', consistency: 'strong' });
   if (!user) return null;
   return { user, session };
 }
