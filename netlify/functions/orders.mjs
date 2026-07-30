@@ -103,7 +103,8 @@ export default async (req) => {
     createdAt: new Date().toISOString(),
   };
 
-  const orders = (await store.get('orders', { type: 'json' })) || [];
+  /* Strong read so two orders placed back to back cannot overwrite each other. */
+  const orders = (await store.get('orders', { type: 'json', consistency: 'strong' })) || [];
   orders.unshift(order);
   await store.setJSON('orders', orders.slice(0, 2000));
 
