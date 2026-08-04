@@ -27,8 +27,8 @@
     #scroll-progress { position: fixed; top: 0; left: 0; width: 0%; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent-2)); z-index: 10000; }
 
     /* CURSOR */
-    #cursor-dot { position: fixed; width: 8px; height: 8px; background: var(--accent); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: transform 0.1s, background 0.2s; }
-    #cursor-ring { position: fixed; width: 36px; height: 36px; border: 1.5px solid rgba(162,89,255,0.6); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: transform 0.18s ease, width 0.2s, height 0.2s, border-color 0.2s; }
+    #cursor-dot { position: fixed; width: 8px; height: 8px; background: var(--accent); border-radius: 50%; pointer-events: none; z-index: 100001; transform: translate(-50%,-50%); transition: transform 0.1s, background 0.2s; }
+    #cursor-ring { position: fixed; width: 36px; height: 36px; border: 1.5px solid rgba(162,89,255,0.6); border-radius: 50%; pointer-events: none; z-index: 100000; transform: translate(-50%,-50%); transition: transform 0.18s ease, width 0.2s, height 0.2s, border-color 0.2s; }
     body.cursor-hover #cursor-dot { transform: translate(-50%,-50%) scale(2); background: var(--accent-2); }
     body.cursor-hover #cursor-ring { width: 54px; height: 54px; border-color: var(--accent-2); }
 
@@ -36,6 +36,8 @@
     nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; display: flex; align-items: center; justify-content: space-between; padding: 0 48px; height: 104px; background: linear-gradient(to bottom, rgba(4,4,7,0.97) 0%, rgba(4,4,7,0.88) 45%, rgba(4,4,7,0.55) 78%, rgba(4,4,7,0) 100%); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); mask-image: linear-gradient(to bottom, #000 62%, transparent 100%); -webkit-mask-image: linear-gradient(to bottom, #000 62%, transparent 100%); }
     .nav-logo { display: flex; align-items: center; text-decoration: none; height: 104px; overflow: hidden; }
     .nav-logo-video { height: 440px; width: auto; display: block; object-fit: contain; mix-blend-mode: screen; mask-image: radial-gradient(ellipse 58% 30% at 50% 50%, #000 45%, transparent 100%); -webkit-mask-image: radial-gradient(ellipse 58% 30% at 50% 50%, #000 45%, transparent 100%); }
+    .embed-frame { width: 100%; border: 1px solid var(--border); border-radius: 10px; display: block; }
+    .embed-empty { color: var(--muted); font-size: 0.9rem; line-height: 1.7; padding: 28px 0; }
     .nav-back { display: flex; align-items: center; gap: 8px; color: var(--off-white); text-decoration: none; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; transition: color 0.2s; }
     .nav-back:hover { color: var(--accent); }
     .nav-back::before { content: '\2190'; font-size: 1rem; }
@@ -484,7 +486,7 @@
       <div class="hero-stats" id="hero-stats"></div>
       <div class="hero-ctas">
         <a href="index.html#contact" class="btn-primary">Book Now</a>
-        <a href="#" class="btn-outline">Listen Now</a>
+        <a href="#" class="btn-outline" id="listen-btn" target="_blank" rel="noopener noreferrer">Listen Now</a>
       </div>
     </div>
     <div class="hero-right">
@@ -505,8 +507,6 @@
       <button class="tab-btn" data-tab="music">Music</button>
       <button class="tab-btn" data-tab="sets">Sets</button>
       <button class="tab-btn" data-tab="venues">Venues</button>
-      <button class="tab-btn" data-tab="analytics">Analytics</button>
-      <button class="tab-btn" data-tab="highlights">Highlights</button>
       <div class="tab-indicator" id="tab-indicator"></div>
     </div>
   </div>
@@ -527,24 +527,18 @@
         <div class="shows-list" id="ov-shows"></div>
       </div>
     </div>
-    <div class="press-section">
-      <h3>Press</h3>
-      <div class="press-quotes" id="ov-press"></div>
-    </div>
   </section>
 
   <!-- MUSIC -->
   <section class="tab-content" id="tab-music">
-    <h2 class="section-title">Discography</h2>
-    <div class="releases-grid" id="releases-grid"></div>
+    <h2 class="section-title">Music</h2>
+    <div id="spotify-embed"></div>
   </section>
 
   <!-- SETS -->
   <section class="tab-content" id="tab-sets">
-    <h2 class="section-title">Recent Sets</h2>
-    <div class="sets-list" id="sets-list"></div>
-    <h3 style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:var(--white);margin-bottom:20px;margin-top:48px;">Featured Mix</h3>
-    <div class="featured-mix" id="featured-mix"></div>
+    <h2 class="section-title">Sets</h2>
+    <div id="soundcloud-embed"></div>
   </section>
 
   <!-- VENUES -->
@@ -558,36 +552,6 @@
     </div>
   </section>
 
-  <!-- ANALYTICS -->
-  <section class="tab-content" id="tab-analytics">
-    <h2 class="section-title">Reach &amp; Impact</h2>
-    <div class="kpi-row" id="kpi-row"></div>
-    <div class="chart-section">
-      <div class="chart-title">Monthly Reach</div>
-      <div class="bar-chart" id="bar-chart"></div>
-    </div>
-    <div class="analytics-row">
-      <div>
-        <div class="donut-title">Audience by Region</div>
-        <div class="donut-wrap">
-          <div class="donut-chart" id="donut-chart"></div>
-          <div class="donut-legend" id="donut-legend"></div>
-        </div>
-      </div>
-      <div>
-        <div class="donut-title">Top Cities</div>
-        <div class="cities-list" id="cities-list"></div>
-      </div>
-    </div>
-    <div class="chart-title" style="margin-bottom:20px;">Engagement Metrics</div>
-    <div class="engagement-grid" id="engagement-grid"></div>
-  </section>
-
-  <!-- HIGHLIGHTS -->
-  <section class="tab-content" id="tab-highlights">
-    <h2 class="section-title">Moments</h2>
-    <div class="highlights-grid" id="highlights-grid"></div>
-  </section>
 
   <!-- FOOTER -->
   <footer>
@@ -735,8 +699,19 @@
     document.getElementById('ov-bio').textContent = artist.longBio;
     const servicesEl = document.getElementById('ov-services');
     artist.services.forEach(s => { const t = document.createElement('span'); t.className='tag'; t.textContent=s; servicesEl.appendChild(t); });
+    /* An empty heading with nothing under it reads as broken, so hide it. */
+    if (!artist.services.length) {
+      servicesEl.previousElementSibling.style.display = 'none';
+      servicesEl.style.display = 'none';
+    }
+
+    /* Genres come from the admin panel. One field, comma separated,
+       so "House, Tech House, Techno" becomes three tags. */
     const infEl = document.getElementById('ov-influences');
-    artist.influences.forEach(s => { const t = document.createElement('span'); t.className='tag'; t.textContent=s; infEl.appendChild(t); });
+    const genreList = String(artist.genre || '')
+      .split(',').map(g => g.trim()).filter(Boolean);
+    const influenceList = genreList.length ? genreList : artist.influences;
+    influenceList.forEach(g => { const t = document.createElement('span'); t.className='tag'; t.textContent=g; infEl.appendChild(t); });
     const showsEl = document.getElementById('ov-shows');
     artist.upcomingShows.forEach(s => {
       showsEl.innerHTML += `<div class="show-card">
@@ -745,58 +720,50 @@
         <span class="show-arrow">&rarr;</span>
       </div>`;
     });
-    const pressEl = document.getElementById('ov-press');
-    artist.pressQuotes.forEach(q => {
-      pressEl.innerHTML += `<blockquote><p>"${q.quote}"</p><cite>&mdash; ${q.source}</cite></blockquote>`;
-    });
+    /* MUSIC - Spotify player for the artist saved in the admin panel.
+       An embed needs no API key and gives every track a 30 second preview,
+       so the artist promotes their own catalogue straight from the profile. */
+    function spotifyEmbed(url) {
+      const m = String(url || '').match(
+        /open\.spotify\.com\/(artist|album|playlist|track)\/([A-Za-z0-9]+)/);
+      return m ? 'https://open.spotify.com/embed/' + m[1] + '/' + m[2] + '?theme=0' : null;
+    }
 
-    // MUSIC
-    const relGrid = document.getElementById('releases-grid');
-    const bgGrads = [
-      'linear-gradient(135deg,#1a1a2e,#2d1b4e)', 'linear-gradient(135deg,#1e2a1e,#2e4a2e)',
-      'linear-gradient(135deg,#2e1a1a,#4e2b1a)', 'linear-gradient(135deg,#1a1e2e,#1a2e4e)',
-      'linear-gradient(135deg,#2a1a2e,#4e1a4e)'
-    ];
-    artist.releases.forEach((r, i) => {
-      relGrid.innerHTML += `<div class="release-card">
-        <div class="release-art">
-          <div class="release-art-inner" style="background:${bgGrads[i%bgGrads.length]};">
-            <div class="play-btn"><span>&#9654;</span></div>
-          </div>
-        </div>
-        <div class="release-info">
-          <div class="release-title">${r.title}</div>
-          <div class="release-meta">${r.year} &middot; ${r.label}<br>${r.genre}</div>
-          <div class="release-streams">&#9671; ${r.streams} streams</div>
-        </div>
-      </div>`;
-    });
+    const musicHost = document.getElementById('spotify-embed');
+    const spotifyUrl = artist.social && artist.social.spotify;
+    const spotifySrc = spotifyEmbed(spotifyUrl);
+    if (spotifySrc) {
+      musicHost.innerHTML = '<iframe class="embed-frame" src="' + spotifySrc + '" '
+        + 'height="480" frameborder="0" loading="lazy" '
+        + 'allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">'
+        + '</iframe>';
+    } else {
+      musicHost.innerHTML = '<p class="embed-empty">No Spotify profile linked yet. '
+        + 'Add the artist\'s Spotify URL in the admin panel and their tracks appear here.</p>';
+    }
 
-    // SETS
-    const setsList = document.getElementById('sets-list');
-    artist.sets.forEach(s => {
-      setsList.innerHTML += `<div class="set-row">
-        <span class="set-date">${s.date}</span>
-        <span class="set-venue-name">${s.venue}</span>
-        <span class="set-city">${s.city}</span>
-        <span class="set-dur">${s.duration}</span>
-        <span class="set-bpm">${s.bpm} BPM</span>
-        <div class="set-action" title="Download">&darr;</div>
-      </div>`;
-    });
-    // Featured mix
-    const fm = artist.featuredMix;
-    const waveHeights = [30,50,70,45,80,55,65,40,75,60,85,50,45,70,55,80,40,65,75,50,85,45,60];
-    let waveBars = waveHeights.map((h,i) => `<div class="wave-bar" style="height:${h}%;animation-delay:${i*0.07}s;"></div>`).join('');
-    let trackRows = fm.tracklist.map(t => `<div class="track-row"><span class="track-time">${t.time}</span><span class="track-name">${t.title}</span></div>`).join('');
-    document.getElementById('featured-mix').innerHTML = `
-      <div class="mix-header">
-        <div><div class="mix-label">Featured Mix</div><div class="mix-title">${fm.title}</div></div>
-        <div class="mix-duration">${fm.duration}</div>
-      </div>
-      <div class="waveform">${waveBars}</div>
-      <div class="tracklist">${trackRows}</div>
-    `;
+    /* SETS - SoundCloud carries the long recordings. */
+    const setsHost = document.getElementById('soundcloud-embed');
+    const scUrl = artist.social && artist.social.soundcloud;
+    if (scUrl && scUrl !== '#' && /soundcloud\.com/.test(scUrl)) {
+      setsHost.innerHTML = '<iframe class="embed-frame" height="480" frameborder="0" '
+        + 'scrolling="no" loading="lazy" allow="autoplay" src="'
+        + 'https://w.soundcloud.com/player/?url=' + encodeURIComponent(scUrl)
+        + '&color=%23a259ff&auto_play=false&hide_related=true&show_comments=false'
+        + '&show_user=true&show_reposts=false&show_teaser=false&visual=true"></iframe>';
+    } else {
+      setsHost.innerHTML = '<p class="embed-empty">No SoundCloud profile linked yet. '
+        + 'Add the artist\'s SoundCloud URL in the admin panel and their sets appear here.</p>';
+    }
+
+    /* Listen Now opens the artist's Spotify; with none set it points at
+       the label's own profile rather than a dead link. */
+    const listenBtn = document.getElementById('listen-btn');
+    if (listenBtn) {
+      const hasSpotify = spotifyUrl && spotifyUrl !== '#';
+      listenBtn.href = hasSpotify ? spotifyUrl
+        : ((window.HVX_CONFIG && window.HVX_CONFIG.social && window.HVX_CONFIG.social.spotify) || '#');
+    }
 
     // VENUES
     function renderVenues(arr, elId) {
@@ -814,111 +781,15 @@
     }
     renderVenues(artist.venues.upcoming, 'venues-upcoming');
     renderVenues(artist.venues.past, 'venues-past');
-
-    // ANALYTICS
-    const an = artist.analytics;
-    document.getElementById('kpi-row').innerHTML = `
-      <div class="kpi-card"><div class="kpi-label">Avg Reach / Show</div><div class="kpi-value">${an.avgReachPerShow.toLocaleString()}</div><div class="kpi-trend up">+12% vs last yr</div></div>
-      <div class="kpi-card"><div class="kpi-label">Total Est. Reach</div><div class="kpi-value">${an.totalReach}</div><div class="kpi-trend up">+18% vs last yr</div></div>
-      <div class="kpi-card"><div class="kpi-label">Shows This Year</div><div class="kpi-value">${an.showsThisYear}</div><div class="kpi-trend up">On Track</div></div>
-      <div class="kpi-card"><div class="kpi-label">Top Market</div><div class="kpi-value" style="font-size:1.5rem;">${an.topMarket}</div><div class="kpi-trend up">&uarr; Growing</div></div>
-    `;
-
-    // Bar chart
-    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    const maxReach = Math.max(...an.monthlyReach, 1);
-    const barChart = document.getElementById('bar-chart');
-    an.monthlyReach.forEach((val, i) => {
-      const pct = (val / maxReach * 90);
-      barChart.innerHTML += `<div class="bar-wrap">
-        <div class="bar" data-h="${pct}" style="height:0%;">
-          <div class="bar-tooltip">${months[i]}: ${val}K</div>
-        </div>
-        <div class="bar-label">${months[i].slice(0,1)}</div>
-      </div>`;
+    /* Venues mirror the events entered in the admin panel. Empty lists say so
+       instead of leaving a bare heading. */
+    [['venues-upcoming','No upcoming shows scheduled yet.'],
+     ['venues-past','No past shows recorded yet.']].forEach(function(pair){
+      const el = document.getElementById(pair[0]);
+      if (el && !el.innerHTML.trim()) {
+        el.innerHTML = '<p class="embed-empty">' + pair[1] + '</p>';
+      }
     });
-
-    // Donut
-    const regions = an.regions;
-    const europeDeg = regions.Europe * 3.6;
-    const latamDeg = regions.LATAM * 3.6;
-    const usaDeg = regions.USA * 3.6;
-    const donut = document.getElementById('donut-chart');
-    donut.style.setProperty('--europe', europeDeg + 'deg');
-    donut.style.setProperty('--latam', latamDeg + 'deg');
-    donut.style.setProperty('--usa', usaDeg + 'deg');
-    document.getElementById('donut-legend').innerHTML = `
-      <div class="legend-row"><div class="legend-dot" style="background:var(--accent);"></div>Europe ${regions.Europe}%</div>
-      <div class="legend-row"><div class="legend-dot" style="background:var(--accent-2);"></div>LATAM ${regions.LATAM}%</div>
-      <div class="legend-row"><div class="legend-dot" style="background:#00d296;"></div>USA ${regions.USA}%</div>
-      <div class="legend-row"><div class="legend-dot" style="background:var(--dark-3);border:1px solid var(--border);"></div>Other ${regions.Other}%</div>
-    `;
-
-    // Top cities
-    const maxCityReach = an.topCities[0].reach || 1;
-    const citiesList = document.getElementById('cities-list');
-    an.topCities.forEach((c, i) => {
-      const pct = (c.reach / maxCityReach * 100);
-      citiesList.innerHTML += `<div class="city-row">
-        <span class="city-rank">${i+1}</span>
-        <span class="city-name">${c.city}</span>
-        <div class="city-bar-wrap"><div class="city-bar" data-w="${pct}"></div></div>
-        <span class="city-reach">${(c.reach/1000).toFixed(0)}K</span>
-      </div>`;
-    });
-
-    // Engagement
-    const eng = an.engagement;
-    document.getElementById('engagement-grid').innerHTML = `
-      <div class="eng-card"><div class="eng-label">Avg Set Rating</div><div class="eng-value">${eng.avgRating}/5</div></div>
-      <div class="eng-card"><div class="eng-label">Social Mentions / Show</div><div class="eng-value">${eng.socialMentions}</div></div>
-      <div class="eng-card"><div class="eng-label">Streams Post-Show</div><div class="eng-value">${eng.streamsPostShow}</div></div>
-      <div class="eng-card"><div class="eng-label">RA Watchlist</div><div class="eng-value">${eng.raWatchlist}</div></div>
-    `;
-
-    // HIGHLIGHTS
-    const isAdmin = localStorage.getItem('hvx_admin') === 'true';
-    const globalFeed = (() => { try { return JSON.parse(localStorage.getItem('hvx_highlights')) || []; } catch(e) { return []; } })();
-    const artistFeed = globalFeed.filter(h => h.artist === artist.id).map(h => ({
-      id: h.id, source: h.source, date: h.date, caption: h.caption || '',
-      likes: h.likes || 0, emoji: h.emoji || '[photo]', dataUrl: h.dataUrl || null
-    }));
-    const defaultHighlights = [
-      { id: 1, source: 'Instagram', date: 'Jun 14, 2026', caption: 'Closing set at Berghain - an unforgettable night. Thank you Berlin.', likes: 1842, emoji: '[audio]' },
-      { id: 2, source: 'Video', date: 'May 31, 2026', caption: 'Exclusive aftermovie from Output, NYC. Full 3-hour set available on our channel.', likes: 962, emoji: '[video]' },
-      { id: 3, source: 'Photo', date: 'May 17, 2026', caption: 'Fabric room 1. One of the best crowds of the year.', likes: 1233, emoji: '[photo]' }
-    ];
-    let highlights = artistFeed.length ? artistFeed : defaultHighlights;
-
-    function renderHighlights() {
-      const grid = document.getElementById('highlights-grid');
-      grid.innerHTML = '';
-      highlights.forEach(h => {
-        const card = document.createElement('div');
-        card.className = 'highlight-card';
-        card.innerHTML = `
-          <div class="highlight-img"><div class="highlight-img-inner" style="background:var(--dark-3);">${h.emoji}</div></div>
-          <div class="highlight-body">
-            <span class="highlight-source">${h.source}</span>
-            <div class="highlight-date">${h.date}</div>
-            <p class="highlight-caption">${h.caption}</p>
-            <div class="highlight-footer">
-              <span class="highlight-likes">&hearts; ${h.likes.toLocaleString()}</span>
-              <div style="display:flex;gap:10px;align-items:center;">
-                ${isAdmin ? `<button class="highlight-delete" data-id="${h.id}" onclick="deleteHighlight(${h.id})">Delete</button>` : ''}
-                <span class="highlight-share" title="Share">&#8599; Share</span>
-              </div>
-            </div>
-          </div>`;
-        grid.appendChild(card);
-      });
-    }
-    renderHighlights();
-
-    window.deleteHighlight = function(id) {
-      highlights = highlights.filter(h => h.id !== id);
-      renderHighlights();
-    };
 
     // TAB SWITCHING
     const tabBtns = document.querySelectorAll('.tab-btn');
