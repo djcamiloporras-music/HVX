@@ -237,6 +237,16 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
 .merch-admin-name{font-family:var(--font-h);font-size:.9rem;font-weight:700;margin-bottom:.25rem}
 .merch-admin-price{color:var(--accent);font-size:.85rem;font-weight:600;margin-bottom:.5rem}
 
+/* IMAGE PICKER */
+.img-picker{display:flex;gap:.5rem;align-items:center}
+.img-picker .form-input{flex:1}
+.img-picker .btn{white-space:nowrap;flex-shrink:0}
+.img-prev{margin-top:.6rem;min-height:0}
+.img-prev img{width:84px;height:84px;object-fit:cover;border-radius:4px;border:1px solid var(--border);display:block}
+.img-prev .img-note{font-size:.75rem;line-height:1.5;margin-top:.3rem}
+.img-prev .img-note.bad{color:var(--red)}
+.img-prev .img-note.busy{color:var(--muted)}
+
 /* CONTACT INBOX */
 .inbox-item{display:grid;grid-template-columns:12px 1fr auto;gap:1rem;align-items:start;padding:1rem 1.5rem;border-bottom:1px solid var(--border);cursor:pointer;transition:background .2s}
 .inbox-item:last-child{border-bottom:none}
@@ -414,7 +424,15 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
         </div>
         <div class="form-row">
           <div class="form-group"><label class="form-label">City</label><input type="text" class="form-input" id="af-city" placeholder="New York, US"/></div>
-          <div class="form-group"><label class="form-label">Photo URL</label><input type="text" class="form-input" id="af-photo" placeholder="https://..."/></div>
+          <div class="form-group">
+            <label class="form-label">Photo</label>
+            <div class="img-picker">
+              <input type="text" class="form-input" id="af-photo" placeholder="Upload a file, or paste a direct image link"/>
+              <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('af-photo-file').click()">Upload</button>
+              <input type="file" id="af-photo-file" accept="image/*" style="display:none" onchange="uploadImage(this,'af-photo','af-photo-prev')"/>
+            </div>
+            <div class="img-prev" id="af-photo-prev"></div>
+          </div>
         </div>
         <div class="form-group"><label class="form-label">Biography</label><textarea class="form-input form-textarea" id="af-bio" placeholder="Artist biography..."></textarea></div>
         <div class="form-row">
@@ -747,7 +765,15 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
         </div>
         <div class="form-group"><label class="form-label">Description</label><input type="text" class="form-input" id="mf-desc" placeholder="Short product description"/></div>
         <div class="form-row">
-          <div class="form-group"><label class="form-label">Image URL</label><input type="text" class="form-input" id="mf-img" placeholder="https://..."/></div>
+          <div class="form-group">
+            <label class="form-label">Product Image</label>
+            <div class="img-picker">
+              <input type="text" class="form-input" id="mf-img" placeholder="Upload a file, or paste a direct image link"/>
+              <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('mf-img-file').click()">Upload</button>
+              <input type="file" id="mf-img-file" accept="image/*" style="display:none" onchange="uploadImage(this,'mf-img','mf-img-prev')"/>
+            </div>
+            <div class="img-prev" id="mf-img-prev"></div>
+          </div>
           <div class="form-group"><label class="form-label">Status</label><select class="form-input" id="mf-status"><option value="available">In Stock</option><option value="preorder">Pre-order</option><option value="soldout">Sold Out</option><option value="coming">Coming Soon</option></select></div>
         </div>
         <div class="form-row">
@@ -1151,6 +1177,7 @@ function editArtist(i){
   document.getElementById('af-ig').value=(a.social&&a.social.instagram)||'';
   document.getElementById('af-sc').value=(a.social&&a.social.soundcloud)||'';
   document.getElementById('af-sp').value=(a.social&&a.social.spotify)||'';
+  showPreview('af-photo-prev',a.photo||'');
   document.getElementById('artist-form-title').textContent='Edit Artist';
   document.getElementById('cancel-artist-btn').style.display='';
   document.getElementById('artist-form-card').scrollIntoView({behavior:'smooth'});
@@ -1173,6 +1200,7 @@ function cancelArtistEdit(){
     var el=document.getElementById(id);if(el)el.value='';
   });
   document.getElementById('edit-artist-id').value='';
+  showPreview('af-photo-prev','');
   document.getElementById('artist-form-title').textContent='Add New Artist';
   document.getElementById('cancel-artist-btn').style.display='none';
 }
@@ -1326,6 +1354,66 @@ function renderOrders(){
     });
 }
 
+// IMAGE UPLOAD AND PREVIEW
+function showPreview(previewId, url){
+  var box=document.getElementById(previewId);
+  if(!box)return;
+  if(!url){box.innerHTML='';return}
+  box.innerHTML='<p class="img-note busy">Checking image...</p>';
+  var img=new Image();
+  img.onload=function(){ box.innerHTML=''; box.appendChild(img); };
+  img.onerror=function(){
+    box.innerHTML='<p class="img-note bad">That link is not an image file. '
+      +'Share links from Google Drive, Dropbox or Instagram are web pages, not images - '
+      +'use the Upload button instead.</p>';
+  };
+  img.src=url;
+}
+
+function uploadImage(input,targetId,previewId){
+  var file=input.files&&input.files[0];
+  if(!file)return;
+  var box=document.getElementById(previewId);
+  if(box)box.innerHTML='<p class="img-note busy">Uploading '+file.name+'...</p>';
+
+  fetch('/api/media',{
+    method:'POST',
+    headers:{
+      'Authorization':'Bearer '+(localStorage.getItem('hvx_token')||''),
+      'Content-Type':'application/octet-stream'
+    },
+    body:file
+  })
+  .then(function(r){return r.json().then(function(d){return {ok:r.ok,d:d}})})
+  .then(function(res){
+    input.value='';
+    if(!res.ok){
+      if(box)box.innerHTML='<p class="img-note bad">'+(res.d.error||'Upload failed')+'</p>';
+      toast(res.d.error||'Upload failed','error');
+      return;
+    }
+    document.getElementById(targetId).value=res.d.url;
+    showPreview(previewId,res.d.url);
+    toast('Image uploaded','success');
+  })
+  .catch(function(){
+    input.value='';
+    if(box)box.innerHTML='<p class="img-note bad">Upload failed. Check your connection.</p>';
+    toast('Upload failed','error');
+  });
+}
+
+/* Typing or pasting a link previews it too, so a bad link is obvious at once. */
+['af-photo','mf-img'].forEach(function(id){
+  document.addEventListener('DOMContentLoaded',function(){
+    var el=document.getElementById(id);
+    if(!el)return;
+    el.addEventListener('change',function(){
+      showPreview(id==='af-photo'?'af-photo-prev':'mf-img-prev',el.value.trim());
+    });
+  });
+});
+
 // MERCH MANAGER
 function getAdminMerch(){return JSON.parse(localStorage.getItem('hvx_merch')||'[]')}
 function saveAdminMerch(list){localStorage.setItem('hvx_merch',JSON.stringify(list));syncPush('merch')}
@@ -1387,6 +1475,7 @@ function editMerch(i){
   document.getElementById('mf-img').value=p.img||'';
   document.getElementById('mf-status').value=p.status||'available';
   var rel=document.getElementById('mf-release');if(rel)rel.value=p.releaseDate||'';
+  showPreview('mf-img-prev',p.img||'');
   document.getElementById('merch-form-title').textContent='Edit Product';
   document.getElementById('cancel-merch-btn').style.display='';
 }
@@ -1408,6 +1497,7 @@ function cancelMerchEdit(){
   });
   document.getElementById('edit-merch-id').value='';
   var st=document.getElementById('mf-status');if(st)st.value='available';
+  showPreview('mf-img-prev','');
   document.getElementById('merch-form-title').textContent='Add New Product';
   document.getElementById('cancel-merch-btn').style.display='none';
 }
