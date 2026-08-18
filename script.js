@@ -134,28 +134,6 @@
 
 
 
-  // COUNTER ANIMATION
-  function animateCounter(el) {
-    const target = +el.dataset.target;
-    const duration = 1800;
-    const step = target / (duration / 16);
-    let current = 0;
-    const timer = setInterval(() => {
-      current += step;
-      if (current >= target) { current = target; clearInterval(timer); }
-      el.textContent = Math.round(current) + (target >= 100 ? '+' : target > 5 ? '+' : '');
-    }, 16);
-  }
-  const counterObs = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.querySelectorAll('.stat-num').forEach(animateCounter);
-        counterObs.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.5 });
-  const statsBand = document.querySelector('.stats-band');
-  if (statsBand) counterObs.observe(statsBand);
 
 
   // ARTIST FILTER
