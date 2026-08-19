@@ -104,7 +104,9 @@ export default async (req) => {
   if (!reference) return json({ error: 'Order reference is required' }, 400);
 
   const shop = getStore('hvx-shop');
-  const orders = (await shop.get('orders', { type: 'json' })) || [];
+  /* Strong read: the order was written milliseconds ago by /api/orders and an
+     eventual read would not see it yet, turning a valid checkout into a 404. */
+  const orders = (await shop.get('orders', { type: 'json', consistency: 'strong' })) || [];
   const order = orders.find((o) => o.reference === reference);
 
   if (!order) return json({ error: 'Order not found' }, 404);
