@@ -77,7 +77,9 @@ export default async (req) => {
   if (!reference) return Response.json({ received: true, ignored: 'no order reference' });
 
   const shop = getStore('hvx-shop');
-  const orders = (await shop.get('orders', { type: 'json' })) || [];
+  /* Strong read: the checkout session wrote this list seconds ago, so a stale
+     copy would both miss the order and undo that write when saved back. */
+  const orders = (await shop.get('orders', { type: 'json', consistency: 'strong' })) || [];
   const order = orders.find((o) => o.reference === reference);
   if (!order) return Response.json({ received: true, ignored: 'unknown order' });
 
