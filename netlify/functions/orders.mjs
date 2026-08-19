@@ -33,7 +33,9 @@ export default async (req) => {
 
   if (req.method === 'GET') {
     const mine = new URL(req.url).searchParams.get('mine');
-    const orders = (await store.get('orders', { type: 'json' })) || [];
+    /* Strong read so a customer or the admin panel sees an order the moment
+       it is placed, not after the eventual-consistency window. */
+    const orders = (await store.get('orders', { type: 'json', consistency: 'strong' })) || [];
 
     if (mine) {
       const found = await resolveSession(req);
