@@ -871,14 +871,21 @@ function syncPush(key){
   const storageKey=HVX_KEYMAP[key];
   const data=JSON.parse(localStorage.getItem(storageKey)||'[]');
   const t=localStorage.getItem('hvx_token')||'';
-  fetch(HVX_API+'?key='+key,{
+  return fetch(HVX_API+'?key='+key,{
     method:'POST',
     headers:{'Content-Type':'application/json','Authorization':'Bearer '+t},
     body:JSON.stringify(data)
   }).then(function(r){
-    if(!r.ok)throw new Error('sync failed');
-  }).catch(function(){
-    toast('Server sync failed - change saved locally only','error');
+    if(!r.ok)throw new Error(r.status===401?'you are no longer signed in on the server':'the server rejected it (HTTP '+r.status+')');
+    return true;
+  }).catch(function(err){
+    /* Saving to this browser is not publishing. A change that never reached
+       the server stays visible in this panel, read back out of local
+       storage, while no visitor can see it - so a failure has to interrupt
+       rather than flash a toast the green one has already pushed past. */
+    toast('NOT PUBLISHED - visible only in this browser','error');
+    alert('This change was NOT published.\n\nReason: '+(err.message||'the server could not be reached')+'.\n\nIt is saved in this browser only, so visitors cannot see it. Sign in again, then re-save to publish it.');
+    return false;
   });
 }
 
