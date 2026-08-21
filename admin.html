@@ -797,6 +797,7 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
         <div>
           <h1 class="page-title">Orders</h1>
           <p class="page-sub">Store orders placed by registered customers.</p>
+          <p class="page-sub" id="pay-health" style="margin-top:.35rem">Checking payment setup...</p>
         </div>
         <div class="header-actions">
           <button class="btn btn-outline btn-sm" onclick="deleteCustomer()">Delete Customer</button>
@@ -1352,7 +1353,32 @@ function cancelEventEdit(){
 
 
 // ORDERS
+/* Reports what Stripe actually says, not what the configuration looks like.
+   A truncated key still starts with sk_live_, so "configured" was never
+   proof of anything - this asks Stripe and repeats the answer verbatim. */
+function checkPayments(){
+  var el=document.getElementById('pay-health');
+  if(!el)return;
+  el.textContent='Checking payment setup...';
+  el.style.color='var(--muted)';
+  fetch('/api/payments/stripe?action=status',{headers:{'Authorization':'Bearer '+(localStorage.getItem('hvx_token')||'')}})
+    .then(function(r){return r.json()})
+    .then(function(d){
+      var bad=function(msg){el.textContent=msg;el.style.color='var(--red)'};
+      if(!d.configured)return bad('Payments are OFF - no Stripe key is set. Orders are saved but nobody can pay.');
+      if(d.keyValid===false)return bad('Stripe REJECTED the API key: '+(d.keyError||'no reason given')+'. Checkout will fail.');
+      if(!d.webhookConfigured)return bad('No webhook secret. Payments would be taken and never confirmed.');
+      if(d.chargesEnabled===false)return bad('Key is valid but this Stripe account cannot take charges yet. Finish your account setup.');
+      if(d.keyValid!==true)return bad('Could not verify the key. Sign in again and reload.');
+      el.textContent='Payments active in '+d.mode.toUpperCase()+' mode. Key verified with Stripe, webhook configured'
+        +(d.payoutsEnabled===false?', but payouts are not enabled yet.':'.');
+      el.style.color=d.mode==='live'?'var(--green)':'var(--muted)';
+    })
+    .catch(function(){var el2=document.getElementById('pay-health');if(el2){el2.textContent='Could not reach the payment status endpoint.';el2.style.color='var(--red)'}});
+}
+
 function renderOrders(){
+  checkPayments();
   var tbody=document.getElementById('orders-tbody');
   if(!tbody)return;
   tbody.innerHTML='<tr><td colspan="8" style="padding:1.5rem;color:var(--muted);text-align:center;font-size:.85rem">Loading...</td></tr>';
