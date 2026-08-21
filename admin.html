@@ -799,6 +799,7 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
           <p class="page-sub">Store orders placed by registered customers.</p>
         </div>
         <div class="header-actions">
+          <button class="btn btn-outline btn-sm" onclick="deleteCustomer()">Delete Customer</button>
           <button class="btn btn-outline btn-sm" onclick="renderOrders()">Refresh</button>
         </div>
       </div>
@@ -811,7 +812,7 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
       <div class="table-wrap">
         <div class="table-head"><h3 class="table-title">All Orders</h3></div>
         <table>
-          <thead><tr><th>Reference</th><th>Customer</th><th>Items</th><th>Type</th><th>Total</th><th>Payment</th><th>Date</th></tr></thead>
+          <thead><tr><th>Reference</th><th>Customer</th><th>Items</th><th>Type</th><th>Total</th><th>Payment</th><th>Date</th><th>Actions</th></tr></thead>
           <tbody id="orders-tbody"></tbody>
         </table>
       </div>
@@ -1342,12 +1343,12 @@ function cancelEventEdit(){
 function renderOrders(){
   var tbody=document.getElementById('orders-tbody');
   if(!tbody)return;
-  tbody.innerHTML='<tr><td colspan="7" style="padding:1.5rem;color:var(--muted);text-align:center;font-size:.85rem">Loading...</td></tr>';
+  tbody.innerHTML='<tr><td colspan="8" style="padding:1.5rem;color:var(--muted);text-align:center;font-size:.85rem">Loading...</td></tr>';
   fetch('/api/orders',{headers:{'Authorization':'Bearer '+(localStorage.getItem('hvx_token')||'')}})
     .then(function(r){return r.ok?r.json():[]})
     .then(function(orders){
       if(!Array.isArray(orders)||!orders.length){
-        tbody.innerHTML='<tr><td colspan="7" style="padding:1.5rem;color:var(--muted);text-align:center;font-size:.85rem">No orders yet.</td></tr>';
+        tbody.innerHTML='<tr><td colspan="8" style="padding:1.5rem;color:var(--muted);text-align:center;font-size:.85rem">No orders yet.</td></tr>';
         document.getElementById('ord-total').textContent='0';
         document.getElementById('ord-paid').textContent='0';
         document.getElementById('ord-pending').textContent='0';
@@ -1366,20 +1367,75 @@ function renderOrders(){
         var payStatus=(o.payment&&o.payment.status)||'unpaid';
         var payBadge=payStatus==='paid'?'badge-green':payStatus==='failed'?'badge-muted':'badge-orange';
         var typeBadge=o.fulfillment==='preorder'?'badge-accent':o.fulfillment==='mixed'?'badge-orange':'badge-green';
+        var cancelled=o.status==='cancelled';
         return '<tr>'+
-          '<td style="font-weight:600">'+o.reference+'</td>'+
+          '<td style="font-weight:600">'+o.reference+(cancelled?'<div style="font-size:.72rem;color:var(--muted)">cancelled</div>':'')+'</td>'+
           '<td>'+o.customer.firstName+' '+o.customer.lastName+'<div style="font-size:.72rem;color:var(--muted)">'+o.customer.email+'</div></td>'+
           '<td style="font-size:.8rem">'+items+'</td>'+
           '<td><span class="badge '+typeBadge+'">'+o.fulfillment+'</span></td>'+
           '<td>$'+(o.total||0).toFixed(2)+'</td>'+
           '<td><span class="badge '+payBadge+'">'+payStatus.replace('_',' ')+'</span></td>'+
           '<td>'+when+'</td>'+
+          '<td style="white-space:nowrap">'+
+            (cancelled?'':'<button class="btn btn-outline btn-sm" onclick="cancelOrder(\''+o.reference+'\')">Cancel</button> ')+
+            '<button class="btn btn-danger btn-sm" onclick="deleteOrder(\''+o.reference+'\')">Delete</button>'+
+          '</td>'+
         '</tr>';
       }).join('');
     })
     .catch(function(){
-      tbody.innerHTML='<tr><td colspan="7" style="padding:1.5rem;color:var(--red);text-align:center;font-size:.85rem">Could not load orders.</td></tr>';
+      tbody.innerHTML='<tr><td colspan="8" style="padding:1.5rem;color:var(--red);text-align:center;font-size:.85rem">Could not load orders.</td></tr>';
     });
+}
+
+// ORDER AND ACCOUNT MAINTENANCE - see netlify/functions/admin-manage.mjs
+function adminHeaders(){
+  return {'Content-Type':'application/json','Authorization':'Bearer '+(localStorage.getItem('hvx_token')||'')};
+}
+
+function manage(action,payload){
+  return fetch('/api/admin/manage?action='+action,{method:'POST',headers:adminHeaders(),body:JSON.stringify(payload)})
+    .then(function(r){return r.json().then(function(d){return {ok:r.ok,status:r.status,data:d}})});
+}
+
+function cancelOrder(ref){
+  if(!confirm('Cancel order '+ref+'?\n\nThe record is kept and marked as cancelled.'))return;
+  manage('cancel-order',{reference:ref}).then(function(res){
+    if(!res.ok){toast(res.data.error||'Could not cancel the order','error');return}
+    /* A cancelled order that was already paid still holds the customer's
+       money. Stripe is where that goes back, so say so instead of letting
+       the word "cancelled" imply a refund that never happened. */
+    if(res.data.refundRequired)toast('Cancelled. Refund it in Stripe - no money was returned.','error');
+    else toast('Order '+ref+' cancelled');
+    renderOrders();
+  }).catch(function(){toast('Network error','error')});
+}
+
+function deleteOrder(ref){
+  if(!confirm('Delete order '+ref+' permanently?\n\nThis cannot be undone.'))return;
+  manage('delete-order',{reference:ref}).then(function(res){
+    if(res.status===409){
+      /* The server refuses to drop a paid order silently. Ask once more. */
+      if(!confirm(res.data.error+'\n\nDelete it anyway?'))return;
+      return manage('delete-order',{reference:ref,force:true}).then(function(f){
+        if(!f.ok){toast(f.data.error||'Could not delete the order','error');return}
+        toast('Order '+ref+' deleted');renderOrders();
+      });
+    }
+    if(!res.ok){toast(res.data.error||'Could not delete the order','error');return}
+    toast('Order '+ref+' deleted');renderOrders();
+  }).catch(function(){toast('Network error','error')});
+}
+
+function deleteCustomer(){
+  var email=(prompt('Delete a customer account.\n\nEnter the exact email address:')||'').trim();
+  if(!email)return;
+  if(!confirm('Delete the account for '+email+'?\n\nThe login and every open session are erased. Past orders stay, with the name and email redacted, so your revenue totals do not change.'))return;
+  manage('delete-account',{email:email}).then(function(res){
+    if(!res.ok){toast(res.data.error||'Could not delete the account','error');return}
+    toast('Account removed. '+res.data.ordersRedacted+' order(s) redacted, '+res.data.sessionsRevoked+' session(s) revoked.');
+    renderOrders();
+  }).catch(function(){toast('Network error','error')});
 }
 
 // IMAGE UPLOAD AND PREVIEW
