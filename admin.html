@@ -893,7 +893,12 @@ function syncPull(key){
   return fetch(HVX_API+'?key='+key)
     .then(function(r){return r.ok?r.json():null})
     .then(function(d){
-      if(Array.isArray(d)&&d.length)localStorage.setItem(HVX_KEYMAP[key],JSON.stringify(d));
+      /* An empty list is an answer, not a missing one: it means everything
+         was deleted. Skipping it left this browser holding entries the
+         server no longer had, and syncPush sends the whole list back, so
+         the next unrelated save would resurrect them. A failed request
+         still yields null and leaves local data untouched. */
+      if(Array.isArray(d))localStorage.setItem(HVX_KEYMAP[key],JSON.stringify(d));
     }).catch(function(){});
 }
 
