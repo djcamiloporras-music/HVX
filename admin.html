@@ -894,20 +894,48 @@ function syncPullAll(){
 }
 
 // AUTH
-const CREDS={user:'hvxmusic2026',pass:'adminhvx'};
+/* The password IS the admin API token, and it is deliberately not written
+   anywhere in this file: only the server knows it, so reading the page
+   source reveals nothing. Signing in is one authenticated request - the
+   server accepting it is the proof, not a comparison made here. */
+function verifyToken(token){
+  return fetch('/api/orders',{headers:{'Authorization':'Bearer '+token}})
+    .then(function(r){return r.status===401?'bad':(r.ok?'ok':'error')})
+    .catch(function(){return 'error'});
+}
 
-function checkSession(){if(localStorage.getItem('hvx_admin')==='true'){showAdmin()}}
+function signOut(){localStorage.removeItem('hvx_admin');localStorage.removeItem('hvx_token');location.reload()}
+
+function checkSession(){
+  const t=localStorage.getItem('hvx_token')||'';
+  if(localStorage.getItem('hvx_admin')!=='true'||!t)return;
+  /* Only a definite rejection signs the user out. A server hiccup opens the
+     panel anyway: the API stays the real boundary, so nothing is risked. */
+  verifyToken(t).then(function(state){if(state==='bad')signOut();else showAdmin()});
+}
 function showAdmin(){document.getElementById('login-screen').classList.add('hidden');document.getElementById('admin-wrap').classList.remove('hidden');localStorage.setItem('hvx_admin','true');renderFeed();refreshUploadArtistSelect();syncPullAll().then(function(){renderFeed();refreshUploadArtistSelect();renderArtistManager();renderEventsAdmin();renderMerchAdmin();renderInbox();});}
 
 document.getElementById('login-btn').addEventListener('click',()=>{
-  const u=document.getElementById('login-user').value;
   const p=document.getElementById('login-pass').value;
   const err=document.getElementById('login-error');
-  if(u===CREDS.user&&p===CREDS.pass){err.style.display='none';localStorage.setItem('hvx_token',p);showAdmin();logActivity('Admin signed in','green')}
-  else{err.style.display='block'}
+  const btn=document.getElementById('login-btn');
+  if(!p){err.textContent='Enter your password.';err.style.display='block';return}
+  btn.disabled=true;btn.textContent='Checking...';
+  verifyToken(p).then(function(state){
+    btn.disabled=false;btn.textContent='Sign In';
+    if(state==='ok'){
+      err.style.display='none';
+      localStorage.setItem('hvx_token',p);
+      showAdmin();
+      logActivity('Admin signed in','green');
+      return;
+    }
+    err.textContent=state==='bad'?'Invalid credentials. Please try again.':'Cannot reach the server. Please try again.';
+    err.style.display='block';
+  });
 });
 document.getElementById('login-pass').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('login-btn').click()});
-document.getElementById('logout-btn').addEventListener('click',()=>{localStorage.removeItem('hvx_admin');location.reload()});
+document.getElementById('logout-btn').addEventListener('click',signOut);
 
 // NAVIGATION
 document.querySelectorAll('.nav-item[data-page]').forEach(btn=>{
