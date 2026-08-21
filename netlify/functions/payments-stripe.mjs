@@ -20,7 +20,7 @@
    No code changes are needed to go from test mode to live: swap the key. */
 
 import { getStore } from '@netlify/blobs';
-import { cors, json, resolveSession } from '../lib/session.mjs';
+import { cors, json, resolveSession, isAdmin } from '../lib/session.mjs';
 
 const STRIPE_API = 'https://api.stripe.com/v1';
 
@@ -59,6 +59,19 @@ async function stripe(path, payload) {
   return data;
 }
 
+async function stripeGet(path) {
+  const res = await fetch(STRIPE_API + path, {
+    headers: { 'Authorization': 'Bearer ' + process.env.STRIPE_SECRET_KEY },
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const err = new Error((data.error && data.error.message) || 'Stripe rejected the request');
+    err.status = res.status;
+    throw err;
+  }
+  return data;
+}
+
 function siteUrl(req) {
   return process.env.URL || process.env.DEPLOY_PRIME_URL || new URL(req.url).origin;
 }
@@ -71,7 +84,7 @@ export default async (req) => {
 
   if (action === 'status') {
     const live = (process.env.STRIPE_SECRET_KEY || '').startsWith('sk_live_');
-    return json({
+    const base = {
       configured,
       mode: configured ? (live ? 'live' : 'test') : null,
       webhookConfigured: Boolean(process.env.STRIPE_WEBHOOK_SECRET),
@@ -79,7 +92,28 @@ export default async (req) => {
         ? 'Stripe Checkout is active in ' + (live ? 'live' : 'test') + ' mode.'
         : 'Stripe is not configured. Orders are saved as pending_payment until '
           + 'STRIPE_SECRET_KEY is set in the Netlify environment variables.',
-    });
+    };
+
+    /* The prefix only describes what the key looks like, never whether Stripe
+       accepts it: a truncated key still starts with sk_live_ and this endpoint
+       still reported "live" while every checkout failed. Only Stripe can
+       answer that, so ask it - but for the admin alone. A public endpoint that
+       calls an external API on demand is something to hammer. */
+    if (!configured || !isAdmin(req)) return json(base);
+
+    try {
+      const account = await stripeGet('/account');
+      return json({
+        ...base,
+        keyValid: true,
+        chargesEnabled: Boolean(account.charges_enabled),
+        payoutsEnabled: Boolean(account.payouts_enabled),
+        account: account.id,
+      });
+    } catch (err) {
+      /* Say what Stripe said. The reason is the whole point of asking. */
+      return json({ ...base, keyValid: false, keyError: err.message });
+    }
   }
 
   if (req.method !== 'POST') return json({ error: 'Method not allowed' }, 405);
