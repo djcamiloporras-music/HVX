@@ -29,7 +29,11 @@ export default async (req) => {
   const store = getStore('hvx-data');
 
   if (req.method === 'GET') {
-    const data = await store.get(key, { type: 'json' });
+    /* Strong read: an eventual one kept serving the previous version for over
+       a minute after the admin published a change, which is the opposite of
+       what this site promises. Correctness wins here - these blobs are small
+       and the extra latency is a fraction of the round trip. */
+    const data = await store.get(key, { type: 'json', consistency: 'strong' });
     return Response.json(data || [], {
       headers: { ...cors, 'Cache-Control': 'no-store' },
     });
@@ -45,7 +49,11 @@ export default async (req) => {
       if (!msg || typeof msg !== 'object' || Array.isArray(msg)) {
         return Response.json({ error: 'Bad body' }, { status: 400, headers: cors });
       }
-      const list = (await store.get('contacts', { type: 'json' })) || [];
+      /* Strong read: this rewrites the whole list, so an eventual copy taken
+         during the consistency window would drop every message received in
+         it. A lost booking enquiry is not recoverable - nobody knows it was
+         sent. This narrows the window to the width of the write itself. */
+      const list = (await store.get('contacts', { type: 'json', consistency: 'strong' })) || [];
       list.unshift({
         name: String(msg.name || '').slice(0, 200),
         email: String(msg.email || '').slice(0, 200),
