@@ -1067,9 +1067,35 @@ document.getElementById('upload-btn')?.addEventListener('click',()=>{
   }
 
   if(uploadedFile&&uploadedFile.type.startsWith('image')){
-    const reader=new FileReader();
-    reader.onload=e=>doSave(e.target.result);
-    reader.readAsDataURL(uploadedFile);
+    /* Store the image's URL, never its bytes. Reading the file as a data URL
+       put the whole photo inside the feed JSON: 1.7 MB downloaded by every
+       visitor to the home page, uncacheable, and a third larger than the
+       original because base64 inflates. Artists and merch already upload to
+       /api/media; this is the one place that never did.
+       The field keeps its name on purpose - the public pages already use it
+       as an <img src>, and a /api/media URL works there unchanged. */
+    var pubBtn=document.getElementById('upload-btn');
+    var restore=function(){pubBtn.disabled=false;pubBtn.textContent='Publish to Feed'};
+    pubBtn.disabled=true;pubBtn.textContent='Uploading...';
+    prepareImage(uploadedFile).then(function(prepared){
+      return fetch('/api/media',{
+        method:'POST',
+        headers:{
+          'Authorization':'Bearer '+(localStorage.getItem('hvx_token')||''),
+          'Content-Type':'application/octet-stream'
+        },
+        body:prepared.blob
+      }).then(function(r){return r.json().then(function(d){return {ok:r.ok,d:d}})});
+    }).then(function(res){
+      restore();
+      /* Publishing a highlight with no image would be worse than not
+         publishing: the caption would go out pointing at nothing. */
+      if(!res.ok){toast(res.d.error||'Image upload failed - nothing was published','error');return}
+      doSave(res.d.url);
+    }).catch(function(){
+      restore();
+      toast('Image upload failed - nothing was published','error');
+    });
   } else {
     doSave(null);
   }
