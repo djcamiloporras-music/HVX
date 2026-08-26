@@ -620,7 +620,10 @@
     // READ URL PARAM
     // Fetch shared data published from the admin panel
     await Promise.all(
-      [['artists','hvx_artists'],['events','hvx_events'],['highlights','hvx_highlights']].map(([k, sk]) =>
+      /* Highlights are not fetched here: the tab that displayed them was
+         removed, and the request stayed behind. It was pulling megabytes of
+         feed data on every profile view, storing it, and showing none of it. */
+      [['artists','hvx_artists'],['events','hvx_events']].map(([k, sk]) =>
         Promise.race([
           fetch('/api/data?key=' + k)
             .then(r => r.ok ? r.json() : null)
