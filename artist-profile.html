@@ -700,16 +700,24 @@
     }
 
     // Stats
+    /* These three counters were placeholders. The admin panel has no field
+       to fill them, so they could only ever read zero - which reads as a
+       claim that the artist never plays anywhere. Removed rather than
+       faked. The row is hidden too, or its margin leaves a phantom gap. */
     const statsEl = document.getElementById('hero-stats');
-    statsEl.innerHTML = `
-      <span class="stat-chip"><strong>${artist.stats.showsPerYear}</strong> shows/yr</span>
-      <span class="stat-chip"><strong>${artist.stats.countries}</strong> countries</span>
-      <span class="stat-chip"><strong>${artist.stats.followers}+</strong> followers</span>
-    `;
+    statsEl.innerHTML = '';
+    statsEl.style.display = 'none';
 
     // Float chip
+    const nextChip = document.getElementById('float-chip-1');
     if (artist.upcomingShows && artist.upcomingShows.length) {
-      document.getElementById('float-chip-1').textContent = 'Next: ' + artist.upcomingShows[0].date + ' @ ' + artist.upcomingShows[0].venue;
+      nextChip.textContent = 'Next: ' + artist.upcomingShows[0].date + ' @ ' + artist.upcomingShows[0].venue;
+    } else {
+      /* Nothing to announce. "Loading..." that never resolves reads as a
+         broken page, so hide the chip - hidden and not removed, because the
+         sibling chip is placed by nth-child and would shift if this one
+         left the DOM. */
+      nextChip.style.display = 'none';
     }
 
     // OVERVIEW
