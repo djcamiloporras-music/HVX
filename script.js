@@ -539,4 +539,29 @@
     }
   }
 
+
+  // TRACKSTACK DEMO SUBMISSION
+  /* The button and the open call only appear once a real link exists.
+     An entry point that leads nowhere is worse than no entry point. */
+  const demoUrl = (window.HVX_CONFIG && window.HVX_CONFIG.demos
+    && window.HVX_CONFIG.demos.trackstack) || '';
+  const demoSection = document.getElementById('demo');
+  const demoLink = document.getElementById('trackstack-link');
+  const demoNote = document.querySelector('.trackstack-note');
+  const demoEntries = document.querySelectorAll('.js-demos-entry');
+
+  if (demoUrl) {
+    if (demoLink) {
+      demoLink.href = demoUrl;
+      /* TrackStack is somebody else's site: open it in its own tab, and
+         deny it any handle back on this one. */
+      demoLink.target = '_blank';
+      demoLink.rel = 'noopener noreferrer';
+    }
+    if (demoNote) demoNote.remove();
+    demoEntries.forEach(el => { el.hidden = false; });
+  } else {
+    if (demoSection) demoSection.hidden = true;
+  }
+
 })();
