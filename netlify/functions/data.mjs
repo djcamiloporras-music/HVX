@@ -6,7 +6,7 @@
 
 import { getStore } from '@netlify/blobs';
 
-const ALLOWED_KEYS = ['artists', 'events', 'merch', 'highlights', 'contacts'];
+const ALLOWED_KEYS = ['artists', 'events', 'merch', 'highlights', 'contacts', 'releases'];
 
 export default async (req) => {
   const url = new URL(req.url);
