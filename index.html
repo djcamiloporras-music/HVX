@@ -42,10 +42,12 @@
       <li><a href="#services" class="nav-link">Services</a></li>
       <li><a href="#releases" class="nav-link">Releases</a></li>
       <li><a href="#merch" class="nav-link">Merch</a></li>
+      <li class="js-demos-entry" hidden><a href="#demo" class="nav-link">Demos</a></li>
       <li><a href="#contact" class="nav-link">Contact</a></li>
     </ul>
     <!-- Account and cart buttons are mounted here by hvx-shop.js.
-         The Demos button returns once the TrackStack link is ready. -->
+         The Demos entries above stay hidden until hvx-config.js has a
+         TrackStack link, so nothing ever points at an empty section. -->
     <div class="nav-cta"></div>
     <button class="nav-hamburger" id="hamburger" aria-label="Menu">
       <span></span><span></span><span></span>
@@ -61,6 +63,7 @@
       <li><a href="#services" class="mobile-link">Services</a></li>
       <li><a href="#releases" class="mobile-link">Releases</a></li>
       <li><a href="#merch" class="mobile-link">Merch</a></li>
+      <li class="js-demos-entry" hidden><a href="#demo" class="mobile-link">Demos</a></li>
       <li><a href="#contact" class="mobile-link">Contact</a></li>
     </ul>
   </div>
