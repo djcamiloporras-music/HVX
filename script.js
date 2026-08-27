@@ -540,6 +540,27 @@
   }
 
 
+  // SITE INDEX PANEL
+  const navMenu = document.getElementById('nav-menu');
+  const navMenuBtn = document.getElementById('nav-menu-btn');
+  const navPanel = document.getElementById('nav-links');
+  if (navMenu && navMenuBtn && navPanel) {
+    const setPanel = open => {
+      navPanel.classList.toggle('open', open);
+      navMenuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    };
+    navMenuBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      setPanel(navMenuBtn.getAttribute('aria-expanded') !== 'true');
+    });
+    /* Every way out closes it. A panel you cannot dismiss is worse than
+       no panel: picking a destination, clicking away, or pressing Escape. */
+    navPanel.addEventListener('click', e => { if (e.target.closest('a')) setPanel(false); });
+    document.addEventListener('click', e => { if (!e.target.closest('#nav-menu')) setPanel(false); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') setPanel(false); });
+  }
+
+
   // TRACKSTACK DEMO SUBMISSION
   /* The button and the open call only appear once a real link exists.
      An entry point that leads nowhere is worse than no entry point. */
@@ -559,7 +580,18 @@
       demoLink.rel = 'noopener noreferrer';
     }
     if (demoNote) demoNote.remove();
-    demoEntries.forEach(el => { el.hidden = false; });
+    /* In the menu, Demos is an action, not a place: send people straight
+       to the submission form. The open call stays on the page for anyone
+       who arrives by scrolling. */
+    demoEntries.forEach(el => {
+      el.hidden = false;
+      const a = el.querySelector('a');
+      if (a) {
+        a.href = demoUrl;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+      }
+    });
   } else {
     if (demoSection) demoSection.hidden = true;
   }
