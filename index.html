@@ -35,7 +35,10 @@
         <video src="assets/hvx-logo-anim.mp4" autoplay muted loop playsinline class="logo-video" aria-label="HVX Music"></video>
       </a>
     </div>
-    <ul class="nav-links">
+    <div class="nav-menu" id="nav-menu">
+    <button class="nav-menu-btn" id="nav-menu-btn" type="button"
+            aria-expanded="false" aria-controls="nav-links">Menu<span class="nav-menu-caret" aria-hidden="true"></span></button>
+    <ul class="nav-links" id="nav-links">
       <li><a href="#home" class="nav-link">Home</a></li>
       <li><a href="artists.html" class="nav-link">Artists</a></li>
       <li><a href="#about" class="nav-link">About</a></li>
@@ -45,6 +48,7 @@
       <li class="js-demos-entry" hidden><a href="#demo" class="nav-link">Demos</a></li>
       <li><a href="#contact" class="nav-link">Contact</a></li>
     </ul>
+    </div>
     <!-- Account and cart buttons are mounted here by hvx-shop.js.
          The Demos entries above stay hidden until hvx-config.js has a
          TrackStack link, so nothing ever points at an empty section. -->
