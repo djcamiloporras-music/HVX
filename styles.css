@@ -993,6 +993,16 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   transition: var(--transition);
 }
 .release-link:hover { color: var(--white); }
+/* Every platform the release is on, not just the first one that happened to
+   be filled in. Wrapping so four links never widen the row off screen. */
+.release-links {
+  display: flex; align-items: center; justify-content: flex-end;
+  gap: 0.45rem 1.1rem; flex-wrap: wrap;
+}
+.release-soon {
+  font-size: 0.82rem; color: var(--muted);
+  opacity: 0.5; white-space: nowrap;
+}
 
 .contact {
   padding: 8rem 4vw;
@@ -1122,6 +1132,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   .release-row { grid-template-columns: 1fr 1fr; }
   .release-date { display: none; }
   .release-genre { display: none; }
+  .release-links { justify-content: flex-start; }
 
   .footer-top { flex-direction: column; }
   .footer-links { gap: 2rem; }
