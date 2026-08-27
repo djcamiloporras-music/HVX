@@ -309,6 +309,10 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
         <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
         Artists
       </button>
+      <button class="nav-item" data-page="releases">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/></svg>
+        Releases
+      </button>
       <button class="nav-item" data-page="events">
         <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
         Events &amp; Shows
@@ -457,6 +461,65 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
     </div>
 
     <!-- EVENTS -->
+    <div class="page-section" id="page-releases">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Releases</h1>
+          <p class="page-sub">Tracks and records shown under Latest Releases on the home page.</p>
+        </div>
+        <div class="header-actions">
+          <a href="index.html#releases" target="_blank" class="btn btn-outline btn-sm">View Section</a>
+        </div>
+      </div>
+
+      <div class="manager-form-card">
+        <h3 id="release-form-title">Add New Release</h3>
+        <input type="hidden" id="edit-release-id"/>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Artist</label>
+            <input type="text" class="form-input" id="rf-artist" list="rf-artist-list" placeholder="Start typing an artist name"/>
+            <datalist id="rf-artist-list"></datalist>
+          </div>
+          <div class="form-group"><label class="form-label">Title</label><input type="text" class="form-input" id="rf-title" placeholder="Track or record title"/></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Genre</label><input type="text" class="form-input" id="rf-genre" placeholder="Tech House"/></div>
+          <div class="form-group"><label class="form-label">Release Date</label><input type="date" class="form-input" id="rf-date"/></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Artwork</label>
+          <div class="img-picker">
+            <input type="text" class="form-input" id="rf-art" placeholder="Upload a file, or paste a direct image link"/>
+            <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('rf-art-file').click()">Upload</button>
+            <input type="file" id="rf-art-file" accept="image/*" style="display:none" onchange="uploadImage(this,'rf-art','rf-art-prev')"/>
+          </div>
+          <div class="img-prev" id="rf-art-prev"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Spotify</label><input type="text" class="form-input" id="rf-spotify" placeholder="https://open.spotify.com/track/..."/></div>
+          <div class="form-group"><label class="form-label">Beatport</label><input type="text" class="form-input" id="rf-beatport" placeholder="https://www.beatport.com/release/..."/></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">SoundCloud</label><input type="text" class="form-input" id="rf-soundcloud" placeholder="https://soundcloud.com/..."/></div>
+          <div class="form-group"><label class="form-label">Apple Music</label><input type="text" class="form-input" id="rf-apple" placeholder="https://music.apple.com/..."/></div>
+        </div>
+        <p style="font-size:.76rem;color:var(--muted);margin:-.4rem 0 1rem">The Listen Now button uses the first link you fill in, in that order. Leave them all empty and the release shows as Soon.</p>
+        <div style="display:flex;gap:.5rem">
+          <button class="btn btn-primary" onclick="saveRelease()" style="width:auto">Save Release</button>
+          <button class="btn btn-outline btn-sm" id="cancel-release-btn" style="display:none" onclick="cancelReleaseEdit()">Cancel</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <div class="table-head"><h3 class="table-title">All Releases</h3></div>
+        <table>
+          <thead><tr><th>Artwork</th><th>Artist</th><th>Title</th><th>Genre</th><th>Date</th><th>Listen</th><th>Actions</th></tr></thead>
+          <tbody id="releases-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
     <div class="page-section" id="page-events">
       <div class="page-header">
         <div><h1 class="page-title">Events &amp; Shows</h1><p class="page-sub">Add and manage upcoming bookings across all artists.</p></div>
@@ -866,7 +929,7 @@ function toast(msg,type='success'){const w=document.getElementById('toast-wrap')
 
 // SERVER SYNC - shared data via /api/data (Netlify Blobs)
 const HVX_API='/api/data';
-const HVX_KEYMAP={artists:'hvx_artists',events:'hvx_events',merch:'hvx_merch',highlights:'hvx_highlights',contacts:'hvx_contacts'};
+const HVX_KEYMAP={artists:'hvx_artists',events:'hvx_events',merch:'hvx_merch',highlights:'hvx_highlights',contacts:'hvx_contacts',releases:'hvx_releases'};
 
 function syncPush(key){
   const storageKey=HVX_KEYMAP[key];
@@ -927,7 +990,7 @@ function checkSession(){
      panel anyway: the API stays the real boundary, so nothing is risked. */
   verifyToken(t).then(function(state){if(state==='bad')signOut();else showAdmin()});
 }
-function showAdmin(){document.getElementById('login-screen').classList.add('hidden');document.getElementById('admin-wrap').classList.remove('hidden');localStorage.setItem('hvx_admin','true');renderFeed();refreshUploadArtistSelect();syncPullAll().then(function(){renderFeed();refreshUploadArtistSelect();renderArtistManager();renderEventsAdmin();renderMerchAdmin();renderInbox();});}
+function showAdmin(){document.getElementById('login-screen').classList.add('hidden');document.getElementById('admin-wrap').classList.remove('hidden');localStorage.setItem('hvx_admin','true');renderFeed();refreshUploadArtistSelect();syncPullAll().then(function(){renderFeed();refreshUploadArtistSelect();renderArtistManager();renderEventsAdmin();renderMerchAdmin();renderReleases();renderInbox();});}
 
 document.getElementById('login-btn').addEventListener('click',()=>{
   const p=document.getElementById('login-pass').value;
@@ -962,6 +1025,7 @@ document.querySelectorAll('.nav-item[data-page]').forEach(btn=>{
     if(btn.dataset.page==='artists')renderArtistManager();
     if(btn.dataset.page==='events'){renderEventsAdmin();refreshUploadArtistSelect()}
     if(btn.dataset.page==='merch-manager')renderMerchAdmin();
+    if(btn.dataset.page==='releases')renderReleases();
     if(btn.dataset.page==='orders')renderOrders();
     if(btn.dataset.page==='contact-inbox')renderInbox();
   });
@@ -1375,6 +1439,133 @@ function cancelEventEdit(){
   document.getElementById('edit-event-id').value='';
   document.getElementById('event-form-title').textContent='Add New Event';
   document.getElementById('cancel-event-btn').style.display='none';
+}
+
+
+// RELEASES
+function getReleases(){return JSON.parse(localStorage.getItem('hvx_releases')||'null')||[]}
+/* Newest first. The table, Edit and Delete all index into this same view,
+   so a button can never act on a different record than the row it sits in. */
+function sortedReleases(){
+  return getReleases().slice().sort(function(a,b){
+    return String(b.date||'').localeCompare(String(a.date||''));
+  });
+}
+/* Stored newest first so every page that reads this list gets the order the
+   section name promises, without each one having to sort. */
+function saveAdminReleases(list){
+  list.sort(function(a,b){return String(b.date||'').localeCompare(String(a.date||''))});
+  localStorage.setItem('hvx_releases',JSON.stringify(list));
+  syncPush('releases');
+}
+
+function refreshReleaseArtistList(){
+  var dl=document.getElementById('rf-artist-list');
+  if(!dl)return;
+  dl.innerHTML=getAdminArtists().map(function(a){
+    return '<option value="'+String(a.name||'').replace(/"/g,'&quot;')+'"></option>';
+  }).join('');
+}
+
+function renderReleases(){
+  refreshReleaseArtistList();
+  var tb=document.getElementById('releases-tbody');
+  if(!tb)return;
+  /* Same order the visitor sees. A panel that lists them differently from
+     the page makes you second-guess which one is right. */
+  var list=sortedReleases();
+  if(!list.length){
+    tb.innerHTML='<tr><td colspan="7" style="padding:1.5rem;color:var(--muted);text-align:center;font-size:.85rem">No releases yet. Add one above.</td></tr>';
+    return;
+  }
+  tb.innerHTML=list.map(function(r,i){
+    var when=r.date?new Date(r.date+'T00:00:00').toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}):'--';
+    var l=r.links||{};
+    var first=l.spotify||l.beatport||l.soundcloud||l.appleMusic||'';
+    var art=r.art?'<img src="'+r.art+'" alt="" style="width:38px;height:38px;object-fit:cover;border-radius:2px;display:block">':'<span style="color:var(--muted);font-size:.72rem">none</span>';
+    return '<tr>'+
+      '<td>'+art+'</td>'+
+      '<td style="font-weight:600">'+(r.artist||'')+'</td>'+
+      '<td>'+(r.title||'')+'</td>'+
+      '<td><span class="badge badge-accent">'+(r.genre||'')+'</span></td>'+
+      '<td style="white-space:nowrap">'+when+'</td>'+
+      '<td>'+(first?'<span class="badge badge-green">linked</span>':'<span class="badge badge-muted">soon</span>')+'</td>'+
+      '<td style="white-space:nowrap">'+
+        '<button class="btn btn-outline btn-sm" onclick="editRelease('+i+')">Edit</button> '+
+        '<button class="btn btn-danger btn-sm" onclick="deleteRelease('+i+')">Delete</button>'+
+      '</td>'+
+    '</tr>';
+  }).join('');
+}
+
+function saveRelease(){
+  var artist=document.getElementById('rf-artist').value.trim();
+  var title=document.getElementById('rf-title').value.trim();
+  if(!artist){toast('Artist is required','error');return}
+  if(!title){toast('Title is required','error');return}
+  var list=sortedReleases();
+  var raw=document.getElementById('edit-release-id').value;
+  var idx=raw!==''?+raw:null;
+  var entry={
+    id:idx!==null?list[idx].id:'release-'+Date.now(),
+    artist:artist,
+    title:title,
+    genre:document.getElementById('rf-genre').value.trim()||'Electronic',
+    date:document.getElementById('rf-date').value||'',
+    art:document.getElementById('rf-art').value.trim()||null,
+    links:{
+      spotify:document.getElementById('rf-spotify').value.trim()||'',
+      beatport:document.getElementById('rf-beatport').value.trim()||'',
+      soundcloud:document.getElementById('rf-soundcloud').value.trim()||'',
+      appleMusic:document.getElementById('rf-apple').value.trim()||''
+    }
+  };
+  if(idx!==null){list[idx]=entry}else{list.push(entry)}
+  saveAdminReleases(list);
+  toast(idx!==null?'Release updated!':'Release added!','success');
+  logActivity('Release '+(idx!==null?'updated':'added')+': '+artist+' - '+title,'purple');
+  cancelReleaseEdit();
+  renderReleases();
+}
+
+function editRelease(i){
+  var r=sortedReleases()[i];
+  if(!r)return;
+  document.getElementById('edit-release-id').value=i;
+  document.getElementById('rf-artist').value=r.artist||'';
+  document.getElementById('rf-title').value=r.title||'';
+  document.getElementById('rf-genre').value=r.genre||'';
+  document.getElementById('rf-date').value=r.date||'';
+  document.getElementById('rf-art').value=r.art||'';
+  showPreview('rf-art-prev',r.art||'');
+  var l=r.links||{};
+  document.getElementById('rf-spotify').value=l.spotify||'';
+  document.getElementById('rf-beatport').value=l.beatport||'';
+  document.getElementById('rf-soundcloud').value=l.soundcloud||'';
+  document.getElementById('rf-apple').value=l.appleMusic||'';
+  document.getElementById('release-form-title').textContent='Edit Release';
+  document.getElementById('cancel-release-btn').style.display='inline-flex';
+  document.querySelector('#page-releases .manager-form-card').scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+function deleteRelease(i){
+  var list=sortedReleases();
+  var r=list[i];
+  if(!r)return;
+  if(!confirm('Delete "'+r.title+'" by '+r.artist+'?\n\nIt disappears from the home page.'))return;
+  list.splice(i,1);
+  saveAdminReleases(list);
+  toast('Release deleted');
+  renderReleases();
+}
+
+function cancelReleaseEdit(){
+  ['rf-artist','rf-title','rf-genre','rf-date','rf-art','rf-spotify','rf-beatport','rf-soundcloud','rf-apple']
+    .forEach(function(id){document.getElementById(id).value=''});
+  showPreview('rf-art-prev','');
+  document.getElementById('edit-release-id').value='';
+  document.getElementById('release-form-title').textContent='Add New Release';
+  document.getElementById('cancel-release-btn').style.display='none';
 }
 
 
