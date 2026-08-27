@@ -201,6 +201,62 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
   display: flex; gap: 2.5rem;
   margin-right: 2.5rem;
 }
+
+/* On wide screens the site index folds behind one button. Eight links
+   competing across the header meant none of them read as a choice. */
+.nav-menu { display: contents; }
+.nav-menu-btn {
+  display: none;
+  align-items: center; gap: 0.55rem;
+  margin-right: 2.5rem;
+  padding: 0.55rem 1.1rem;
+  background: transparent;
+  color: var(--off-white);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  font-family: var(--font-main);
+  font-size: 0.78rem; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  cursor: none;
+  transition: var(--transition);
+}
+.nav-menu-btn:hover,
+.nav-menu-btn[aria-expanded="true"] { border-color: var(--accent); color: var(--accent); }
+.nav-menu-caret {
+  width: 6px; height: 6px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform var(--transition);
+}
+.nav-menu-btn[aria-expanded="true"] .nav-menu-caret { transform: translateY(1px) rotate(-135deg); }
+
+@media (min-width: 901px) {
+  .nav-menu { display: block; position: relative; }
+  .nav-menu-btn { display: inline-flex; }
+  .nav-links {
+    position: absolute; top: calc(100% + 10px); right: 0;
+    flex-direction: column; gap: 0;
+    margin-right: 0; min-width: 212px;
+    padding: 0.4rem 0;
+    background: var(--dark-2);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.55);
+    opacity: 0; visibility: hidden; transform: translateY(-8px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  }
+  .nav-links.open { opacity: 1; visibility: visible; transform: translateY(0); }
+  .nav-links li { display: block; }
+  .nav-links .nav-link {
+    display: block; padding: 0.62rem 1.2rem;
+    font-size: 0.82rem; letter-spacing: 0.06em;
+  }
+  /* The sliding underline belongs to a horizontal bar, not to a list. */
+  .nav-links .nav-link::after { display: none; }
+  .nav-links .nav-link:hover { background: var(--dark-3); color: var(--white); }
+  .nav-links .nav-link.active { color: var(--accent); }
+}
 .nav-link {
   font-size: 0.85rem;
   font-weight: 500;
