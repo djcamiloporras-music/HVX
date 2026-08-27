@@ -486,9 +486,20 @@
               .toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
           : '--';
 
-        const listenUrl = r.links
-          ? (r.links.spotify || r.links.beatport || r.links.soundcloud || r.links.appleMusic || null)
-          : null;
+        /* One link per platform the admin filled in. Order is fixed so the
+           row reads the same way every time, whichever ones exist. */
+        const PLATFORMS = [
+          ['spotify', 'Spotify'],
+          ['beatport', 'Beatport'],
+          ['soundcloud', 'SoundCloud'],
+          ['appleMusic', 'Apple Music'],
+        ];
+        const rl = r.links || {};
+        const listenLinks = PLATFORMS
+          .filter(([key]) => rl[key])
+          .map(([key, label]) =>
+            `<a href="${rl[key]}" target="_blank" rel="noopener noreferrer" class="release-link">${label}</a>`)
+          .join('');
 
         const row = document.createElement('div');
         row.className = 'release-row';
@@ -500,9 +511,7 @@
              <p class="release-title">${r.title}</p>
            </div>
            <span class="release-genre">${r.genre}</span>
-           ${listenUrl
-             ? `<a href="${listenUrl}" target="_blank" rel="noopener noreferrer" class="release-link">Listen Now</a>`
-             : `<span class="release-link" style="opacity:.35;cursor:default;">Soon</span>`}`;
+           <div class="release-links">${listenLinks || '<span class="release-soon">Soon</span>'}</div>`;
 
         row.addEventListener('mouseenter', () => { row.style.background = 'rgba(162,89,255,0.04)'; });
         row.addEventListener('mouseleave', () => { row.style.background = ''; });
