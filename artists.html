@@ -588,6 +588,21 @@
     </ul>
   </footer>
 
+  <script src="hvx-config.js"></script>
+  <script>
+  /* Demos points at the same TrackStack link the rest of the site uses.
+     This page loads no bundle, so it reads the config directly. */
+  (function () {
+    var url = (window.HVX_CONFIG && window.HVX_CONFIG.demos
+      && window.HVX_CONFIG.demos.trackstack) || '';
+    var link = document.querySelector('.nav-links a[href$="#demo"]');
+    if (!link) return;
+    if (!url) { link.parentNode.hidden = true; return; }
+    link.href = url;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+  })();
+  </script>
   <script>
 (async () => {
     // CURSOR
