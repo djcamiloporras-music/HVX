@@ -25,6 +25,13 @@ window.HVX_CONFIG = {
     requireAuthOnEntry: false,
   },
 
+  /* Demo submissions run through TrackStack. This is the only place the
+     link lives; leaving it empty hides the open call and its buttons, so
+     the site never sends anyone to a dead page. */
+  demos: {
+    trackstack: 'https://tstack.link/hvxmusic-0XnScKNGhrv1sf1c9dHJU',
+  },
+
   /* Future backend endpoints - leave empty until ready */
   forms: {
     demo:    '',   // Google Apps Script URL
