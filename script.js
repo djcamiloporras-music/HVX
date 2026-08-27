@@ -4,7 +4,7 @@
 
   // FETCH SHARED DATA FROM SERVER (admin-published content)
   await Promise.all(
-    [['artists','hvx_artists'],['merch','hvx_merch']].map(([k, sk]) =>
+    [['artists','hvx_artists'],['merch','hvx_merch'],['releases','hvx_releases']].map(([k, sk]) =>
       Promise.race([
         fetch('/api/data?key=' + k)
           .then(r => r.ok ? r.json() : null)
@@ -460,8 +460,15 @@
   // RENDER RELEASES FROM DATA
   const releasesList = document.getElementById('releases-list');
 
-  if (releasesList && window.HVX) {
-    const releases = window.HVX.releases || [];
+  if (releasesList) {
+    /* Published releases win over the ones bundled with the site, the same
+       way the roster works. Newest first: the section is called Latest. */
+    const _storedReleases = (() => { try { return JSON.parse(localStorage.getItem('hvx_releases')); } catch (_e) { return null; } })();
+    const releases = ((_storedReleases && _storedReleases.length)
+      ? _storedReleases
+      : ((window.HVX && window.HVX.releases) || []))
+      .slice()
+      .sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
 
     if (releases.length === 0) {
       releasesList.innerHTML =
@@ -471,8 +478,12 @@
          </div>`;
     } else {
       releases.forEach(r => {
+        /* A bare YYYY-MM-DD is parsed as UTC midnight and then printed a day
+           earlier anywhere west of Greenwich. Pinning it to local midnight
+           keeps the date the admin actually typed. */
         const date = r.date
-          ? new Date(r.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+          ? new Date(/^\d{4}-\d{2}-\d{2}$/.test(r.date) ? r.date + 'T00:00:00' : r.date)
+              .toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
           : '--';
 
         const listenUrl = r.links
