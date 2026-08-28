@@ -1547,6 +1547,60 @@ select:focus-visible {
   overflow: hidden;
 }
 .merch-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* Product gallery. The track scrolls with snap points, so a phone swipes it
+   natively and no gesture code is needed; the arrows just nudge that same
+   scroll. A product with one photo renders exactly as before. */
+.merch-card-img { position: relative; }
+.merch-gallery { position: absolute; inset: 0; }
+.merch-track {
+  display: flex; height: 100%;
+  overflow-x: auto; overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none; -ms-overflow-style: none;
+}
+.merch-track::-webkit-scrollbar { display: none; }
+.merch-track img { flex: 0 0 100%; scroll-snap-align: center; }
+.merch-nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 30px; height: 30px; border-radius: 50%;
+  background: rgba(8, 8, 12, 0.62);
+  border: 1px solid var(--border);
+  color: var(--white); font-size: 1rem; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  cursor: none; opacity: 0; transition: opacity 0.2s, border-color 0.2s;
+  padding: 0;
+}
+.merch-nav.prev { left: 8px; }
+.merch-nav.next { right: 8px; }
+.merch-card:hover .merch-nav, .merch-nav:focus-visible { opacity: 1; }
+.merch-nav:hover { border-color: var(--accent); }
+.merch-dots {
+  position: absolute; left: 0; right: 0; bottom: 9px;
+  display: flex; justify-content: center; gap: 5px;
+  pointer-events: none;
+}
+.merch-dots i {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: rgba(255, 255, 255, 0.34);
+  transition: background 0.2s, width 0.2s;
+}
+.merch-dots i.on { background: var(--accent); width: 14px; border-radius: 3px; }
+
+/* Touch has no hover, so the arrows would never appear. There the swipe is
+   the control, and the dots say how far along you are. */
+/* Someone who asked the system for less motion should not get an animated
+   slide every time they tap an arrow. */
+@media (prefers-reduced-motion: reduce) {
+  .merch-track { scroll-behavior: auto; }
+}
+
+@media (hover: none) {
+  .merch-nav { display: none; }
+  .merch-dots i { width: 6px; height: 6px; }
+  .merch-dots i.on { width: 16px; }
+}
 .merch-card-body { padding: 1.4rem; }
 .merch-card-name { font-family: var(--font-alt); font-size: 1.05rem; font-weight: 700; margin-bottom: 0.3rem; }
 .merch-card-price { color: var(--accent); font-weight: 700; font-size: 1rem; margin-bottom: 0.5rem; }
