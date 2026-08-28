@@ -246,6 +246,16 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
 .img-prev .img-note{font-size:.75rem;line-height:1.5;margin-top:.3rem}
 .img-prev .img-note.bad{color:var(--red)}
 .img-prev .img-note.busy{color:var(--muted)}
+.img-gallery{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.7rem}
+.img-slot{position:relative;width:84px}
+.img-slot img{width:84px;height:84px;object-fit:cover;border-radius:4px;border:1px solid var(--border);display:block}
+.img-slot.cover img{border-color:var(--accent)}
+.img-slot-tag{display:block;text-align:center;font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;margin-top:.25rem;color:var(--muted)}
+.img-slot.cover .img-slot-tag{color:var(--accent)}
+.img-slot-x{position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;border:1px solid var(--border);background:var(--dark-3);color:var(--off-white);font-size:.75rem;line-height:1;cursor:pointer;padding:0}
+.img-slot-x:hover{border-color:var(--red);color:var(--red)}
+.img-slot-cover-btn{width:100%;margin-top:.25rem;font-size:.62rem;padding:.15rem 0;background:none;border:1px solid var(--border);border-radius:2px;color:var(--muted);cursor:pointer}
+.img-slot-cover-btn:hover{border-color:var(--accent);color:var(--accent)}
 
 /* CONTACT INBOX */
 .inbox-item{display:grid;grid-template-columns:12px 1fr auto;gap:1rem;align-items:start;padding:1rem 1.5rem;border-bottom:1px solid var(--border);cursor:pointer;transition:background .2s}
@@ -829,13 +839,16 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
         <div class="form-group"><label class="form-label">Description</label><input type="text" class="form-input" id="mf-desc" placeholder="Short product description"/></div>
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label">Product Image</label>
+            <label class="form-label">Product Images</label>
             <div class="img-picker">
-              <input type="text" class="form-input" id="mf-img" placeholder="Upload a file, or paste a direct image link"/>
+              <input type="text" class="form-input" id="mf-img" placeholder="Paste an image link and press Add, or upload files"/>
+              <button type="button" class="btn btn-outline btn-sm" onclick="addMerchImageFromInput()">Add</button>
               <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('mf-img-file').click()">Upload</button>
-              <input type="file" id="mf-img-file" accept="image/*" style="display:none" onchange="uploadImage(this,'mf-img','mf-img-prev')"/>
+              <input type="file" id="mf-img-file" accept="image/*" multiple style="display:none" onchange="uploadMerchImages(this)"/>
             </div>
             <div class="img-prev" id="mf-img-prev"></div>
+            <div class="img-gallery" id="mf-gallery"></div>
+            <p class="img-note busy" style="margin-top:.4rem">The first image is the cover: it heads the card and is the one shown in the cart.</p>
           </div>
           <div class="form-group"><label class="form-label">Status</label><select class="form-input" id="mf-status"><option value="available">In Stock</option><option value="preorder">Pre-order</option><option value="soldout">Sold Out</option><option value="coming">Coming Soon</option></select></div>
         </div>
@@ -1844,6 +1857,90 @@ function renderMerchAdmin(){
   `).join('');
 }
 
+/* MERCH IMAGE GALLERY
+   The product being edited holds its images here while the form is open.
+   On save the list goes to `images`, and its first entry is mirrored into
+   `img`: the cart thumbnail and every older product still read that field,
+   so nothing published before today changes behaviour. */
+var merchImages = [];
+
+function renderMerchGallery(){
+  var box=document.getElementById('mf-gallery');
+  if(!box)return;
+  if(!merchImages.length){box.innerHTML='';return}
+  box.innerHTML=merchImages.map(function(url,i){
+    return '<div class="img-slot'+(i===0?' cover':'')+'">'+
+      '<button type="button" class="img-slot-x" title="Remove" onclick="removeMerchImage('+i+')">x</button>'+
+      '<img src="'+url.replace(/"/g,'&quot;')+'" alt=""/>'+
+      (i===0
+        ? '<span class="img-slot-tag">Cover</span>'
+        : '<button type="button" class="img-slot-cover-btn" onclick="makeMerchCover('+i+')">Make cover</button>')+
+    '</div>';
+  }).join('');
+}
+
+function addMerchImage(url){
+  var clean=String(url||'').trim();
+  if(!clean)return false;
+  /* The same photo twice is never intentional. */
+  if(merchImages.indexOf(clean)!==-1){toast('That image is already on this product','error');return false}
+  merchImages.push(clean);
+  renderMerchGallery();
+  return true;
+}
+
+function addMerchImageFromInput(){
+  var el=document.getElementById('mf-img');
+  if(addMerchImage(el.value)) el.value='';
+}
+
+function removeMerchImage(i){
+  merchImages.splice(i,1);
+  renderMerchGallery();
+}
+
+function makeMerchCover(i){
+  var picked=merchImages.splice(i,1)[0];
+  merchImages.unshift(picked);
+  renderMerchGallery();
+}
+
+/* Several files at once, uploaded one after another rather than all at
+   the same time: the platform rejects large simultaneous bodies, and a
+   queue also keeps the order the person picked them in. */
+function uploadMerchImages(input){
+  var files=Array.prototype.slice.call(input.files||[]);
+  if(!files.length)return;
+  var box=document.getElementById('mf-img-prev');
+  var done=0, failed=0;
+
+  function step(){
+    if(!files.length){
+      input.value='';
+      if(box)box.innerHTML='<p class="img-note'+(failed?' bad':' busy')+'">'+
+        done+' image'+(done===1?'':'s')+' added'+(failed?', '+failed+' failed':'')+'.</p>';
+      return;
+    }
+    var file=files.shift();
+    if(box)box.innerHTML='<p class="img-note busy">Uploading '+file.name+' ('+(done+failed+1)+' of '+(done+failed+1+files.length)+')...</p>';
+    prepareImage(file).then(function(prepared){
+      return fetch('/api/media',{
+        method:'POST',
+        headers:{
+          'Authorization':'Bearer '+(localStorage.getItem('hvx_token')||''),
+          'Content-Type':'application/octet-stream'
+        },
+        body:prepared.blob
+      }).then(function(r){return r.json().then(function(d){return {ok:r.ok,d:d}})});
+    }).then(function(res){
+      if(res.ok&&res.d.url){addMerchImage(res.d.url);done++}
+      else{failed++;toast(res.d.error||('Could not upload '+file.name),'error')}
+      step();
+    }).catch(function(){failed++;toast('Could not upload '+file.name,'error');step()});
+  }
+  step();
+}
+
 function saveMerchProduct(){
   const name=document.getElementById('mf-name').value.trim();
   if(!name){toast('Product name is required','error');return}
@@ -1855,7 +1952,8 @@ function saveMerchProduct(){
     name,
     price:document.getElementById('mf-price').value.trim()||'0',
     desc:document.getElementById('mf-desc').value.trim(),
-    img:document.getElementById('mf-img').value.trim()||null,
+    images:merchImages.slice(),
+    img:merchImages[0]||null,
     status:document.getElementById('mf-status').value,
     releaseDate:(document.getElementById('mf-release')||{}).value ? document.getElementById('mf-release').value.trim() : ''
   };
@@ -1873,10 +1971,14 @@ function editMerch(i){
   document.getElementById('mf-name').value=p.name||'';
   document.getElementById('mf-price').value=p.price||'';
   document.getElementById('mf-desc').value=p.desc||'';
-  document.getElementById('mf-img').value=p.img||'';
+  document.getElementById('mf-img').value='';
   document.getElementById('mf-status').value=p.status||'available';
   var rel=document.getElementById('mf-release');if(rel)rel.value=p.releaseDate||'';
-  showPreview('mf-img-prev',p.img||'');
+  /* Products saved before galleries existed carry a single img. Treat that
+     as a gallery of one so editing them does not wipe their picture. */
+  merchImages=(Array.isArray(p.images)&&p.images.length)?p.images.slice():(p.img?[p.img]:[]);
+  renderMerchGallery();
+  showPreview('mf-img-prev','');
   document.getElementById('merch-form-title').textContent='Edit Product';
   document.getElementById('cancel-merch-btn').style.display='';
 }
@@ -1898,6 +2000,8 @@ function cancelMerchEdit(){
   });
   document.getElementById('edit-merch-id').value='';
   var st=document.getElementById('mf-status');if(st)st.value='available';
+  merchImages=[];
+  renderMerchGallery();
   showPreview('mf-img-prev','');
   document.getElementById('merch-form-title').textContent='Add New Product';
   document.getElementById('cancel-merch-btn').style.display='none';
