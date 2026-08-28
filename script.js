@@ -525,6 +525,30 @@
 
 
   // RENDER MERCH FROM ADMIN DATA
+  /* Arrows nudge the same scroll a finger would, so both inputs end up in
+     the same place. The dots follow the scroll position rather than a
+     counter we keep, which means a swipe updates them too. */
+  function wireMerchGallery(card) {
+    const track = card.querySelector('.merch-track');
+    if (!track) return;
+    const dots = [...card.querySelectorAll('.merch-dots i')];
+    const step = (dir) => track.scrollBy({ left: dir * track.clientWidth, behavior: 'smooth' });
+
+    const prev = card.querySelector('.merch-nav.prev');
+    const next = card.querySelector('.merch-nav.next');
+    if (prev) prev.addEventListener('click', (e) => { e.preventDefault(); step(-1); });
+    if (next) next.addEventListener('click', (e) => { e.preventDefault(); step(1); });
+
+    /* Toggling three classes is not work worth deferring, and waiting for an
+       animation frame means the dots stop updating wherever frames are
+       throttled. Do it on the event. */
+    const syncDots = () => {
+      const at = Math.round(track.scrollLeft / Math.max(1, track.clientWidth));
+      dots.forEach((d, i) => d.classList.toggle('on', i === at));
+    };
+    track.addEventListener('scroll', syncDots, { passive: true });
+  }
+
   const merchGrid = document.getElementById('merch-grid');
   if (merchGrid) {
     const products = (() => { try { return JSON.parse(localStorage.getItem('hvx_merch') || '[]'); } catch(_e) { return []; } })();
@@ -532,6 +556,26 @@
       merchGrid.innerHTML = '<div class="merch-empty"><p class="merch-empty-label">HVX Store</p><p class="merch-empty-msg">Shop coming soon.</p></div>';
     } else {
       const LABELS = { available: 'In Stock', preorder: 'Pre-order', soldout: 'Sold Out', coming: 'Coming Soon' };
+
+      /* Products saved before galleries existed carry a single img, so read
+         whichever field is there. One photo means no arrows and no dots:
+         controls for a carousel of one are just noise. */
+      const merchGallery = (p) => {
+        const shots = (Array.isArray(p.images) && p.images.length)
+          ? p.images
+          : (p.img ? [p.img] : []);
+        if (!shots.length) return '&#128717;';
+        const alt = String(p.name || '').replace(/"/g, '&quot;');
+        const slides = shots.map((src, i) =>
+          `<img src="${src}" alt="${alt}${shots.length > 1 ? ' ' + (i + 1) + ' of ' + shots.length : ''}">`).join('');
+        if (shots.length === 1) return slides;
+        return `<div class="merch-gallery">
+            <div class="merch-track">${slides}</div>
+            <button class="merch-nav prev" type="button" aria-label="Previous image">&lsaquo;</button>
+            <button class="merch-nav next" type="button" aria-label="Next image">&rsaquo;</button>
+            <div class="merch-dots">${shots.map((_, i) => `<i class="${i ? '' : 'on'}"></i>`).join('')}</div>
+          </div>`;
+      };
       products.forEach(p => {
         const status = p.status || 'available';
         const buyable = status === 'available' || status === 'preorder';
@@ -539,7 +583,7 @@
         const card = document.createElement('div');
         card.className = 'merch-card reveal';
         card.innerHTML =
-          `<div class="merch-card-img">${p.img ? `<img src="${p.img}" alt="${p.name}">` : '&#128717;'}</div>
+          `<div class="merch-card-img">${merchGallery(p)}</div>
            <div class="merch-card-body">
              <p class="merch-card-name">${p.name}</p>
              <p class="merch-card-price">$${p.price}</p>
@@ -553,6 +597,7 @@
                </button>
              </div>
            </div>`;
+        wireMerchGallery(card);
         revealObs.observe(card);
         merchGrid.appendChild(card);
       });
