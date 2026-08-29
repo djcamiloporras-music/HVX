@@ -88,6 +88,27 @@ export default async (req) => {
     if (order.payment && order.payment.status === 'paid') {
       return Response.json({ received: true, duplicate: true });
     }
+    /* Where to send it. Stripe has moved this field between versions, so
+       read every shape it has used rather than trusting one: an order that
+       is paid but has nowhere to ship is not a recoverable state. */
+    const ship = (session.collected_information && session.collected_information.shipping_details)
+      || session.shipping_details
+      || session.shipping
+      || null;
+    if (ship) {
+      const a = ship.address || {};
+      order.shipping = {
+        name: ship.name || (order.customer && (order.customer.firstName + ' ' + order.customer.lastName)) || '',
+        phone: ship.phone || (session.customer_details && session.customer_details.phone) || '',
+        line1: a.line1 || '',
+        line2: a.line2 || '',
+        city: a.city || '',
+        state: a.state || '',
+        postalCode: a.postal_code || '',
+        country: a.country || 'US',
+      };
+    }
+
     order.status = 'paid';
     order.payment = {
       provider: 'stripe',
