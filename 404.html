@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page Not Found &mdash; HVX Music</title>
+  <meta name="robots" content="noindex, follow" />
+  <link rel="icon" href="assets/hvx-logo-transparent.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .nf {
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center;
+      padding: 4rem 6vw; gap: 0;
+    }
+    .nf-logo { height: 34px; width: auto; margin-bottom: 3rem; opacity: 0.9; }
+    .nf-code {
+      font-family: var(--font-alt); font-weight: 800;
+      font-size: clamp(4rem, 16vw, 9rem); line-height: 0.9;
+      letter-spacing: -0.03em;
+      background: linear-gradient(120deg, var(--white), var(--accent));
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1.2rem;
+    }
+    .nf-title {
+      font-family: var(--font-alt); font-size: clamp(1.1rem, 3vw, 1.5rem);
+      font-weight: 700; margin-bottom: 0.8rem;
+    }
+    .nf-text {
+      font-size: 0.92rem; color: var(--off-white); line-height: 1.8;
+      max-width: 42ch; margin-bottom: 2.5rem;
+    }
+    .nf-actions { display: flex; gap: 0.8rem; flex-wrap: wrap; justify-content: center; }
+    .nf-links {
+      margin-top: 3.5rem; padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      display: flex; gap: 1.6rem; flex-wrap: wrap; justify-content: center;
+    }
+    .nf-links a {
+      font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--muted); transition: color 0.2s;
+    }
+    .nf-links a:hover { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <main class="nf">
+    <img src="assets/hvx-logo-transparent.png" alt="HVX Music" class="nf-logo" />
+
+    <p class="nf-code">404</p>
+    <h1 class="nf-title">This page does not exist</h1>
+    <p class="nf-text">The link may be old, or the address may have a typo in it. Nothing is broken
+      on our side, and everything else is still where you left it.</p>
+
+    <div class="nf-actions">
+      <a href="index.html" class="btn btn-primary">Back to Home</a>
+      <a href="artists.html" class="btn btn-outline">See the Artists</a>
+    </div>
+
+    <nav class="nf-links">
+      <a href="index.html#releases">Releases</a>
+      <a href="index.html#merch">Merch</a>
+      <a href="index.html#demo">Demos</a>
+      <a href="index.html#contact">Contact</a>
+    </nav>
+  </main>
+</body>
+</html>
