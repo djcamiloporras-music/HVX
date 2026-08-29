@@ -72,7 +72,16 @@ export default async (req) => {
     }
 
     const qty = Math.min(MAX_QTY, Math.max(1, parseInt(line.qty, 10) || 1));
+
+    /* money() answers 0 for anything it cannot read, so a price written as
+       a range once turned a $2,000 piece into a free one. Refuse the sale
+       instead: a product nobody can price is a product nobody can buy. */
     const price = money(product.price);
+    if (!(price > 0)) {
+      return json({
+        error: '"' + product.name + '" is not priced correctly and cannot be sold right now.',
+      }, 409);
+    }
     items.push({
       id: product.id,
       name: product.name,
