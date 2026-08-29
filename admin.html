@@ -834,7 +834,7 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
         <input type="hidden" id="edit-merch-id"/>
         <div class="form-row">
           <div class="form-group"><label class="form-label">Product Name</label><input type="text" class="form-input" id="mf-name" placeholder="HVX Logo Tee"/></div>
-          <div class="form-group"><label class="form-label">Price (USD)</label><input type="text" class="form-input" id="mf-price" placeholder="35"/></div>
+          <div class="form-group"><label class="form-label">Price (USD)</label><input type="text" class="form-input" id="mf-price" placeholder="35" oninput="previewPrice()"/><p class="img-note busy" id="mf-price-note" style="margin-top:.35rem"></p></div>
         </div>
         <div class="form-group"><label class="form-label">Description</label><input type="text" class="form-input" id="mf-desc" placeholder="Short product description"/></div>
         <div class="form-row">
@@ -1964,16 +1964,79 @@ function uploadMerchImages(input){
   step();
 }
 
+/* The same reading the server does, so the panel can refuse what the
+   store would refuse. Kept deliberately identical: a price that looks fine
+   here and fails there is how a $2,000 piece became free. */
+function parsePrice(raw){
+  var text=String(raw==null?'':raw).trim();
+  if(!text) return {ok:false,error:'Enter a price.'};
+  /* 1.500,00 is one thousand five hundred to half the world and one dollar
+     fifty to the other half. The store is priced in US dollars, so the US
+     reading is the right one, but guessing silently is how a $1,500 piece
+     becomes $1.50. Spot the other notation and ask instead. */
+  var lastComma=text.lastIndexOf(',');
+  var lastDot=text.lastIndexOf('.');
+  if(lastComma>-1&&lastDot>-1&&lastComma>lastDot){
+    return {ok:false,error:'That looks like European notation. Here a comma groups thousands and a period marks cents: write 1500.00, not 1.500,00.'};
+  }
+
+  var digits=text.replace(/[^0-9.]/g,'');
+  if(!digits) return {ok:false,error:'That price has no number in it.'};
+
+  /* A period followed by exactly three digits is almost always a thousands
+     separator someone typed out of habit. It parses cleanly, which is what
+     makes it dangerous, so refuse it rather than charge a thousandth. */
+  if(/^\d+\.\d{3}$/.test(digits)&&text.indexOf(',')===-1){
+    return {ok:false,error:'Three digits after the period reads as cents, so this would charge $'+(Number(digits)).toFixed(2)+'. If you meant '+digits.replace('.','')+', write it without the period.'};
+  }
+  if((digits.match(/\./g)||[]).length>1){
+    return {ok:false,error:'That reads as more than one number. A price is a single amount, not a range: write 1500, not 1,500 - 2,000.'};
+  }
+  var n=Number(digits);
+  if(!isFinite(n)) return {ok:false,error:'That price cannot be read as a number.'};
+  var value=Math.round(n*100)/100;
+  if(value<=0) return {ok:false,error:'A price has to be greater than zero.'};
+  /* Stripe will not process a charge under fifty cents. */
+  if(value<0.5) return {ok:false,error:'The minimum a card can be charged is $0.50.'};
+  return {ok:true,value:value};
+}
+
+/* Shows what the store would actually charge, while it is being typed. */
+function previewPrice(){
+  var el=document.getElementById('mf-price');
+  var out=document.getElementById('mf-price-note');
+  if(!el||!out)return;
+  var raw=el.value.trim();
+  if(!raw){out.textContent='';out.className='img-note busy';return}
+  var p=parsePrice(raw);
+  if(p.ok){
+    out.textContent='Charged as $'+p.value.toFixed(2);
+    out.className='img-note busy';
+  }else{
+    out.textContent=p.error;
+    out.className='img-note bad';
+  }
+}
+
 function saveMerchProduct(){
   const name=document.getElementById('mf-name').value.trim();
   if(!name){toast('Product name is required','error');return}
+
+  var priced=parsePrice(document.getElementById('mf-price').value);
+  if(!priced.ok){
+    toast(priced.error,'error');
+    previewPrice();
+    document.getElementById('mf-price').focus();
+    return;
+  }
+
   const products=getAdminMerch();
   const idxRaw=document.getElementById('edit-merch-id').value;
   const idx=idxRaw!==''?+idxRaw:null;
   const product={
     id:idx!==null?products[idx].id:'merch-'+Date.now(),
     name,
-    price:document.getElementById('mf-price').value.trim()||'0',
+    price:priced.value.toFixed(2),
     desc:document.getElementById('mf-desc').value.trim(),
     images:merchImages.slice(),
     img:merchImages[0]||null,
@@ -1993,6 +2056,7 @@ function editMerch(i){
   document.getElementById('edit-merch-id').value=i;
   document.getElementById('mf-name').value=p.name||'';
   document.getElementById('mf-price').value=p.price||'';
+  previewPrice();
   document.getElementById('mf-desc').value=p.desc||'';
   document.getElementById('mf-img').value='';
   document.getElementById('mf-status').value=p.status||'available';
@@ -2025,6 +2089,7 @@ function cancelMerchEdit(){
   var st=document.getElementById('mf-status');if(st)st.value='available';
   merchImages=[];
   renderMerchGallery();
+  var pn=document.getElementById('mf-price-note');if(pn)pn.textContent='';
   showPreview('mf-img-prev','');
   document.getElementById('merch-form-title').textContent='Add New Product';
   document.getElementById('cancel-merch-btn').style.display='none';
