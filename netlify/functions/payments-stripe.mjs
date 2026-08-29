@@ -6,6 +6,9 @@
    handled there. The order total is rebuilt from the stored order, never
    from the browser, so a tampered cart cannot change the amount charged.
 
+   Shipping addresses are collected by Stripe on its own page, limited to
+   the United States, and written onto the order by the webhook.
+
    GET  /api/payments/stripe?action=status                    public
    POST /api/payments/stripe?action=create-checkout-session   Bearer customer
         { reference }  ->  { url }   redirect the browser to url
@@ -156,6 +159,19 @@ export default async (req) => {
     customer_email: order.customer.email,
     client_reference_id: order.reference,
     metadata: { orderRef: order.reference, fulfillment: order.fulfillment },
+
+    /* The address is collected here rather than on our own page: Stripe
+       already autocompletes and format-checks it, restricts the country
+       list, and hands it back with the payment. A separate form before
+       this one would mean a second place to get wrong, a mapping API key
+       in the browser, and the customer typing an address twice.
+
+       Format is all this guarantees. It does not prove a house exists, so
+       an address that looks right can still bounce. */
+    shipping_address_collection: { allowed_countries: ['US'] },
+
+    /* A phone number is what a courier asks for when a delivery fails. */
+    phone_number_collection: { enabled: 'true' },
   };
 
   /* Amounts are taken from the stored order and sent in cents. */
