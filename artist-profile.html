@@ -8,8 +8,12 @@
   <meta property="og:type" content="profile" />
   <meta property="og:title" content="Artist Profile &mdash; HVX Music" />
   <meta property="og:description" content="Discover HVX Music artists, releases, and upcoming shows." />
-  <meta property="og:url" content="https://hvx-music.netlify.app/artist-profile.html" />
-  <link rel="canonical" href="https://hvx-music.netlify.app/artist-profile.html" />
+  <meta property="og:url" content="https://hvxmusic.com/artist-profile.html" />
+  <meta property="og:image" content="https://hvxmusic.com/assets/hvx-logo-transparent.png" />
+  <meta property="og:site_name" content="HVX Music" />
+  <link rel="canonical" href="https://hvxmusic.com/artist-profile.html" />
+  <link rel="icon" href="assets/hvx-logo-transparent.png" type="image/png" />
+  <link rel="apple-touch-icon" href="assets/hvx-logo-transparent.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -676,6 +680,31 @@
 
     // POPULATE HERO
     document.title = artist.name + ' - HVX Music';
+
+    /* Every artist shares this one file, so a fixed canonical would tell
+       search engines that all of them are the same page. Point it at the
+       address actually being viewed, now that the artist is known. */
+    const canon = document.querySelector('link[rel="canonical"]');
+    const artistUrl = artist.id
+      ? 'https://hvxmusic.com/artist-profile.html?id=' + encodeURIComponent(artist.id)
+      : null;
+    if (canon && artistUrl) canon.href = artistUrl;
+
+    const ogUrl = document.querySelector('meta[property="og:url"]');
+    if (ogUrl && artistUrl) ogUrl.setAttribute('content', artistUrl);
+
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) ogTitle.setAttribute('content', artist.name + ' - HVX Music');
+
+    /* Sharing a profile should preview that artist, not the label logo.
+       Link previews are fetched by other servers, which have no page to
+       resolve a relative path against, so it has to be absolute. */
+    const ogImg = document.querySelector('meta[property="og:image"]');
+    if (ogImg && artist.photo) {
+      ogImg.setAttribute('content', /^https?:\/\//.test(artist.photo)
+        ? artist.photo
+        : 'https://hvxmusic.com/' + String(artist.photo).replace(/^\//, ''));
+    }
     const genreClass = artist.genre.toLowerCase().replace(' ', '-');
     const genreEl = document.getElementById('hero-genre-tag');
     genreEl.textContent = artist.genre;
