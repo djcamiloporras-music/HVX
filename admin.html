@@ -937,6 +937,15 @@ window.addEventListener('scroll',()=>{const d=document.documentElement;sp.style.
 // RIPPLE
 document.addEventListener('click',e=>{const btn=e.target.closest('.btn');if(!btn)return;const r=btn.getBoundingClientRect();const rip=document.createElement('span');const s=Math.max(r.width,r.height);rip.className='ripple';rip.style.cssText=`width:${s}px;height:${s}px;left:${e.clientX-r.left-s/2}px;top:${e.clientY-r.top-s/2}px`;btn.appendChild(rip);rip.addEventListener('animationend',()=>rip.remove())});
 
+/* Names and addresses arrive from whatever a buyer typed into Stripe.
+   They are shown here, in the panel, so they get escaped before they are
+   put into HTML. */
+function esc(value){
+  return String(value==null?'':value)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
 // TOAST
 function toast(msg,type='success'){const w=document.getElementById('toast-wrap');const t=document.createElement('div');t.className=`toast ${type}`;t.innerHTML=`<span class="toast-dot"></span>${msg}`;w.appendChild(t);setTimeout(()=>t.classList.add('show'),10);setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),400)},3200)}
 
@@ -1636,9 +1645,23 @@ function renderOrders(){
         var payBadge=payStatus==='paid'?'badge-green':payStatus==='failed'?'badge-muted':'badge-orange';
         var typeBadge=o.fulfillment==='preorder'?'badge-accent':o.fulfillment==='mixed'?'badge-orange':'badge-green';
         var cancelled=o.status==='cancelled';
+        /* Everything needed to put it in a box and address it, in the cell
+           that already identifies the buyer. An order paid but unshippable
+           is the one state worth shouting about. */
+        var sh=o.shipping;
+        var ship = sh
+          ? '<div style="font-size:.72rem;color:var(--off-white);margin-top:.35rem;line-height:1.45">'+
+              esc(sh.name||'')+'<br/>'+
+              esc(sh.line1||'')+(sh.line2?'<br/>'+esc(sh.line2):'')+'<br/>'+
+              esc([sh.city,sh.state].filter(Boolean).join(', '))+' '+esc(sh.postalCode||'')+
+              (sh.phone?'<br/>'+esc(sh.phone):'')+
+            '</div>'
+          : (payStatus==='paid'
+              ? '<div style="font-size:.72rem;color:var(--red);margin-top:.35rem">Paid with no shipping address. Contact the buyer.</div>'
+              : '');
         return '<tr>'+
           '<td style="font-weight:600">'+o.reference+(cancelled?'<div style="font-size:.72rem;color:var(--muted)">cancelled</div>':'')+'</td>'+
-          '<td>'+o.customer.firstName+' '+o.customer.lastName+'<div style="font-size:.72rem;color:var(--muted)">'+o.customer.email+'</div></td>'+
+          '<td>'+o.customer.firstName+' '+o.customer.lastName+'<div style="font-size:.72rem;color:var(--muted)">'+o.customer.email+'</div>'+ship+'</td>'+
           '<td style="font-size:.8rem">'+items+'</td>'+
           '<td><span class="badge '+typeBadge+'">'+o.fulfillment+'</span></td>'+
           '<td>$'+(o.total||0).toFixed(2)+'</td>'+
