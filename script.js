@@ -2,6 +2,44 @@
 
 (async () => {
 
+  // HERO VIDEO
+  /* Placed before anything that awaits, so a wide screen starts fetching
+     immediately instead of queueing behind the content request below.
+
+     Hiding a video with display:none does not stop the browser downloading
+     it. At 375px the hero is hidden and the page was still pulling 14 MB
+     nobody could see, on whatever data plan the visitor was paying for. */
+  (function heroVideo() {
+    const video = document.querySelector('.hero-video[data-src]');
+    if (!video) return;
+
+    const wide = window.matchMedia('(min-width: 901px)');
+    const calm = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const conn = navigator.connection || {};
+    /* Two different ways of saying "not now": the system motion setting,
+       and the browser's own data saver. Either one and it stays unloaded. */
+    const unwelcome = () => calm.matches || conn.saveData === true;
+
+    const attach = () => {
+      if (video.src || !wide.matches || unwelcome()) return;
+      video.src = video.dataset.src;
+      /* The autoplay attribute does the starting: with no src it had nothing
+         to act on, and once one is attached it plays on its own. This call
+         is the backup for browsers that want an explicit request, and its
+         rejection is not a failure. Autoplay can be refused anyway, in low
+         power mode for instance, and nothing breaks: the wrap is black on a
+         black page, so a video that never starts simply is not there. */
+      video.play().catch(() => {});
+    };
+
+    attach();
+    /* A tablet turned sideways, or a window dragged wider, crosses the
+       breakpoint after load and should get the video then. */
+    if (wide.addEventListener) wide.addEventListener('change', attach);
+    else if (wide.addListener) wide.addListener(attach);
+  })();
+
+
   // FETCH SHARED DATA FROM SERVER (admin-published content)
   await Promise.all(
     [['artists','hvx_artists'],['merch','hvx_merch'],['releases','hvx_releases']].map(([k, sk]) =>
