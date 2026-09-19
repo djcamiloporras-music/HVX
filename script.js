@@ -40,6 +40,21 @@
   })();
 
 
+  // IMAGE SIZING
+  /* The admin uploads whatever the phone or camera produced, and a 2321x3480
+     shirt photo was being sent whole to a 343px card. Netlify's Image CDN
+     resizes and re-encodes at the edge, so the stored original stays intact
+     and the visitor gets the size actually drawn.
+
+     Only same-site uploads are rewritten. A link the client pasted to another
+     host is left exactly as typed, and so is anything already a data URI. */
+  const sized = (src, width) => {
+    const s = String(src || '');
+    if (s.indexOf('/api/media?') !== 0) return s;
+    return '/.netlify/images?url=' + encodeURIComponent(s) + '&w=' + width + '&q=76';
+  };
+
+
   // FETCH SHARED DATA FROM SERVER (admin-published content)
   await Promise.all(
     [['artists','hvx_artists'],['merch','hvx_merch'],['releases','hvx_releases']].map(([k, sk]) =>
@@ -442,7 +457,7 @@
       card.dataset.genre = artist.genre;
 
       const imgHTML = artist.photo
-        ? `<img src="${artist.photo}" alt="${artist.name}" class="artist-img" style="width:100%;height:100%;object-fit:cover;">`
+        ? `<img src="${sized(artist.photo, 600)}" alt="${artist.name}" class="artist-img" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;">`
         : `<div class="artist-img-placeholder"><span>${artist.placeholder ? 'COMING SOON' : 'ARTIST'}</span></div>`;
 
       const socialHTML = (!artist.placeholder && artist.social)
@@ -542,7 +557,7 @@
         const row = document.createElement('div');
         row.className = 'release-row';
         row.innerHTML =
-          `<div class="release-artwork">${r.art ? `<img src="${r.art}" alt="${r.title}" style="width:100%;height:100%;object-fit:cover;border-radius:2px;">` : ''}</div>
+          `<div class="release-artwork">${r.art ? `<img src="${sized(r.art, 160)}" alt="${r.title}" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;border-radius:2px;">` : ''}</div>
            <span class="release-date">${date}</span>
            <div class="release-info">
              <p class="release-artist">${r.artist}</p>
@@ -605,7 +620,7 @@
         if (!shots.length) return '&#128717;';
         const alt = String(p.name || '').replace(/"/g, '&quot;');
         const slides = shots.map((src, i) =>
-          `<img src="${src}" alt="${alt}${shots.length > 1 ? ' ' + (i + 1) + ' of ' + shots.length : ''}">`).join('');
+          `<img src="${sized(src, 700)}" alt="${alt}${shots.length > 1 ? ' ' + (i + 1) + ' of ' + shots.length : ''}" loading="lazy" decoding="async">`).join('');
         if (shots.length === 1) return slides;
         return `<div class="merch-gallery">
             <div class="merch-track">${slides}</div>
