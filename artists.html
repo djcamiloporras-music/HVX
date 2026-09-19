@@ -9,8 +9,13 @@
   <meta property="og:title" content="Artists &mdash; HVX Music" />
   <meta property="og:description" content="Meet the HVX Music electronic music artist roster." />
   <meta property="og:url" content="https://hvxmusic.com/artists.html" />
-  <meta property="og:image" content="https://hvxmusic.com/assets/hvx-logo-transparent.png" />
+  <meta property="og:image" content="https://hvxmusic.com/assets/hvx-og-cover.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="HVX Music" />
   <meta property="og:site_name" content="HVX Music" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://hvxmusic.com/assets/hvx-og-cover.jpg" />
   <link rel="canonical" href="https://hvxmusic.com/artists.html" />
   <link rel="icon" href="assets/hvx-logo-transparent.png" type="image/png" />
   <link rel="apple-touch-icon" href="assets/hvx-logo-transparent.png" />
@@ -106,13 +111,16 @@
       height: 104px;
       overflow: hidden;
     }
-    .nav-logo-video {
-      height: 440px;
+    .nav-logo-mark {
+      height: 44px;
       width: auto;
       display: block;
-      object-fit: contain;
+      /* Still frame, not a video: iOS in Low Power Mode blocks autoplay and
+         stamps a play button over the mark. Screen blending drops the black
+         backing, and the side fade ends the cropped streak softly. */
       mix-blend-mode: screen;
-      mask-image: radial-gradient(ellipse 58% 30% at 50% 50%, #000 45%, transparent 100%); -webkit-mask-image: radial-gradient(ellipse 58% 30% at 50% 50%, #000 45%, transparent 100%);
+      mask-image: linear-gradient(to right, transparent 0%, #000 16%, #000 84%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 16%, #000 84%, transparent 100%);
     }
     .nav-links {
       display: flex;
@@ -541,7 +549,8 @@
     @media (max-width: 640px) {
       .artists-grid { grid-template-columns: 1fr; }
       .nav-links { display: none; }
-      .hero-title { font-size: 3.5rem; }
+      .nav-logo-mark { height: 32px; }
+      .hero-title { font-size: clamp(2.2rem, 11.5vw, 3.5rem); }
     }
   </style>
 </head>
@@ -554,7 +563,7 @@
   <!-- NAV -->
   <nav>
     <a href="index.html" class="nav-logo">
-      <video src="assets/hvx-logo-anim.mp4" autoplay muted loop playsinline class="nav-logo-video" aria-label="HVX Music"></video>
+      <img src="assets/hvx-logo-nav.jpg" alt="HVX Music" class="nav-logo-mark" width="550" height="114" />
     </a>
     <ul class="nav-links">
       <li><a href="artists.html" class="active">Artists</a></li>
