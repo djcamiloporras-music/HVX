@@ -43,6 +43,15 @@
       .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
   }
 
+  /* Cart thumbnails are 56px. Sending the full camera file for one is the
+     same waste the grid had, so same-site uploads go through Netlify's Image
+     CDN; anything hosted elsewhere is left as the client typed it. */
+  function sized(src, width) {
+    var s = String(src == null ? '' : src);
+    if (s.indexOf('/api/media?') !== 0) return s;
+    return '/.netlify/images?url=' + encodeURIComponent(s) + '&w=' + width + '&q=76';
+  }
+
   function money(value) {
     var n = Number(String(value).replace(/[^0-9.]/g, ''));
     return Number.isFinite(n) ? n : 0;
@@ -387,7 +396,7 @@
       var preorder = (p.status || '') === 'preorder';
       return '<div class="hvx-line">' +
         '<div class="hvx-line-img">' +
-          (p.img ? '<img src="' + esc(p.img) + '" alt="' + esc(p.name) + '">' : '&#9834;') +
+          (p.img ? '<img src="' + esc(sized(p.img, 180)) + '" alt="' + esc(p.name) + '" loading="lazy" decoding="async">' : '&#9834;') +
         '</div>' +
         '<div>' +
           '<div class="hvx-line-name">' + esc(p.name) + '</div>' +
