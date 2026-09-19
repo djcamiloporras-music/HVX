@@ -502,17 +502,17 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
 .hero-img-wrap .chip-3 { bottom: 14%; left: -10%; }
 .hero-img-wrap .chip-4 { bottom: 8%;  right: -6%; }
 
-.logo-video {
-  height: 440px;
+.logo-mark {
+  height: 44px;
   width: auto;
   display: block;
-  object-fit: contain;
+  /* A still frame replaces the looping video: iOS in Low Power Mode refuses to
+     autoplay and stamps its own play button over the mark. The file keeps the
+     black backing the video had, so screen blending drops it against the bar,
+     and the side fade stops the cropped light streak on a hard edge. */
   mix-blend-mode: screen;
-  /* The clip alone leaves a hard-edged black rectangle, because the video's
-     pure black is darker than the bar behind it. Fading the edges dissolves
-     that seam so the mark reads as emerging from the black gradient. */
-  mask-image: radial-gradient(ellipse 58% 30% at 50% 50%, #000 45%, transparent 100%);
-  -webkit-mask-image: radial-gradient(ellipse 58% 30% at 50% 50%, #000 45%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, #000 16%, #000 84%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 16%, #000 84%, transparent 100%);
 }
 
 .hero-video-wrap {
@@ -1139,7 +1139,7 @@ body:has(button:hover) .cursor-follower { width: 48px; height: 48px; opacity: 0.
 }
 
 @media (max-width: 600px) {
-  .logo-video { height: 280px; }
+  .logo-mark { height: 32px; }
   .hero-title { letter-spacing: -0.02em; }
   .artists-grid { grid-template-columns: 1fr 1fr; gap: 1px; }
   .contact-inner { grid-template-columns: 1fr; }
