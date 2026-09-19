@@ -82,6 +82,10 @@
       display: flex; flex-direction: column; justify-content: center;
       padding: 80px 56px 80px 56px;
       position: relative; z-index: 1;
+      /* A grid track defaults to min-width:auto, so one wide child drags the
+         whole column past the screen. This lets the column shrink and the
+         child wrap instead. */
+      min-width: 0;
     }
     .hero-genre-tag {
       display: inline-block; padding: 5px 14px; border-radius: 20px;
@@ -94,9 +98,13 @@
 
     .hero-artist-name {
       font-family: 'Syne', sans-serif;
-      font-size: clamp(4rem, 8vw, 7rem);
+      /* The floor was 4rem, which a 375px screen never got below: one long
+         surname at that size is wider than the phone itself. It scales down
+         now, and breaks as a last resort for names longer than any of ours. */
+      font-size: clamp(2.4rem, 10vw, 7rem);
       font-weight: 800; line-height: 0.9; letter-spacing: -0.03em;
       color: var(--white); margin-bottom: 16px;
+      overflow-wrap: break-word;
     }
     .hero-city {
       font-size: 0.8rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase;
@@ -104,13 +112,35 @@
     }
     .hero-city::before { content: ''; color: var(--accent); font-size: 0.6rem; }
     .hero-bio { font-size: 1rem; color: var(--off-white); line-height: 1.7; max-width: 480px; margin-bottom: 36px; }
+    /* A long biography is the norm, not the exception. Clamped, the reader
+       chooses to open it; unclamped, a phone gets twenty lines of prose
+       before it reaches anything else on the page. */
+    .bio-clamped {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: var(--bio-lines, 5);
+      overflow: hidden;
+    }
+    .bio-more {
+      /* The paragraph's own bottom margin would sit between the text and
+         this control, dropping it into whatever follows. The gap moves here
+         instead, and the paragraph gives its up in clampBio. */
+      display: inline-block; margin: 10px 0 36px;
+      background: none; border: none; padding: 0;
+      font-family: inherit; font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--accent); cursor: pointer;
+      transition: color 0.2s;
+    }
+    .bio-more:hover { color: var(--cyan); }
+
     .hero-stats { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 36px; }
     .stat-chip {
       padding: 8px 16px; background: var(--dark-3); border: 1px solid var(--border);
       border-radius: 40px; font-size: 0.78rem; color: var(--off-white); font-weight: 500;
     }
     .stat-chip strong { color: var(--accent); font-weight: 700; }
-    .hero-ctas { display: flex; gap: 14px; }
+    .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; }
     .btn-primary {
       padding: 14px 32px; background: var(--accent); color: var(--white); border: none;
       border-radius: 4px; font-family: 'Manrope', sans-serif; font-size: 0.85rem; font-weight: 700;
@@ -452,6 +482,15 @@
     }
     @media (max-width: 640px) {
       .nav-links { display: none; }
+      /* 56px of padding either side leaves 263px of a 375px screen. */
+      .hero-left { padding: 56px 20px; }
+      .hero-bio { max-width: none; }
+      .tab-nav-inner { padding: 0 20px; }
+      /* Three things share the bar: back, mark, Book Now. At 440px tall the
+         mark is 248px wide, which pushed the button on top of it. */
+      .nav-logo-video { height: 240px; }
+      .nav-cta { padding: 10px 14px; font-size: 0.7rem; }
+      .nav-back { font-size: 0.72rem; }
       .tab-content { padding: 32px 16px; }
       .kpi-row { grid-template-columns: 1fr 1fr; }
       .releases-grid { grid-template-columns: repeat(2, 1fr); }
@@ -678,6 +717,37 @@
       });
     }
 
+    /* Clamps a block of text and offers to open it, but only when there is
+       something hidden to open. Under the limit the text already fits, and
+       a control that reveals nothing is just clutter. */
+    function clampBio(el, lines) {
+      if (!el || !el.textContent.trim()) return;
+      el.style.setProperty('--bio-lines', lines);
+      el.classList.add('bio-clamped');
+
+      /* Measured after clamping, so the comparison is against the limit
+         rather than against a guess about how long the text is. */
+      if (el.scrollHeight <= el.clientHeight + 1) {
+        el.classList.remove('bio-clamped');
+        return;
+      }
+
+      /* Hand the spacing to the control, so the text sits right above it. */
+      el.style.marginBottom = '6px';
+
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'bio-more';
+      btn.setAttribute('aria-expanded', 'false');
+      btn.textContent = 'Read more';
+      btn.addEventListener('click', () => {
+        const opened = !el.classList.toggle('bio-clamped');
+        btn.setAttribute('aria-expanded', opened ? 'true' : 'false');
+        btn.textContent = opened ? 'Read less' : 'Read more';
+      });
+      el.insertAdjacentElement('afterend', btn);
+    }
+
     // POPULATE HERO
     document.title = artist.name + ' - HVX Music';
 
@@ -712,6 +782,7 @@
     document.getElementById('hero-name').textContent = artist.name;
     document.getElementById('hero-city').textContent = artist.city;
     document.getElementById('hero-bio').textContent = artist.bio;
+    clampBio(document.getElementById('hero-bio'), 5);
     document.getElementById('hero-img-text').textContent = artist.name.slice(0,2);
     // Hero bg gradient by genre
     const heroImgEl = document.getElementById('hero-img');
@@ -755,6 +826,8 @@
     // OVERVIEW
     document.getElementById('ov-name').textContent = artist.name;
     document.getElementById('ov-bio').textContent = artist.longBio;
+    /* More room here: this section exists to be read, unlike the hero. */
+    clampBio(document.getElementById('ov-bio'), 8);
     const servicesEl = document.getElementById('ov-services');
     artist.services.forEach(s => { const t = document.createElement('span'); t.className='tag'; t.textContent=s; servicesEl.appendChild(t); });
     /* An empty heading with nothing under it reads as broken, so hide it. */
