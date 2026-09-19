@@ -9,8 +9,10 @@
   <meta property="og:title" content="Artist Profile &mdash; HVX Music" />
   <meta property="og:description" content="Discover HVX Music artists, releases, and upcoming shows." />
   <meta property="og:url" content="https://hvxmusic.com/artist-profile.html" />
-  <meta property="og:image" content="https://hvxmusic.com/assets/hvx-logo-transparent.png" />
+  <meta property="og:image" content="https://hvxmusic.com/assets/hvx-og-cover.jpg" />
+  <meta property="og:image:alt" content="HVX Music" />
   <meta property="og:site_name" content="HVX Music" />
+  <meta name="twitter:card" content="summary_large_image" />
   <link rel="canonical" href="https://hvxmusic.com/artist-profile.html" />
   <link rel="icon" href="assets/hvx-logo-transparent.png" type="image/png" />
   <link rel="apple-touch-icon" href="assets/hvx-logo-transparent.png" />
@@ -39,7 +41,17 @@
     /* NAV */
     nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; display: flex; align-items: center; justify-content: space-between; padding: 0 48px; height: 104px; background: linear-gradient(to bottom, rgba(4,4,7,0.97) 0%, rgba(4,4,7,0.88) 45%, rgba(4,4,7,0.55) 78%, rgba(4,4,7,0) 100%); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); mask-image: linear-gradient(to bottom, #000 62%, transparent 100%); -webkit-mask-image: linear-gradient(to bottom, #000 62%, transparent 100%); }
     .nav-logo { display: flex; align-items: center; text-decoration: none; height: 104px; overflow: hidden; }
-    .nav-logo-video { height: 440px; width: auto; display: block; object-fit: contain; mix-blend-mode: screen; mask-image: radial-gradient(ellipse 58% 30% at 50% 50%, #000 45%, transparent 100%); -webkit-mask-image: radial-gradient(ellipse 58% 30% at 50% 50%, #000 45%, transparent 100%); }
+    .nav-logo-mark {
+      height: 44px;
+      width: auto;
+      display: block;
+      /* Still frame, not a video: iOS in Low Power Mode blocks autoplay and
+         stamps a play button over the mark. Screen blending drops the black
+         backing, and the side fade ends the cropped streak softly. */
+      mix-blend-mode: screen;
+      mask-image: linear-gradient(to right, transparent 0%, #000 16%, #000 84%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 16%, #000 84%, transparent 100%);
+    }
     .embed-frame { width: 100%; border: 1px solid var(--border); border-radius: 10px; display: block; }
     .embed-empty { color: var(--muted); font-size: 0.9rem; line-height: 1.7; padding: 28px 0; }
     .nav-back { display: flex; align-items: center; gap: 8px; color: var(--off-white); text-decoration: none; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; transition: color 0.2s; }
@@ -486,9 +498,9 @@
       .hero-left { padding: 56px 20px; }
       .hero-bio { max-width: none; }
       .tab-nav-inner { padding: 0 20px; }
-      /* Three things share the bar: back, mark, Book Now. At 440px tall the
-         mark is 248px wide, which pushed the button on top of it. */
-      .nav-logo-video { height: 240px; }
+      /* Three things share the bar: back, mark, Book Now. At 44px tall the
+         mark is 212px wide, which leaves nothing between it and the button. */
+      .nav-logo-mark { height: 32px; }
       .nav-cta { padding: 10px 14px; font-size: 0.7rem; }
       .nav-back { font-size: 0.72rem; }
       .tab-content { padding: 32px 16px; }
@@ -512,7 +524,7 @@
   <nav>
     <a href="index.html" class="nav-back">Home</a>
     <a href="index.html" class="nav-logo">
-      <video src="assets/hvx-logo-anim.mp4" autoplay muted loop playsinline class="nav-logo-video" aria-label="HVX Music"></video>
+      <img src="assets/hvx-logo-nav.jpg" alt="HVX Music" class="nav-logo-mark" width="550" height="114" />
     </a>
     <ul class="nav-links">
       <li><a href="artists.html">Artists</a></li>
