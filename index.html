@@ -116,10 +116,13 @@
       <!-- RIGHT: rotating 3D logo video -->
       <div class="hero-visual">
         <div class="hero-img-wrap hero-video-wrap">
+          <!-- The file is named in data-src, not src: a video hidden with
+               display:none still downloads, and this one is 14 MB. script.js
+               attaches it only on screens that actually show it. -->
           <video
             class="hero-video"
-            src="assets/hvx-rotate.mp4"
-            autoplay muted loop playsinline
+            data-src="assets/hvx-rotate.mp4"
+            autoplay muted loop playsinline preload="none"
             aria-label="HVX Music 3D rotating logo">
           </video>
           <div class="chip chip-1"><span class="chip-dot"></span>House / Tech House</div>
