@@ -475,6 +475,13 @@
       color: var(--off-white);
       line-height: 1.65;
       opacity: 0.8;
+      /* Three lines is a taste of the artist, not their whole story. No
+         control here on purpose: the card already opens the full profile,
+         and a second thing to click would compete with it. */
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      overflow: hidden;
     }
 
     /* -- FOOTER -- */
