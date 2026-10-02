@@ -717,16 +717,37 @@
       .filter(ev => ev.artistId === artist.id)
       .sort((a, b) => (a.date || '').localeCompare(b.date || ''));
     if (artistEvents.length) {
-      artist.upcomingShows = artistEvents.map(ev => {
+      /* The admin keeps one flat list of shows. A date that has already passed
+         is not something to announce: left in Upcoming it sat at the top of
+         the list and took over the "Next" chip, so a show from two years ago
+         was presented as the next booking. Dates are compared as YYYY-MM-DD
+         strings, which sort correctly and avoid the timezone shift that
+         building a Date from a bare date introduces. */
+      const now = new Date();
+      const todayStr = now.getFullYear() + '-'
+        + String(now.getMonth() + 1).padStart(2, '0') + '-'
+        + String(now.getDate()).padStart(2, '0');
+
+      const shown = (ev) => {
         const d = new Date(ev.date + 'T00:00:00');
-        const dateStr = isNaN(d.getTime()) ? ev.date : d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-        return { date: dateStr, venue: ev.venue, city: ev.city || '' };
+        return isNaN(d.getTime()) ? ev.date
+          : d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+      };
+      const asVenue = (ev) => ({
+        flag: '', city: ev.city || '', venue: ev.venue, date: shown(ev),
+        capacity: ev.capacity || '-', status: ev.status || 'Confirmed'
       });
-      artist.venues.upcoming = artistEvents.map(ev => {
-        const d = new Date(ev.date + 'T00:00:00');
-        const dateStr = isNaN(d.getTime()) ? ev.date : d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-        return { flag: '', city: ev.city || '', venue: ev.venue, date: dateStr, capacity: ev.capacity || '-', status: ev.status || 'Confirmed' };
-      });
+
+      const upcoming = artistEvents.filter(ev => (ev.date || '') >= todayStr);
+      /* Most recent first: a history reads backwards from now, while what is
+         coming reads forwards. */
+      const past = artistEvents.filter(ev => (ev.date || '') < todayStr).reverse();
+
+      artist.upcomingShows = upcoming.map(ev => ({
+        date: shown(ev), venue: ev.venue, city: ev.city || ''
+      }));
+      artist.venues.upcoming = upcoming.map(asVenue);
+      artist.venues.past = past.map(asVenue);
     }
 
     /* Clamps a block of text and offers to open it, but only when there is
