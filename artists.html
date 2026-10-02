@@ -677,10 +677,21 @@
       return 'dance';
     }
 
+    // IMAGE SIZING
+    /* The admin stores whatever the camera produced. Netlify's Image CDN
+       resizes and re-encodes at the edge, so the original stays untouched and
+       the visitor gets the size actually drawn. Only same-site uploads are
+       rewritten; a link pasted to another host is left as typed. */
+    const sized = (src, width) => {
+      const s = String(src || '');
+      if (s.indexOf('/api/media?') !== 0) return s;
+      return '/.netlify/images?url=' + encodeURIComponent(s) + '&w=' + width + '&q=76';
+    };
+
     if (artistData.length) {
       artistData.forEach(a => {
         const imgHTML = a.photo
-          ? `<img src="${a.photo}" alt="${a.name}" style="width:100%;height:100%;object-fit:cover;">`
+          ? `<img src="${sized(a.photo, 900)}" alt="${a.name}" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;">`
           : `<div class="card-img-placeholder"><span class="placeholder-text">${a.name.toUpperCase()}</span></div>`;
         const art = document.createElement('article');
         art.className = 'artist-card';
