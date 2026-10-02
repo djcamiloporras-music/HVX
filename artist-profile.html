@@ -672,6 +672,17 @@
       }
     });
 
+    // IMAGE SIZING
+    /* The admin stores whatever the camera produced. Netlify's Image CDN
+       resizes and re-encodes at the edge, so the original stays untouched and
+       the visitor gets the size actually drawn. Only same-site uploads are
+       rewritten; a link pasted to another host is left as typed. */
+    const sized = (src, width) => {
+      const s = String(src || '');
+      if (s.indexOf('/api/media?') !== 0) return s;
+      return '/.netlify/images?url=' + encodeURIComponent(s) + '&w=' + width + '&q=76';
+    };
+
     // READ URL PARAM
     // Fetch shared data published from the admin panel
     await Promise.all(
@@ -827,12 +838,25 @@
     if (artist.photo) {
       const heroPhoto = document.createElement('img');
       heroPhoto.className = 'hero-photo';
-      heroPhoto.src = artist.photo;
       heroPhoto.alt = artist.name;
       /* If the file is missing, fall back to the placeholder rather than
          leaving an empty frame where a face should be. */
       heroPhoto.onerror = () => heroPhoto.remove();
       heroImgEl.appendChild(heroPhoto);
+
+      /* The column holding this photo is display:none below 1025px, and a
+         hidden img still downloads: a phone was pulling 348 KB of a picture
+         it never showed. The file is attached only once that column is on
+         screen, and again if the window is later widened past the
+         breakpoint. Drawn at 420x560, so 900 covers a 2x display. */
+      const wideHero = window.matchMedia('(min-width: 1025px)');
+      const attachPhoto = () => {
+        if (heroPhoto.src || !wideHero.matches) return;
+        heroPhoto.src = sized(artist.photo, 900);
+      };
+      attachPhoto();
+      if (wideHero.addEventListener) wideHero.addEventListener('change', attachPhoto);
+      else if (wideHero.addListener) wideHero.addListener(attachPhoto);
     }
 
     // Stats
