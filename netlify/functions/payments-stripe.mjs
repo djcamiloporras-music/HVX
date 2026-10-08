@@ -183,7 +183,26 @@ export default async (req) => {
       item.type === 'preorder' ? item.name + ' (Pre-order)' : item.name;
   });
 
+  /* Stripe is told the discount as a discount, not by quietly shaving the line
+     prices: the customer sees the code and the amount it took off on the
+     payment page, which is what makes a working code feel like it worked.
+
+     A single-use coupon is created per checkout rather than mirroring the
+     label's codes into Stripe and keeping two lists in step. The amount comes
+     from the stored order, so it is the figure /api/orders already decided. */
   try {
+    if (order.discount > 0) {
+      const made = await stripe('/coupons', {
+        amount_off: Math.round(order.discount * 100),
+        currency: 'usd',
+        duration: 'once',
+        max_redemptions: 1,
+        name: (order.coupon && order.coupon.code ? order.coupon.code : 'DISCOUNT')
+          + ' - ' + order.reference,
+      });
+      payload['discounts[0][coupon]'] = made.id;
+    }
+
     const session = await stripe('/checkout/sessions', payload);
 
     order.payment = {
