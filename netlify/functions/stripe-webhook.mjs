@@ -16,6 +16,7 @@
       variable STRIPE_WEBHOOK_SECRET, then redeploy. */
 
 import { getStore } from '@netlify/blobs';
+import { notify, money } from '../lib/mailer.mjs';
 
 const TOLERANCE_SECONDS = 300;
 
@@ -119,6 +120,37 @@ export default async (req) => {
       paidAt: new Date().toISOString(),
     };
     await shop.setJSON('orders', orders);
+
+    /* Told after the order is saved, never before: if the notice were sent
+       first and the write then failed, the label would be chasing an order
+       that does not exist. The result is logged rather than acted on, because
+       answering Stripe with an error would have it retry an event already
+       handled and the money has arrived either way. */
+    const ship = order.shipping;
+    const result = await notify({
+      subject: 'New order ' + order.reference + ' - ' + money(order.payment.amountTotal),
+      heading: 'A new order was paid',
+      rows: [
+        ['Reference', order.reference],
+        ['Customer', (order.customer.firstName + ' ' + order.customer.lastName).trim()],
+        ['Email', order.customer.email],
+        ['Total', money(order.payment.amountTotal)],
+        ['Fulfilment', order.fulfillment],
+        ['Items', order.items.map((i) => i.qty + ' x ' + i.name).join(', ')],
+        ['Ship to', ship
+          ? [ship.name, ship.line1, ship.line2, ship.city, ship.state, ship.postalCode, ship.country]
+              .filter(Boolean).join(', ')
+          : ''],
+        ['Phone', ship ? ship.phone : ''],
+        ['Placed', order.createdAt],
+      ],
+      message: order.note,
+      replyTo: order.customer.email,
+    });
+    if (!result.sent && result.reason !== 'not configured') {
+      console.log('order notification not sent:', result.reason, result.detail || '');
+    }
+
     return Response.json({ received: true, order: order.reference, status: 'paid' });
   }
 
