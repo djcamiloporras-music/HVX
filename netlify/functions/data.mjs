@@ -5,6 +5,7 @@
    POST /api/data?key=contacts (no auth) -> appends one contact message  */
 
 import { getStore } from '@netlify/blobs';
+import { notify } from '../lib/mailer.mjs';
 
 const ALLOWED_KEYS = ['artists', 'events', 'merch', 'highlights', 'contacts', 'releases'];
 
@@ -54,7 +55,7 @@ export default async (req) => {
          it. A lost booking enquiry is not recoverable - nobody knows it was
          sent. This narrows the window to the width of the write itself. */
       const list = (await store.get('contacts', { type: 'json', consistency: 'strong' })) || [];
-      list.unshift({
+      const entry = {
         name: String(msg.name || '').slice(0, 200),
         email: String(msg.email || '').slice(0, 200),
         type: String(msg.type || '').slice(0, 100),
@@ -62,8 +63,30 @@ export default async (req) => {
         date: new Date().toISOString(),
         read: false,
         id: Date.now(),
-      });
+      };
+      list.unshift(entry);
       await store.setJSON('contacts', list.slice(0, 500));
+
+      /* Sent after the message is stored, so a mail failure never costs the
+         enquiry: it is in the admin panel either way. The sender's own
+         address is only ever used as reply-to, never as the from, which
+         would fail SPF and land the notice in spam. */
+      const result = await notify({
+        subject: 'New enquiry from ' + (entry.name || entry.email || 'the website'),
+        heading: 'Someone wrote in through the site',
+        rows: [
+          ['Name', entry.name],
+          ['Email', entry.email],
+          ['Subject', entry.type],
+          ['Received', entry.date],
+        ],
+        message: entry.message,
+        replyTo: entry.email || undefined,
+      });
+      if (!result.sent && result.reason !== 'not configured') {
+        console.log('contact notification not sent:', result.reason, result.detail || '');
+      }
+
       return Response.json({ ok: true }, { headers: cors });
     }
 
