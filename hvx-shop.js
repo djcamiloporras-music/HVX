@@ -19,12 +19,18 @@
   var API_AUTH = '/api/auth';
   var API_ORDERS = '/api/orders';
   var API_STRIPE = '/api/payments/stripe';
+  var API_COUPONS = '/api/coupons';
 
   var TOKEN_KEY = 'hvx_user_token';
   var CART_KEY = 'hvx_cart';
   var CATALOG_KEY = 'hvx_merch';
 
-  var state = { user: null, cart: [], busy: false, notice: null };
+  var state = { user: null, cart: [], busy: false, notice: null,
+    /* { code, label, discount, forSubtotal } once a code has been checked.
+       forSubtotal is what the cart was worth at the time: a percentage is
+       worth a different amount the moment a quantity changes, so the
+       preview can tell when it has gone stale. */
+    coupon: null, couponBusy: false };
   var ui = {};
 
   /* ------------------------------------------------------------------ util */
@@ -177,8 +183,96 @@
 
   function clearCart() {
     state.cart = [];
+    state.coupon = null;
     saveCart();
     paintCart();
+  }
+
+  /* ------------------------------------------------------------- discounts */
+
+  function cartDiscount() {
+    return state.coupon ? money(state.coupon.discount) : 0;
+  }
+
+  function cartPayable() {
+    return Math.max(0, Math.round((cartTotal() - cartDiscount()) * 100) / 100);
+  }
+
+  /* Asks the server what a code is worth. Nothing here decides a price: this
+     is a preview for the cart, and /api/orders works it out again from the
+     catalog when the order is actually written. */
+  function checkCoupon(code, onDone) {
+    var subtotal = cartTotal();
+    state.couponBusy = true;
+    api(API_COUPONS + '?action=check', { method: 'POST', body: { code: code, subtotal: subtotal } })
+      .then(function (res) {
+        state.couponBusy = false;
+        if (res.status === 401) { onDone({ signIn: true }); return; }
+        if (!res.ok || !res.data || !res.data.ok) {
+          onDone({ error: (res.data && res.data.error) || 'That code could not be applied.' });
+          return;
+        }
+        onDone({ coupon: {
+          code: res.data.code,
+          label: res.data.label,
+          discount: money(res.data.discount),
+          forSubtotal: subtotal
+        } });
+      })
+      .catch(function () {
+        state.couponBusy = false;
+        onDone({ error: 'Could not reach the server. Try again.' });
+      });
+  }
+
+  function applyCouponFromInput() {
+    var field = document.getElementById('hvx-coupon-input');
+    if (!field) return;
+    var code = (field.value || '').trim().toUpperCase();
+    if (!code) return;
+    if (!state.user) {
+      closeCart();
+      openAuth('Sign in to use a discount code.');
+      return;
+    }
+    var btn = document.getElementById('hvx-coupon-apply');
+    if (btn) { btn.disabled = true; btn.textContent = '...'; }
+    checkCoupon(code, function (result) {
+      if (result.signIn) {
+        closeCart();
+        openAuth('Sign in to use a discount code.');
+        return;
+      }
+      if (result.error) {
+        state.coupon = null;
+        paintCart();
+        message(result.error, 'error', 'hvx-cart-msg');
+        return;
+      }
+      state.coupon = result.coupon;
+      paintCart();
+      message(result.coupon.code + ' applied: ' + result.coupon.label + '.', 'ok', 'hvx-cart-msg');
+    });
+  }
+
+  function removeCoupon() {
+    state.coupon = null;
+    paintCart();
+  }
+
+  /* A percentage is worth less after a line is removed and more after one is
+     added, so a preview taken at the old subtotal would be wrong by the time
+     it is read. Re-asked once, and only when the subtotal actually moved. */
+  function refreshCouponIfStale() {
+    if (!state.coupon || state.couponBusy) return;
+    if (Math.abs(state.coupon.forSubtotal - cartTotal()) < 0.005) return;
+    var code = state.coupon.code;
+    checkCoupon(code, function (result) {
+      if (result.coupon) { state.coupon = result.coupon; paintCart(); return; }
+      state.coupon = null;
+      paintCart();
+      if (result.error) message(result.error, 'error', 'hvx-cart-msg');
+    });
   }
 
   /* -------------------------------------------------------------- ui build */
@@ -420,9 +514,31 @@
       return p && p.status === 'preorder';
     });
 
+    var applied = state.coupon;
+
     ui.cartFoot.innerHTML =
       '<div class="hvx-msg" id="hvx-cart-msg"></div>' +
-      '<div class="hvx-totals"><span>Total</span><strong>' + fmt(cartTotal()) + '</strong></div>' +
+      /* The subtotal only appears once something is taken off it. On a cart
+         with no code it would be a second line saying what Total already
+         says. */
+      (applied
+        ? '<div class="hvx-totals" style="font-size:.85rem;opacity:.75;margin-bottom:.4rem">' +
+            '<span>Subtotal</span><span>' + fmt(cartTotal()) + '</span>' +
+          '</div>' +
+          '<div class="hvx-totals" style="font-size:.85rem;margin-bottom:.4rem;color:#86efac">' +
+            '<span>' + esc(applied.code) + ' (' + esc(applied.label) + ')</span>' +
+            '<span>-' + fmt(cartDiscount()) + '</span>' +
+          '</div>'
+        : '') +
+      '<div class="hvx-totals"><span>Total</span><strong>' + fmt(cartPayable()) + '</strong></div>' +
+      (applied
+        ? '<div style="display:flex;gap:.5rem;margin-bottom:1rem">' +
+            '<button class="hvx-btn hvx-btn-ghost" id="hvx-coupon-remove" style="padding:.55rem .9rem;font-size:.78rem">Remove ' + esc(applied.code) + '</button>' +
+          '</div>'
+        : '<div style="display:flex;gap:.5rem;margin-bottom:1rem">' +
+            '<input class="hvx-input" id="hvx-coupon-input" placeholder="Discount code" autocomplete="off" spellcheck="false" style="text-transform:uppercase;flex:1" />' +
+            '<button class="hvx-btn hvx-btn-ghost" id="hvx-coupon-apply" style="width:auto;padding:.55rem 1.1rem;font-size:.8rem">Apply</button>' +
+          '</div>') +
       '<button class="hvx-btn" id="hvx-checkout">' +
         (state.user ? 'Checkout' : 'Sign In to Checkout') +
       '</button>' +
@@ -431,6 +547,19 @@
         : '');
 
     document.getElementById('hvx-checkout').addEventListener('click', doCheckout);
+
+    var applyBtn = document.getElementById('hvx-coupon-apply');
+    if (applyBtn) applyBtn.addEventListener('click', applyCouponFromInput);
+    var codeField = document.getElementById('hvx-coupon-input');
+    /* Enter is what people press in a one-field row, and without this it
+       would submit nothing or reload the page. */
+    if (codeField) codeField.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); applyCouponFromInput(); }
+    });
+    var removeBtn = document.getElementById('hvx-coupon-remove');
+    if (removeBtn) removeBtn.addEventListener('click', removeCoupon);
+
+    refreshCouponIfStale();
   }
 
   /* ----------------------------------------------------------- open/close */
@@ -587,8 +716,13 @@
     message('', '', 'hvx-cart-msg');
 
     var items = state.cart.map(function (line) { return { id: line.id, qty: line.qty }; });
+    /* Only the code travels, never the amount. The server reads the code
+       again and works out what it is worth from the catalog price, so a
+       discount edited in the browser changes nothing about what is charged. */
+    var payload = { items: items };
+    if (state.coupon) payload.coupon = state.coupon.code;
 
-    api(API_ORDERS, { method: 'POST', body: { items: items } })
+    api(API_ORDERS, { method: 'POST', body: payload })
       .then(function (res) {
         if (!res.ok) {
           busy(button, false, 'Checkout');
@@ -599,6 +733,13 @@
             closeCart();
             openAuth('Your session expired. Please sign in again.');
             return null;
+          }
+          /* The code stopped being valid between the cart and this call, so
+             the order was refused rather than quietly charged at full price.
+             Dropping it here lets the same Checkout press work again. */
+          if (res.data && res.data.coupon === 'rejected') {
+            state.coupon = null;
+            paintCart();
           }
           message(res.data.error || 'Could not place the order.', 'error', 'hvx-cart-msg');
           return null;
