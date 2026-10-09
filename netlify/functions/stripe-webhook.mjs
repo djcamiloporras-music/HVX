@@ -126,7 +126,7 @@ export default async (req) => {
        that does not exist. The result is logged rather than acted on, because
        answering Stripe with an error would have it retry an event already
        handled and the money has arrived either way. */
-    const ship = order.shipping;
+    const shipTo = order.shipping;
     const result = await notify({
       subject: 'New order ' + order.reference + ' - ' + money(order.payment.amountTotal),
       heading: 'A new order was paid',
@@ -137,11 +137,11 @@ export default async (req) => {
         ['Total', money(order.payment.amountTotal)],
         ['Fulfilment', order.fulfillment],
         ['Items', order.items.map((i) => i.qty + ' x ' + i.name).join(', ')],
-        ['Ship to', ship
-          ? [ship.name, ship.line1, ship.line2, ship.city, ship.state, ship.postalCode, ship.country]
-              .filter(Boolean).join(', ')
+        ['Ship to', shipTo
+          ? [shipTo.name, shipTo.line1, shipTo.line2, shipTo.city,
+             shipTo.state, shipTo.postalCode, shipTo.country].filter(Boolean).join(', ')
           : ''],
-        ['Phone', ship ? ship.phone : ''],
+        ['Phone', shipTo ? shipTo.phone : ''],
         ['Placed', order.createdAt],
       ],
       message: order.note,
