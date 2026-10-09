@@ -331,6 +331,10 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
         <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
         Merch Manager
       </button>
+      <button class="nav-item" data-page="coupons">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 9V7a2 2 0 012-2h14a2 2 0 012 2v2a2 2 0 000 6v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2a2 2 0 000-6z"/><path d="M13 7v2M13 15v2"/></svg>
+        Discount Codes
+      </button>
       <button class="nav-item" data-page="orders">
         <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><path d="M3 6h18M16 10a4 4 0 01-8 0"/></svg>
         Orders
@@ -868,6 +872,42 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
     </div>
 
     <!-- ORDERS -->
+    <div class="page-section" id="page-coupons">
+      <div class="page-header">
+        <div><h1 class="page-title">Discount Codes</h1><p class="page-sub">Codes customers can enter at checkout. Turn one on for a season and off again without losing its history.</p></div>
+      </div>
+      <div class="manager-form-card" id="coupon-form-card">
+        <h3 id="coupon-form-title">Add New Code</h3>
+        <input type="hidden" id="edit-coupon-code"/>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Code</label><input type="text" class="form-input" id="cf-code" placeholder="SUMMER26" style="text-transform:uppercase"/></div>
+          <div class="form-group"><label class="form-label">Discount type</label><select class="form-input" id="cf-type" onchange="couponValueHint()"><option value="percent">Percentage off</option><option value="fixed">Fixed amount off</option></select></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Value</label><input type="text" class="form-input" id="cf-value" placeholder="15" oninput="couponValueHint()"/><p class="img-note" id="cf-value-hint">15 means 15% off the order.</p></div>
+          <div class="form-group"><label class="form-label">Expires on <span style="opacity:.6">(optional)</span></label><input type="date" class="form-input" id="cf-expires"/><p class="img-note">The code still works all of that day. Leave empty for no expiry.</p></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Maximum uses <span style="opacity:.6">(optional)</span></label><input type="text" class="form-input" id="cf-maxuses" placeholder="0"/><p class="img-note">0 means unlimited.</p></div>
+          <div class="form-group"><label class="form-label">Minimum order <span style="opacity:.6">(optional)</span></label><input type="text" class="form-input" id="cf-minorder" placeholder="0"/><p class="img-note">0 means it applies to any order.</p></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Status</label><select class="form-input" id="cf-active"><option value="yes">Active</option><option value="no">Inactive</option></select></div>
+          <div class="form-group" style="display:flex;align-items:flex-end;gap:.5rem">
+            <button class="btn btn-primary" onclick="saveCoupon()" style="width:auto">Save Code</button>
+            <button class="btn btn-outline btn-sm" id="cancel-coupon-btn" style="display:none" onclick="cancelCouponEdit()">Cancel</button>
+          </div>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <div class="table-head"><h3 class="table-title">All Codes</h3></div>
+        <table>
+          <thead><tr><th>Code</th><th>Discount</th><th>Status</th><th>Expires</th><th>Used</th><th>Minimum</th><th>Actions</th></tr></thead>
+          <tbody id="coupons-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
     <div class="page-section" id="page-orders">
       <div class="page-header">
         <div>
@@ -1048,6 +1088,7 @@ document.querySelectorAll('.nav-item[data-page]').forEach(btn=>{
     if(btn.dataset.page==='events'){renderEventsAdmin();refreshUploadArtistSelect()}
     if(btn.dataset.page==='merch-manager')renderMerchAdmin();
     if(btn.dataset.page==='releases')renderReleases();
+    if(btn.dataset.page==='coupons')loadCoupons();
     if(btn.dataset.page==='orders')renderOrders();
     if(btn.dataset.page==='contact-inbox')renderInbox();
   });
@@ -1450,6 +1491,181 @@ function deleteEvent(id){
   renderEventsAdmin();
   logActivity('Event deleted','orange');
   toast('Event deleted','error');
+}
+
+// DISCOUNT CODES
+/* Kept in memory and read from the server each time the page is opened,
+   never mirrored into localStorage like the other managers. Those are
+   mirrored because the public site reads them; a list of discount codes has
+   no reason to sit in browser storage once the tab is closed. */
+var ADMIN_COUPONS=[];
+
+function couponAuth(){return {'Content-Type':'application/json','Authorization':'Bearer '+(localStorage.getItem('hvx_token')||'')}}
+
+function loadCoupons(){
+  const tbody=document.getElementById('coupons-tbody');
+  if(tbody)tbody.innerHTML='<tr><td colspan="7" style="padding:1.5rem;color:var(--muted);text-align:center;font-size:.85rem">Loading...</td></tr>';
+  return fetch('/api/coupons',{headers:couponAuth()})
+    .then(function(r){
+      if(!r.ok)throw new Error(r.status===401?'you are no longer signed in on the server':'HTTP '+r.status);
+      return r.json();
+    })
+    .then(function(d){ADMIN_COUPONS=Array.isArray(d)?d:[];renderCoupons()})
+    .catch(function(err){
+      if(tbody)tbody.innerHTML='<tr><td colspan="7" style="padding:1.5rem;color:var(--muted);text-align:center;font-size:.85rem">Could not load codes: '+(err.message||'the server could not be reached')+'</td></tr>';
+    });
+}
+
+/* The whole list goes up at once, the same way the other managers publish.
+   The server keeps each code's redemption count, so editing a code here
+   cannot reset how many times it has already been used. */
+function pushCoupons(){
+  return fetch('/api/coupons',{method:'POST',headers:couponAuth(),body:JSON.stringify(ADMIN_COUPONS)})
+    .then(function(r){
+      if(!r.ok)throw new Error(r.status===401?'you are no longer signed in on the server':'the server rejected it (HTTP '+r.status+')');
+      return loadCoupons();
+    })
+    .catch(function(err){
+      toast('NOT SAVED','error');
+      alert('This change was NOT saved.\n\nReason: '+(err.message||'the server could not be reached')+'.');
+      return loadCoupons();
+    });
+}
+
+function couponWorth(c){
+  return c.type==='fixed' ? '$'+Number(c.value).toFixed(2)+' off' : Number(c.value)+'% off';
+}
+
+function renderCoupons(){
+  const tbody=document.getElementById('coupons-tbody');
+  if(!tbody)return;
+  if(!ADMIN_COUPONS.length){
+    tbody.innerHTML='<tr><td colspan="7" style="padding:1.5rem;color:var(--muted);text-align:center;font-size:.85rem">No codes yet. Add one above.</td></tr>';
+    return;
+  }
+  /* Today in New York, matching how the server decides an expiry, so a code
+     is never shown here as live while checkout is turning it away. */
+  const today=new Intl.DateTimeFormat('en-CA',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+  tbody.innerHTML=ADMIN_COUPONS.map(function(c){
+    const expired=c.expiresAt&&c.expiresAt<today;
+    const spent=c.maxUses>0&&(c.uses||0)>=c.maxUses;
+    /* Three ways a code can be off, and the badge says which: switched off by
+       hand, past its date, or out of uses. "Inactive" alone would send
+       somebody hunting for a switch that is already in the right position. */
+    const state=!c.active?['Inactive','badge-muted']:expired?['Expired','badge-muted']:spent?['Used up','badge-muted']:['Active','badge-green'];
+    const esc=function(v){return String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')};
+    return '<tr>'+
+      '<td><strong>'+esc(c.code)+'</strong></td>'+
+      '<td>'+esc(couponWorth(c))+'</td>'+
+      '<td><span class="badge '+state[1]+'">'+state[0]+'</span></td>'+
+      '<td>'+(c.expiresAt?esc(c.expiresAt):'<span style="color:var(--muted)">never</span>')+'</td>'+
+      '<td>'+(c.uses||0)+(c.maxUses>0?' of '+c.maxUses:'')+'</td>'+
+      '<td>'+(c.minOrder>0?'$'+Number(c.minOrder).toFixed(2):'<span style="color:var(--muted)">none</span>')+'</td>'+
+      '<td style="display:flex;gap:.5rem;flex-wrap:wrap">'+
+        '<button class="btn btn-outline btn-sm" onclick="editCoupon(\''+esc(c.code)+'\')">Edit</button>'+
+        '<button class="btn btn-outline btn-sm" onclick="toggleCoupon(\''+esc(c.code)+'\')">'+(c.active?'Turn off':'Turn on')+'</button>'+
+        '<button class="btn btn-outline btn-sm" onclick="deleteCoupon(\''+esc(c.code)+'\')">Delete</button>'+
+      '</td>'+
+    '</tr>';
+  }).join('');
+}
+
+function saveCoupon(){
+  const code=(document.getElementById('cf-code').value||'').toUpperCase().replace(/[^A-Z0-9_-]/g,'');
+  const value=Number((document.getElementById('cf-value').value||'').replace(/[^0-9.]/g,''));
+  if(!code){toast('A code is required','error');return}
+  if(!(value>0)){toast('The discount value must be greater than zero','error');return}
+  const type=document.getElementById('cf-type').value;
+  if(type==='percent'&&value>100){toast('A percentage cannot be over 100','error');return}
+
+  const editing=document.getElementById('edit-coupon-code').value;
+  const existing=ADMIN_COUPONS.find(function(c){return c.code===code});
+  /* Renaming onto a code that already exists would silently merge the two and
+     take the other one's redemption count with it. */
+  if(existing&&existing.code!==editing){toast('A code named '+code+' already exists','error');return}
+
+  const entry={
+    code:code,
+    type:type,
+    value:value,
+    active:document.getElementById('cf-active').value==='yes',
+    expiresAt:document.getElementById('cf-expires').value||'',
+    maxUses:parseInt((document.getElementById('cf-maxuses').value||'0').replace(/[^0-9]/g,''),10)||0,
+    minOrder:Number((document.getElementById('cf-minorder').value||'0').replace(/[^0-9.]/g,''))||0,
+    uses:(existing&&existing.uses)||0
+  };
+  if(editing){
+    const i=ADMIN_COUPONS.findIndex(function(c){return c.code===editing});
+    if(i>-1)ADMIN_COUPONS[i]=entry; else ADMIN_COUPONS.unshift(entry);
+  }else{
+    ADMIN_COUPONS.unshift(entry);
+  }
+  cancelCouponEdit();
+  pushCoupons();
+  logActivity('Discount code '+code+' saved','purple');
+  toast('Code saved','success');
+}
+
+function editCoupon(code){
+  const c=ADMIN_COUPONS.find(function(x){return x.code===code});
+  if(!c)return;
+  document.getElementById('edit-coupon-code').value=c.code;
+  document.getElementById('cf-code').value=c.code;
+  document.getElementById('cf-type').value=c.type||'percent';
+  document.getElementById('cf-value').value=c.value;
+  document.getElementById('cf-expires').value=c.expiresAt||'';
+  document.getElementById('cf-maxuses').value=c.maxUses||0;
+  document.getElementById('cf-minorder').value=c.minOrder||0;
+  document.getElementById('cf-active').value=c.active?'yes':'no';
+  couponValueHint();
+  document.getElementById('coupon-form-title').textContent='Edit Code';
+  document.getElementById('cancel-coupon-btn').style.display='';
+  document.getElementById('coupon-form-card').scrollIntoView({behavior:'smooth'});
+}
+
+/* Switching a code off leaves it and its history in place, which is the point
+   of a seasonal code: next year it goes back on instead of being recreated. */
+function toggleCoupon(code){
+  const c=ADMIN_COUPONS.find(function(x){return x.code===code});
+  if(!c)return;
+  c.active=!c.active;
+  renderCoupons();
+  pushCoupons();
+  toast('Code '+code+(c.active?' turned on':' turned off'),c.active?'success':'error');
+}
+
+function deleteCoupon(code){
+  const c=ADMIN_COUPONS.find(function(x){return x.code===code});
+  const used=c&&(c.uses||0)>0;
+  if(!confirm('Delete '+code+'?'+(used?'\n\nIt has been used '+c.uses+' time(s). Deleting loses that record. Turning it off keeps it.':'')))return;
+  ADMIN_COUPONS=ADMIN_COUPONS.filter(function(x){return x.code!==code});
+  renderCoupons();
+  pushCoupons();
+  logActivity('Discount code '+code+' deleted','orange');
+  toast('Code deleted','error');
+}
+
+function cancelCouponEdit(){
+  ['cf-code','cf-value','cf-expires'].forEach(function(id){document.getElementById(id).value=''});
+  document.getElementById('cf-maxuses').value='';
+  document.getElementById('cf-minorder').value='';
+  document.getElementById('cf-type').value='percent';
+  document.getElementById('cf-active').value='yes';
+  document.getElementById('edit-coupon-code').value='';
+  couponValueHint();
+  document.getElementById('coupon-form-title').textContent='Add New Code';
+  document.getElementById('cancel-coupon-btn').style.display='none';
+}
+
+/* The same number means two very different things depending on the type, so
+   the hint under the field reads back what was actually typed. */
+function couponValueHint(){
+  const t=document.getElementById('cf-type'),v=document.getElementById('cf-value'),h=document.getElementById('cf-value-hint');
+  if(!t||!h)return;
+  const n=(v&&v.value||'').replace(/[^0-9.]/g,'')||'15';
+  h.textContent=t.value==='fixed'
+    ? n+' means $'+Number(n).toFixed(2)+' off the order.'
+    : n+' means '+n+'% off the order.';
 }
 
 function cancelEventEdit(){
