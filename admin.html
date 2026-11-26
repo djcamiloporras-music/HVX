@@ -148,6 +148,19 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
 .feed-date{font-size:.7rem;color:var(--muted)}
 .feed-caption{font-size:.82rem;color:var(--off-white);line-height:1.55;margin-bottom:.8rem}
 .feed-actions{display:flex;gap:.5rem;justify-content:flex-end}
+.feed-title{font-family:var(--font-h);font-size:.95rem;font-weight:700;color:var(--white);line-height:1.3;margin:0 0 .4rem}
+.feed-cat-badge{position:absolute;top:.6rem;left:.6rem;background:rgba(8,8,8,.8);border:1px solid rgba(162,89,255,.25);color:var(--accent);border-radius:3px;padding:.2rem .55rem;font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+
+/* COMMENT MODERATION */
+.nav-badge{margin-left:auto;background:var(--accent-2);color:#fff;border-radius:100px;padding:.1rem .45rem;font-size:.62rem;font-weight:700}
+.cm-item{background:var(--dark-2);border:1px solid var(--border);border-radius:6px;padding:1rem 1.1rem;margin-bottom:.9rem}
+.cm-head{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;margin-bottom:.5rem}
+.cm-who{font-size:.8rem;font-weight:700;color:var(--accent)}
+.cm-reason{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-2);border:1px solid rgba(255,107,53,.3);border-radius:100px;padding:.15rem .55rem;white-space:nowrap}
+.cm-text{font-size:.88rem;line-height:1.6;color:var(--off-white);margin:0 0 .8rem;white-space:pre-wrap;overflow-wrap:anywhere}
+.cm-foot{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+.cm-meta{font-size:.68rem;color:var(--muted);overflow-wrap:anywhere}
+.cm-actions{display:flex;gap:.5rem;flex-shrink:0}
 
 /* API KEYS */
 .api-section{background:var(--dark-2);border:1px solid var(--border);border-radius:6px;margin-bottom:1.5rem;overflow:hidden}
@@ -315,6 +328,11 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
         <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 20M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
         Highlights &amp; Feed
       </button>
+      <button class="nav-item" data-page="comments">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+        Comments
+        <span class="nav-badge" id="cm-badge" hidden>0</span>
+      </button>
       <button class="nav-item" data-page="artists">
         <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
         Artists
@@ -409,6 +427,22 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
             </select>
           </div>
         </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Title</label>
+            <input class="form-input" id="upload-title" type="text" maxlength="90" placeholder="Short headline for the card"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Category</label>
+            <select class="form-input" id="upload-category">
+              <option value="News">News</option>
+              <option value="Release">Release</option>
+              <option value="Show">Show</option>
+              <option value="Studio">Studio</option>
+              <option value="Press">Press</option>
+            </select>
+          </div>
+        </div>
         <div class="form-group">
           <label class="form-label">Caption</label>
           <textarea class="form-input form-textarea" id="upload-caption" placeholder="Write a caption..." maxlength="220"></textarea>
@@ -420,6 +454,20 @@ tbody td{padding:.9rem 1.5rem;font-size:.85rem;vertical-align:middle}
       <div class="feed-grid" id="feed-grid">
         <p style="color:var(--muted);font-size:.85rem;grid-column:1/-1">No highlights published yet. Upload content above.</p>
       </div>
+    </div>
+
+    <!-- COMMENT MODERATION -->
+    <div class="page-section" id="page-comments">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Comments</h1>
+          <p class="page-sub">Comments held by the automatic check, waiting for a person to decide.</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-outline" onclick="loadPending()">Refresh</button>
+        </div>
+      </div>
+      <div id="cm-list"></div>
     </div>
 
     <!-- ARTISTS -->
@@ -1084,6 +1132,7 @@ document.querySelectorAll('.nav-item[data-page]').forEach(btn=>{
     btn.classList.add('active');
     document.getElementById('page-'+btn.dataset.page).classList.add('active');
     if(btn.dataset.page==='highlights')renderFeed();
+    if(btn.dataset.page==='comments')loadPending();
     if(btn.dataset.page==='artists')renderArtistManager();
     if(btn.dataset.page==='events'){renderEventsAdmin();refreshUploadArtistSelect()}
     if(btn.dataset.page==='merch-manager')renderMerchAdmin();
@@ -1129,12 +1178,14 @@ function renderFeed(){
       <div class="feed-img">
         ${h.dataUrl?`<img class="feed-img-preview" src="${h.dataUrl}" alt=""/>`:'<span class="feed-img-placeholder">No Preview</span>'}
         <span class="feed-source-badge">${h.source}</span>
+        ${h.category?`<span class="feed-cat-badge">${esc(h.category)}</span>`:''}
       </div>
       <div class="feed-body">
         <div class="feed-meta">
           <span class="feed-artist">${h.artist.toUpperCase()}</span>
           <span class="feed-date">${h.date}</span>
         </div>
+        ${h.title?`<p class="feed-title">${esc(h.title)}</p>`:''}
         <p class="feed-caption">${h.caption||'-'}</p>
         <div class="feed-actions">
           <button class="btn btn-danger btn-sm" onclick="deleteHighlight(${h.id})">Delete</button>
@@ -1164,13 +1215,15 @@ zone?.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('drag
 document.getElementById('upload-btn')?.addEventListener('click',()=>{
   const artist=document.getElementById('upload-artist').value;
   const source=document.getElementById('upload-source').value;
+  const title=document.getElementById('upload-title').value.trim();
+  const category=document.getElementById('upload-category').value;
   const caption=document.getElementById('upload-caption').value.trim();
   const highlights=getHighlights();
   const id=Date.now();
 
   function doSave(dataUrl){
     const dateStr=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
-    const entry={id,artist,source,caption,date:dateStr,dataUrl:dataUrl||null};
+    const entry={id,artist,source,title,category,caption,date:dateStr,dataUrl:dataUrl||null};
     highlights.unshift(entry);
     saveHighlights(highlights);
     // Sync to per-artist key read by artist-profile.html
@@ -1183,6 +1236,7 @@ document.getElementById('upload-btn')?.addEventListener('click',()=>{
     updateDashStats();
     logActivity(`New highlight uploaded for ${artist.toUpperCase()} (${source})`,'purple');
     toast('Highlight published to feed!','success');
+    document.getElementById('upload-title').value='';
     document.getElementById('upload-caption').value='';
     document.getElementById('cap-count').textContent='0';
     uploadedFile=null;
@@ -1240,6 +1294,107 @@ function updateDashStats(){
   const el=document.getElementById('dash-highlights');
   if(el)el.textContent=getHighlights().length;
 }
+
+// COMMENT MODERATION
+/* The feed's comment endpoint publishes what is clean, refuses what is
+   clearly abusive, and holds everything uncertain. Held is the verdict that
+   needs a person: the author was told someone would look, and this is where
+   someone looks. Without this page a held comment would wait forever.
+
+   Comment text is whatever a visitor typed, so every field goes through
+   esc() before it reaches innerHTML, and the post and comment ids travel in
+   data attributes rather than inside an onclick string. */
+let cmBound=false;
+
+function cmAuth(){return {'Content-Type':'application/json','Authorization':'Bearer '+(localStorage.getItem('hvx_token')||'')}}
+
+function cmBadge(n){
+  const b=document.getElementById('cm-badge');
+  if(!b)return;
+  b.textContent=n;
+  b.hidden=!n;
+}
+
+function bindCm(){
+  if(cmBound)return;
+  const el=document.getElementById('cm-list');
+  if(!el)return;
+  el.addEventListener('click',function(e){
+    const btn=e.target.closest?e.target.closest('[data-cm-act]'):null;
+    if(!btn)return;
+    cmAct(btn.getAttribute('data-cm-post'),btn.getAttribute('data-cm-id'),btn.getAttribute('data-cm-act'));
+  });
+  cmBound=true;
+}
+
+function loadPending(){
+  const el=document.getElementById('cm-list');
+  bindCm();
+  if(el)el.innerHTML='<p style="padding:1.5rem;color:var(--muted);font-size:.85rem">Loading...</p>';
+  return fetch('/api/comments?action=pending',{headers:cmAuth()})
+    .then(function(r){
+      if(!r.ok)throw new Error(r.status===401?'you are no longer signed in on the server':'HTTP '+r.status);
+      return r.json();
+    })
+    .then(function(rows){
+      const list=Array.isArray(rows)?rows:[];
+      cmBadge(list.length);
+      renderPending(list);
+      return list;
+    })
+    .catch(function(err){
+      cmBadge(0);
+      if(el)el.innerHTML='<p style="padding:1.5rem;color:var(--accent-2);font-size:.85rem">The queue could not be loaded: '+esc(err.message||'request failed')+'.</p>';
+      return [];
+    });
+}
+
+function renderPending(rows){
+  const el=document.getElementById('cm-list');
+  if(!el)return;
+  if(!rows.length){
+    el.innerHTML='<p style="padding:1.5rem;color:var(--muted);font-size:.85rem">Nothing waiting. Comments that pass the automatic check are published straight away.</p>';
+    return;
+  }
+  el.innerHTML=rows.map(function(c){
+    return '<div class="cm-item">'+
+      '<div class="cm-head">'+
+        '<span class="cm-who">'+esc(c.name||'Guest')+'</span>'+
+        '<span class="cm-reason">'+esc(c.reason||'held')+'</span>'+
+      '</div>'+
+      '<p class="cm-text">'+esc(c.text||'')+'</p>'+
+      '<div class="cm-foot">'+
+        '<span class="cm-meta">'+esc(c.email||'no address')+' &middot; post '+esc(c.post||'?')+' &middot; '+esc(c.createdAt||'')+'</span>'+
+        '<span class="cm-actions">'+
+          '<button class="btn btn-primary btn-sm" data-cm-act="approve" data-cm-post="'+esc(c.post)+'" data-cm-id="'+esc(c.id)+'">Approve</button>'+
+          '<button class="btn btn-danger btn-sm" data-cm-act="delete" data-cm-post="'+esc(c.post)+'" data-cm-id="'+esc(c.id)+'">Delete</button>'+
+        '</span>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+}
+
+function cmAct(post,id,action){
+  if(!post||!id)return;
+  if(action==='delete'&&!confirm('Delete this comment?\n\nIt will not appear on the site and cannot be recovered.'))return;
+  return fetch('/api/comments?action='+action,{method:'POST',headers:cmAuth(),body:JSON.stringify({post:post,id:id})})
+    .then(function(r){
+      if(!r.ok)throw new Error(r.status===401?'you are no longer signed in on the server':'HTTP '+r.status);
+      return r.json();
+    })
+    .then(function(){
+      toast(action==='approve'?'Comment published':'Comment deleted',action==='approve'?'success':'error');
+      logActivity('Comment '+(action==='approve'?'approved':'deleted')+' on post '+post,action==='approve'?'purple':'orange');
+      return loadPending();
+    })
+    .catch(function(err){
+      toast('Not done: '+(err.message||'request failed'),'error');
+    });
+}
+
+/* Populate the badge on load so a held comment is noticed without having to
+   open the page to find out there is nothing to see. */
+if((localStorage.getItem('hvx_token')||''))loadPending();
 
 // API KEYS
 function toggleApi(id){const body=document.getElementById('api-'+id);body.classList.toggle('open')}
