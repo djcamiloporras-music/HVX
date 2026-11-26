@@ -2485,16 +2485,21 @@ function renderInbox(){
   if(unr)unr.textContent=unread;
   if(wk)wk.textContent=thisWeek;
   if(!contacts.length){el.innerHTML='<p style="padding:1.5rem;color:var(--muted);font-size:.85rem">No messages yet.</p>';return}
+  /* Every field below is whatever a visitor typed into the public contact
+     form, which takes unauthenticated posts. Written straight into innerHTML
+     a message containing markup would run script in this panel, where the
+     admin token sits in localStorage. The date is built by toLocaleString,
+     which cannot carry markup, so only the text fields need esc(). */
   el.innerHTML=contacts.map(function(c,i){
     return '<div class="inbox-item '+(c.read?'read':'unread')+'" onclick="openInboxItem('+i+')">'+
       '<span class="inbox-dot"></span>'+
       '<div>'+
-        '<div class="inbox-subject">'+(c.name||'Anonymous')+' - '+(c.type||'Inquiry')+'</div>'+
-        '<div class="inbox-preview">'+((c.message||'').slice(0,80))+'</div>'+
+        '<div class="inbox-subject">'+esc(c.name||'Anonymous')+' - '+esc(c.type||'Inquiry')+'</div>'+
+        '<div class="inbox-preview">'+esc((c.message||'').slice(0,80))+'</div>'+
         '<div class="inbox-detail" id="inbox-detail-'+i+'">'+
-          '<div class="inbox-detail-name">'+(c.name||'Anonymous')+'</div>'+
-          '<div class="inbox-detail-meta">'+(c.email||'')+' | '+(c.type||'Inquiry')+' | '+new Date(c.date).toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})+'</div>'+
-          '<div class="inbox-detail-msg">'+(c.message||'(no message)')+'</div>'+
+          '<div class="inbox-detail-name">'+esc(c.name||'Anonymous')+'</div>'+
+          '<div class="inbox-detail-meta">'+esc(c.email||'')+' | '+esc(c.type||'Inquiry')+' | '+new Date(c.date).toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})+'</div>'+
+          '<div class="inbox-detail-msg">'+esc(c.message||'(no message)')+'</div>'+
           '<div style="margin-top:.75rem;display:flex;gap:.5rem">'+
             '<button class="btn btn-outline btn-sm" onclick="event.stopPropagation();toggleRead('+i+')">'+(c.read?'Mark Unread':'Mark Read')+'</button>'+
             '<button class="btn btn-danger" onclick="event.stopPropagation();deleteContact('+i+')">Delete</button>'+
