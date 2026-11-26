@@ -24,6 +24,7 @@
   <link rel="apple-touch-icon" href="assets/hvx-logo-transparent.png" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="hvx-shop.css" />
+  <link rel="stylesheet" href="hvx-feed.css" />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 </head>
 <body>
@@ -48,6 +49,7 @@
     <ul class="nav-links" id="nav-links">
       <li><a href="#home" class="nav-link">Home</a></li>
       <li><a href="artists.html" class="nav-link">Artists</a></li>
+      <li class="js-highlights-entry" hidden><a href="#highlights" class="nav-link">Highlights</a></li>
       <li><a href="#about" class="nav-link">About</a></li>
       <li><a href="#services" class="nav-link">Services</a></li>
       <li><a href="#releases" class="nav-link">Releases</a></li>
@@ -70,6 +72,7 @@
     <ul>
       <li><a href="#home" class="mobile-link">Home</a></li>
       <li><a href="artists.html" class="mobile-link">Artists</a></li>
+      <li class="js-highlights-entry" hidden><a href="#highlights" class="mobile-link">Highlights</a></li>
       <li><a href="#about" class="mobile-link">About</a></li>
       <li><a href="#services" class="mobile-link">Services</a></li>
       <li><a href="#releases" class="mobile-link">Releases</a></li>
@@ -182,6 +185,19 @@
     <div class="section-cta">
       <a href="artists.html" class="btn btn-outline">View All Artists</a>
     </div>
+  </section>
+
+  <!-- HIGHLIGHTS FEED -->
+  <!-- Starts hidden and is revealed by hvx-feed.js only once something is
+       published, on the same rule as the Demos entries above: nothing on
+       this page ever points at an empty section. -->
+  <section class="hvxf-section" id="highlights" hidden>
+    <div class="section-header">
+      <p class="section-tag">Latest</p>
+      <h2 class="section-title">Highlights</h2>
+    </div>
+    <!-- Rendered by hvx-feed.js from /api/data?key=highlights -->
+    <div id="hvx-feed"></div>
   </section>
 
   <!-- ABOUT -->
@@ -449,5 +465,6 @@
   <script src="hvx-data.js"></script>
   <script src="script.js"></script>
   <script src="hvx-shop.js"></script>
+  <script src="hvx-feed.js"></script>
 </body>
 </html>
